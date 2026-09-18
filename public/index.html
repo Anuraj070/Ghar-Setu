@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Build-IQ | AI Renovation &amp; B2B Construction Platform India</title>
+<!-- SEO -->
+<meta name="description" content="Build-IQ uses AI to generate instant Bills of Quantities (BoQ), verify regional material prices, and connect homeowners with verified B2B construction suppliers across India.">
+<meta name="keywords" content="AI renovation, construction materials, BoQ generator, B2B construction India, home renovation, building materials, contractor platform">
+<meta name="author" content="Build-IQ">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#E25822">
+<link rel="canonical" href="https://build-iq-seven.vercel.app/">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://build-iq-seven.vercel.app/">
+<meta property="og:title" content="Build-IQ | AI Renovation &amp; B2B Construction Platform">
+<meta property="og:description" content="Generate your renovation BoQ in seconds. Verify material prices. Connect with local contractors. Powered by AI.">
+<meta property="og:site_name" content="Build-IQ">
+<meta property="og:locale" content="en_IN">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Build-IQ | AI Renovation &amp; B2B Construction Platform">
+<meta name="twitter:description" content="Generate your renovation BoQ in seconds. Verify material prices. Connect with local contractors.">
+<!-- Structured Data -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Build-IQ","description":"AI-powered renovation scoping and B2B construction materials platform for India","url":"https://build-iq-seven.vercel.app/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.8","ratingCount":"1240"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════ CSS @property — animated gradient angle ═══════════ */
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --glow-opacity {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+
+:root {
+  --indigo-950:#060913;--indigo-900:#0B132B;--indigo-800:#1C2541;
+  --terracotta:#E25822;--terracotta-hover:#C24513;--terracotta-glow:rgba(226,88,34,0.18);
+  --terracotta-light:#FFF4EE;--terracotta-lighter:#FFF9F5;
+  --bg-body:#FFFFFF;--surface-white:#FFFFFF;--surface-elevated:#FAFBFD;
+  --border-subtle:#EEF1F6;--border-hover:#DDE3EC;--text-main:#1A1D26;--text-muted:#6B7A90;
+  --accent-green:#10B981;--accent-green-bg:#ECFDF5;
+  --warm-50:#FFFBF7;--warm-100:#FFF3E8;--warm-200:#FFE4CC;
+  --radius-md:12px;--radius-lg:18px;--radius-xl:24px;
+  --shadow-soft:0 2px 8px rgba(0,0,0,.04);
+  --shadow-card:0 8px 30px -8px rgba(0,0,0,.06),0 4px 10px -4px rgba(0,0,0,.03);
+  --shadow-elevated:0 24px 48px -12px rgba(0,0,0,.1);
+  --shadow-glow:0 0 40px rgba(226,88,34,.12);
+  --transition-smooth:all 0.4s cubic-bezier(0.16,1,0.3,1);
+  --transition-bounce:all 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  --nav-bg:rgba(255,255,255,0.92);--input-bg:#F6F8FB;
+}
+[data-theme="dark"] {
+  --bg-body:#0A0E1A;--surface-white:#111827;--surface-elevated:#1A2035;
+  --border-subtle:#1F2A45;--border-hover:#2A3A5A;--text-main:#E8ECF4;--text-muted:#8899B0;
+  --terracotta-light:#1A1210;--terracotta-lighter:#15110E;
+  --warm-50:#0F0D0B;--warm-100:#1A1510;--warm-200:#251D14;
+  --accent-green-bg:#022C22;
+  --shadow-soft:0 2px 8px rgba(0,0,0,.2);
+  --shadow-card:0 8px 30px -8px rgba(0,0,0,.35);
+  --shadow-elevated:0 24px 48px -12px rgba(0,0,0,.5);
+  --shadow-glow:0 0 40px rgba(226,88,34,.2);
+  --nav-bg:rgba(10,14,26,0.95);--input-bg:#111827;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',-apple-system,sans-serif;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg-body);color:var(--text-main);line-height:1.6;overflow-x:hidden;transition:background .5s ease,color .5s ease;}
+
+/* ═══════════ PAGE LOADER ═══════════ */
+#page-loader{position:fixed;inset:0;background:#FFFFFF;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;transition:opacity .8s,visibility .8s;}
+[data-theme="dark"] #page-loader{background:#0A0E1A;}
+#page-loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-logo{font-size:2.2rem;font-weight:800;color:var(--text-main);letter-spacing:-1px;}
+.loader-logo span{color:var(--terracotta);}
+.loader-bar-wrap{width:200px;height:3px;background:var(--border-subtle);border-radius:99px;overflow:hidden;}
+.loader-bar{height:100%;width:0;background:linear-gradient(90deg,var(--terracotta),#FF8C60,#FFB088);border-radius:99px;animation:loadBar 1.4s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes loadBar{to{width:100%;}}
+
+/* SVG Crane Loader */
+.loader-crane{width:80px;height:80px;}
+.crane-hook{animation:craneSwing 1.2s ease-in-out infinite alternate;transform-origin:50% 0%;}
+@keyframes craneSwing{0%{transform:rotate(-12deg);}100%{transform:rotate(12deg);}}
+.crane-cable{stroke-dasharray:60;animation:cableDraw 1.4s ease forwards;}
+@keyframes cableDraw{from{stroke-dashoffset:60;}to{stroke-dashoffset:0;}}
+
+/* ═══════════ SCROLL PROGRESS ═══════════ */
+#scroll-progress{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--terracotta),#FF8C60,#FFB088);z-index:1100;transition:width .1s linear;box-shadow:0 0 10px rgba(226,88,34,.3);}
+
+/* ═══════════ FLOATING BUILDING BLOCKS CANVAS ═══════════ */
+#blocks-canvas{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.6;transition:opacity .5s;}
+
+/* ═══════════ WebGL HERO SHADER ═══════════ */
+#webgl-bg{position:absolute;inset:0;z-index:0;opacity:.35;pointer-events:none;}
+
+/* ═══════════ CURSOR GLOW ═══════════ */
+.cursor-glow{position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(226,88,34,.05) 0%,rgba(226,88,34,.02) 30%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;transition:opacity .4s;}
+
+/* ═══════════ NAVBAR ═══════════ */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 6%;background:var(--nav-bg);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border-subtle);position:sticky;top:0;z-index:1000;transition:var(--transition-smooth),padding .4s;}
+nav.scrolled{padding:.7rem 6%;box-shadow:0 4px 30px rgba(0,0,0,.04);}
+.logo{font-size:1.55rem;font-weight:800;color:var(--text-main);letter-spacing:-.6px;display:flex;align-items:center;gap:.5rem;cursor:pointer;transition:var(--transition-bounce);}
+.logo:hover{transform:scale(1.04);}
+.logo span{color:var(--terracotta);}
+.logo-badge{background:var(--terracotta-light);color:var(--terracotta);font-size:.65rem;text-transform:uppercase;padding:.2rem .55rem;border-radius:6px;font-weight:700;letter-spacing:.5px;border:1px solid rgba(226,88,34,.15);transition:var(--transition-smooth);}
+.logo:hover .logo-badge{background:var(--terracotta);color:#fff;transform:scale(1.05);}
+.nav-links{display:flex;align-items:center;gap:1.8rem;}
+.nav-links a{text-decoration:none;color:var(--text-muted);font-weight:600;font-size:.92rem;position:relative;padding-bottom:2px;transition:var(--transition-smooth);}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:50%;width:0;height:2.5px;background:var(--terracotta);transition:width .4s cubic-bezier(.16,1,.3,1),left .4s cubic-bezier(.16,1,.3,1);border-radius:2px;}
+.nav-links a:not(.btn-nav):hover{color:var(--terracotta);}
+.nav-links a:not(.btn-nav):hover::after{width:100%;left:0;}
+.theme-toggle{width:48px;height:26px;background:#E2E8F0;border-radius:99px;position:relative;cursor:pointer;border:none;transition:background .4s;flex-shrink:0;}
+[data-theme="dark"] .theme-toggle{background:var(--terracotta);}
+.theme-toggle::before{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .4s cubic-bezier(.16,1,.3,1);box-shadow:0 2px 6px rgba(0,0,0,.15);}
+[data-theme="dark"] .theme-toggle::before{transform:translateX(22px);}
+.theme-label{font-size:.82rem;font-weight:600;color:var(--text-muted);white-space:nowrap;transition:var(--transition-smooth);}
+.cart-trigger{display:flex;align-items:center;gap:.5rem;background:var(--surface-elevated);padding:.5rem 1rem;border-radius:30px;cursor:pointer;border:1px solid var(--border-subtle);font-size:.85rem;font-weight:700;color:var(--text-main);transition:var(--transition-bounce);}
+.cart-trigger:hover{background:var(--warm-50);transform:translateY(-2px);box-shadow:var(--shadow-card);border-color:var(--terracotta);}
+.cart-badge{background:var(--terracotta);color:#fff;border-radius:50%;padding:.15rem .5rem;font-size:.75rem;font-family:'JetBrains Mono',monospace;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.cart-bump{transform:scale(1.5)!important;}
+.btn-nav{background:var(--terracotta);color:#fff!important;padding:.6rem 1.4rem;border-radius:10px;transition:var(--transition-bounce);box-shadow:0 4px 14px rgba(226,88,34,.2);}
+.btn-nav:hover{background:var(--terracotta-hover);transform:translateY(-3px);box-shadow:0 8px 24px rgba(226,88,34,.35);}
+.btn-nav::after{display:none!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px;background:none;border:none;}
+.hamburger span{display:block;width:24px;height:2.5px;background:var(--text-main);border-radius:2px;transition:all .4s cubic-bezier(.16,1,.3,1);transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+.mobile-menu{display:none;flex-direction:column;gap:0;background:var(--surface-white);border-bottom:1px solid var(--border-subtle);overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.16,1,.3,1);}
+.mobile-menu.open{max-height:400px;}
+.mobile-menu a{text-decoration:none;color:var(--text-main);font-weight:600;padding:1rem 6%;border-bottom:1px solid var(--border-subtle);transition:background .3s,color .3s,padding-left .3s;}
+.mobile-menu a:hover{background:var(--warm-50);color:var(--terracotta);padding-left:8%;}
+
+/* ═══════════ HERO ═══════════ */
+.hero{background:linear-gradient(165deg,#FFFFFF 0%,var(--warm-50) 30%,var(--terracotta-lighter) 60%,var(--warm-100) 100%);color:var(--text-main);padding:8rem 6% 12rem 6%;text-align:center;position:relative;overflow:hidden;}
+[data-theme="dark"] .hero{background:linear-gradient(165deg,#0A0E1A 0%,#111520 30%,#1A1210 60%,#15110E 100%);}
+#hero-canvas{position:absolute;inset:0;pointer-events:none;opacity:.4;}
+
+/* Blueprint grid */
+.hero-grid-bg{position:absolute;inset:0;background-image:
+  linear-gradient(rgba(226,88,34,.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(226,88,34,.04) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;animation:gridDrift 20s linear infinite;}
+[data-theme="dark"] .hero-grid-bg{background-image:
+  linear-gradient(rgba(226,88,34,.06) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(226,88,34,.06) 1px,transparent 1px);}
+@keyframes gridDrift{0%{transform:translate(0,0);}100%{transform:translate(60px,60px);}}
+
+/* Floating construction elements */
+.floating-elements{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.float-el{position:absolute;opacity:.08;font-size:2.5rem;animation:floatUpDown 6s ease-in-out infinite;transition:opacity .5s;}
+[data-theme="dark"] .float-el{opacity:.06;}
+.float-el:nth-child(1){top:15%;left:8%;animation-delay:0s;font-size:3rem;}
+.float-el:nth-child(2){top:25%;right:12%;animation-delay:1.5s;font-size:2rem;}
+.float-el:nth-child(3){bottom:35%;left:15%;animation-delay:3s;font-size:2.8rem;}
+.float-el:nth-child(4){top:40%;right:8%;animation-delay:0.8s;font-size:2.2rem;}
+.float-el:nth-child(5){bottom:30%;right:18%;animation-delay:2.2s;font-size:1.8rem;}
+.float-el:nth-child(6){top:10%;left:45%;animation-delay:4s;font-size:2rem;}
+.float-el:nth-child(7){bottom:25%;left:38%;animation-delay:1s;font-size:2.5rem;}
+@keyframes floatUpDown{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(5deg);}}
+
+/* ═══ SVG Skyline ═══ */
+.hero-skyline{position:absolute;bottom:0;left:0;right:0;z-index:1;pointer-events:none;overflow:visible;}
+.hero-skyline svg{display:block;width:100%;height:auto;}
+.skyline-building{fill:var(--border-subtle);opacity:.3;transition:fill .5s,opacity .5s;}
+[data-theme="dark"] .skyline-building{fill:#1F2A45;opacity:.5;}
+.skyline-crane{transform-origin:50% 100%;animation:craneSway 8s ease-in-out infinite alternate;}
+@keyframes craneSway{0%{transform:rotate(-2deg);}100%{transform:rotate(2deg);}}
+.crane-arm{animation:craneArmMove 10s ease-in-out infinite alternate;transform-origin:left center;}
+@keyframes craneArmMove{0%{transform:rotate(-1deg);}100%{transform:rotate(1.5deg);}}
+.crane-ball{animation:ballSwing 3s ease-in-out infinite alternate;transform-origin:50% 0;}
+@keyframes ballSwing{0%{transform:rotate(-8deg);}100%{transform:rotate(8deg);}}
+
+/* Animated gradient border for cards — uses @property */
+.gradient-border{position:relative;}
+.gradient-border::before{
+  content:'';position:absolute;inset:-2px;border-radius:inherit;
+  background:conic-gradient(from var(--gradient-angle),transparent,var(--terracotta),transparent,var(--terracotta),transparent);
+  z-index:-1;opacity:0;transition:opacity .5s;
+  animation:rotateBorder 4s linear infinite;
+}
+@keyframes rotateBorder{to{--gradient-angle:360deg;}}
+.gradient-border:hover::before{opacity:1;}
+.gradient-border::after{content:'';position:absolute;inset:0;background:var(--surface-white);border-radius:inherit;z-index:-1;}
+
+.hero-content{position:relative;z-index:2;}
+.hero-pill{display:inline-flex;align-items:center;gap:.6rem;background:rgba(226,88,34,.06);border:1px solid rgba(226,88,34,.15);padding:.45rem 1.2rem;border-radius:30px;font-size:.84rem;font-weight:600;margin-bottom:1.8rem;animation:pulseGlow 3s infinite ease-in-out;cursor:default;transition:var(--transition-bounce);color:var(--terracotta);}
+.hero-pill:hover{background:rgba(226,88,34,.12);transform:scale(1.04);box-shadow:0 4px 20px rgba(226,88,34,.15);}
+@keyframes pulseGlow{0%,100%{border-color:rgba(226,88,34,.15);}50%{border-color:rgba(226,88,34,.5);box-shadow:0 0 30px rgba(226,88,34,.1);}}
+.hero-pill .dot{width:8px;height:8px;background:var(--accent-green);border-radius:50%;box-shadow:0 0 12px var(--accent-green);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero h1{font-size:clamp(2.3rem,4.8vw,3.9rem);font-weight:800;line-height:1.12;letter-spacing:-1.5px;max-width:900px;margin:0 auto 1.5rem auto;color:var(--text-main);}
+[data-theme="dark"] .hero h1{color:#E8ECF4;}
+.hero h1 .gradient-text{background:linear-gradient(135deg,#E25822,#FF6B35,#FF8C60,#E25822);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradientShift 5s linear infinite;}
+@keyframes gradientShift{to{background-position:300% center;}}
+.hero p{font-size:1.15rem;color:var(--text-muted);max-width:660px;margin:0 auto 2.5rem auto;font-weight:400;}
+.typewriter-cursor{display:inline-block;width:3px;height:.9em;background:var(--terracotta);margin-left:2px;vertical-align:middle;animation:cursorBlink .8s step-end infinite;}
+@keyframes cursorBlink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-cta-group{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-hero-primary{background:var(--terracotta);color:#fff;padding:1rem 2.2rem;border-radius:12px;font-weight:700;font-size:1rem;border:none;cursor:pointer;transition:var(--transition-bounce);position:relative;overflow:hidden;box-shadow:0 6px 20px rgba(226,88,34,.3);}
+.btn-hero-primary:hover{background:var(--terracotta-hover);transform:translateY(-4px) scale(1.02);box-shadow:0 12px 32px rgba(226,88,34,.4);}
+.btn-hero-outline{background:transparent;color:var(--text-main);padding:.98rem 2.2rem;border-radius:12px;font-weight:700;font-size:1rem;border:2px solid var(--border-hover);cursor:pointer;transition:var(--transition-bounce);}
+.btn-hero-outline:hover{background:var(--surface-elevated);border-color:var(--terracotta);color:var(--terracotta);transform:translateY(-4px);box-shadow:var(--shadow-card);}
+.scroll-indicator{position:absolute;bottom:6rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;z-index:2;opacity:.4;animation:bounce 2.5s infinite;color:var(--text-muted);}
+.scroll-indicator span{font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(10px);}}
+
+/* ═══════════ STATS BAR ═══════════ */
+.stats-bar{background:var(--surface-white);border-bottom:1px solid var(--border-subtle);padding:2.8rem 6%;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;text-align:center;transition:background .5s;}
+.stat-item{display:flex;flex-direction:column;gap:.35rem;padding:1rem;border-radius:var(--radius-md);transition:var(--transition-bounce);}
+.stat-item:hover{background:var(--warm-50);transform:translateY(-4px);box-shadow:var(--shadow-soft);}
+.stat-number{font-size:2.2rem;font-weight:800;color:var(--terracotta);font-family:'JetBrains Mono',monospace;}
+.stat-label{font-size:.8rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px;}
+
+/* ═══════════ SCROLL REVEAL ═══════════ */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.reveal.stagger-1{transition-delay:.12s;}.reveal.stagger-2{transition-delay:.24s;}.reveal.stagger-3{transition-delay:.36s;}.reveal.stagger-4{transition-delay:.48s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ═══════════ HOW IT WORKS ═══════════ */
+.hiw-section{padding:6.5rem 6%;max-width:1200px;margin:0 auto;text-align:center;}
+.section-badge{color:var(--terracotta);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.6rem;display:inline-flex;align-items:center;gap:.5rem;}
+.section-badge::before,.section-badge::after{content:'';width:20px;height:2px;background:var(--terracotta);border-radius:2px;opacity:.4;}
+.section-title{color:var(--text-main);font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:-.8px;font-weight:800;margin-bottom:.5rem;}
+.section-sub{color:var(--text-muted);font-size:1rem;margin-bottom:3.5rem;}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;position:relative;}
+.steps-grid::before{content:'';position:absolute;top:50%;left:5%;right:5%;height:2px;background:linear-gradient(90deg,transparent,rgba(226,88,34,.12),transparent);z-index:0;display:none;}
+@media(min-width:960px){.steps-grid::before{display:block;}}
+
+/* Step Cards with gradient border @property */
+.step-card{background:var(--surface-white);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:2.2rem 1.6rem;position:relative;z-index:1;transition:var(--transition-bounce);cursor:default;}
+.step-card:hover{transform:translateY(-10px) scale(1.02);box-shadow:var(--shadow-elevated);border-color:rgba(226,88,34,.3);}
+.step-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(226,88,34,.03),transparent);opacity:0;transition:opacity .4s;pointer-events:none;}
+.step-card:hover::after{opacity:1;}
+
+/* SVG step icons */
+.step-icon-wrap{width:64px;height:64px;margin:0 auto 1.2rem auto;position:relative;}
+.step-svg-icon{width:100%;height:100%;}
+.step-svg-icon .icon-path{stroke:var(--terracotta);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1);}
+.step-card.drawn .icon-path{stroke-dashoffset:0;}
+.step-svg-icon .icon-fill{fill:rgba(226,88,34,.1);opacity:0;transition:opacity .6s .4s;}
+.step-card.drawn .icon-fill{opacity:1;}
+
+.step-num-badge{position:absolute;top:-6px;right:-6px;width:26px;height:26px;background:linear-gradient(135deg,var(--terracotta),#FF8C60);border-radius:50%;color:#fff;font-weight:800;font-size:.7rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(226,88,34,.3);border:2px solid var(--surface-white);transition:var(--transition-bounce);}
+.step-card:hover .step-num-badge{transform:scale(1.2) rotate(-10deg);}
+
+.step-card h4{font-size:1.08rem;font-weight:700;color:var(--text-main);margin-bottom:.5rem;}
+.step-card p{font-size:.88rem;color:var(--text-muted);line-height:1.7;}
+
+/* ═══════════ DEMO ═══════════ */
+.demo-container{background:var(--surface-white);max-width:980px;margin:-70px auto 4rem auto;padding:3rem;border-radius:var(--radius-xl);box-shadow:var(--shadow-elevated);border:1px solid var(--border-subtle);border-top:4px solid var(--terracotta);position:relative;z-index:10;transition:background .5s;overflow:hidden;}
+.demo-container::before{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle,rgba(226,88,34,.04),transparent 70%);pointer-events:none;}
+.demo-header{text-align:center;margin-bottom:2rem;}
+.demo-header h2{font-size:2rem;font-weight:800;color:var(--text-main);letter-spacing:-.5px;}
+.prompt-pills{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.3rem;justify-content:center;}
+.prompt-pill{font-size:.8rem;background:var(--warm-50);color:var(--text-muted);padding:.5rem 1.1rem;border-radius:22px;cursor:pointer;border:1px solid var(--border-subtle);font-weight:600;transition:var(--transition-bounce);}
+.prompt-pill:hover{border-color:var(--terracotta);background:var(--terracotta-light);color:var(--terracotta);transform:translateY(-3px);box-shadow:0 6px 18px rgba(226,88,34,.1);}
+.input-group{display:flex;gap:.8rem;background:var(--input-bg);padding:.55rem;border-radius:14px;border:2px solid var(--border-subtle);transition:var(--transition-smooth);}
+.input-group:focus-within{border-color:var(--terracotta);box-shadow:0 0 0 5px rgba(226,88,34,.08);background:var(--surface-white);}
+input[type="text"]{flex:1;padding:.85rem 1rem;border:none;background:transparent;font-size:1rem;color:var(--text-main);outline:none;}
+.btn-primary{background:var(--terracotta);color:#fff;border:none;padding:.9rem 1.8rem;font-size:.95rem;font-weight:700;border-radius:10px;cursor:pointer;transition:var(--transition-bounce);display:inline-flex;align-items:center;gap:.5rem;white-space:nowrap;position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(226,88,34,.2);}
+.btn-primary:hover{background:var(--terracotta-hover);transform:translateY(-2px);box-shadow:0 8px 24px rgba(226,88,34,.3);}
+.btn-primary .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);animation:rippleAnim .6s linear;pointer-events:none;}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
+.loader{display:none;text-align:center;padding:3rem 1rem;background:var(--warm-50);border-radius:12px;margin-top:1.5rem;border:1px dashed rgba(226,88,34,.2);}
+.spinner{border:3.5px solid var(--border-subtle);border-top:3.5px solid var(--terracotta);border-radius:50%;width:36px;height:36px;animation:spin .75s cubic-bezier(.6,.2,.4,.8) infinite;margin:0 auto 12px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.pipeline-wrap{margin-top:1rem;}
+.pipeline-track{background:var(--border-subtle);border-radius:99px;height:5px;overflow:hidden;margin-bottom:.5rem;}
+.pipeline-fill{height:100%;background:linear-gradient(90deg,var(--terracotta),#FF8C60,#FFB088);border-radius:99px;width:0%;transition:width .5s ease;box-shadow:0 0 8px rgba(226,88,34,.3);}
+.pipeline-status{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);font-weight:600;}
+.results-dashboard{display:none;margin-top:2rem;border-top:1px solid var(--border-subtle);padding-top:2rem;animation:slideUpFade .6s cubic-bezier(.16,1,.3,1) forwards;}
+@keyframes slideUpFade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.results-header-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem;}
+.results-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--accent-green-bg);color:#065F46;border:1px solid #A7F3D0;padding:.4rem .9rem;border-radius:22px;font-size:.82rem;font-weight:700;}
+[data-theme="dark"] .results-badge{color:#6EE7B7;border-color:#064E3B;}
+.btn-copy{background:transparent;border:1px solid var(--border-subtle);padding:.45rem 1rem;font-size:.8rem;border-radius:8px;font-weight:600;color:var(--text-main);cursor:pointer;transition:var(--transition-bounce);}
+.btn-copy:hover{background:var(--warm-50);border-color:var(--terracotta);color:var(--terracotta);transform:translateY(-2px);}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;}
+.metric-card{background:var(--warm-50);padding:1.5rem;border-radius:var(--radius-md);border:1px solid var(--border-subtle);border-left:4px solid var(--terracotta);transition:var(--transition-bounce);}
+.metric-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-card);}
+.metric-card h4{font-size:.74rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.4rem;font-weight:700;}
+.metric-card .value{font-size:1.5rem;font-weight:800;color:var(--text-main);}
+.materials-list{margin-top:2rem;background:var(--warm-50);padding:1.8rem;border-radius:var(--radius-lg);border:1px solid var(--border-subtle);}
+.materials-list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+.materials-list-header h4{color:var(--text-main);font-size:1rem;font-weight:700;}
+.materials-list ul{list-style:none;}
+.materials-list li{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0;border-bottom:1px solid var(--border-subtle);font-size:.92rem;font-weight:500;animation:fadeInRow .4s ease both;transition:var(--transition-smooth);}
+.materials-list li:hover{padding-left:.5rem;background:rgba(226,88,34,.02);border-radius:6px;}
+@keyframes fadeInRow{from{opacity:0;transform:translateX(-10px);}to{opacity:1;transform:translateX(0);}}
+.materials-list li:nth-child(1){animation-delay:.05s;}.materials-list li:nth-child(2){animation-delay:.12s;}.materials-list li:nth-child(3){animation-delay:.19s;}.materials-list li:nth-child(4){animation-delay:.26s;}
+.materials-list li:last-child{border-bottom:none;}
+.boq-item-label{display:flex;align-items:center;gap:.75rem;cursor:pointer;}
+.boq-checkbox{accent-color:var(--terracotta);width:18px;height:18px;cursor:pointer;}
+.item-price{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--terracotta);}
+.tag-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.3rem;padding-top:1.3rem;border-top:1px dashed var(--border-subtle);flex-wrap:wrap;gap:1rem;}
+
+/* ═══════════ MARKETPLACE ═══════════ */
+.marketplace{padding:6rem 6%;max-width:1200px;margin:0 auto;text-align:center;}
+.market-search-bar{max-width:520px;margin:1.8rem auto 0 auto;position:relative;}
+.market-search-bar input{width:100%;padding:.8rem 1rem .8rem 2.8rem;border-radius:28px;border:2px solid var(--border-subtle);background:var(--surface-white);outline:none;font-size:.92rem;color:var(--text-main);transition:var(--transition-smooth);}
+.market-search-bar input:focus{border-color:var(--terracotta);box-shadow:0 0 0 4px rgba(226,88,34,.08);}
+.search-icon-fixed{position:absolute;left:1rem;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none;}
+.category-tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;}
+.cat-tab{padding:.5rem 1.1rem;border-radius:22px;background:var(--warm-50);border:1.5px solid var(--border-subtle);font-size:.82rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:var(--transition-bounce);}
+.cat-tab:hover{transform:translateY(-2px);border-color:var(--terracotta);color:var(--terracotta);box-shadow:0 4px 12px rgba(226,88,34,.1);}
+.cat-tab.active{background:var(--terracotta);color:#fff;border-color:var(--terracotta);box-shadow:0 4px 14px rgba(226,88,34,.25);}
+.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;margin-top:2.5rem;}
+
+.product{background:var(--surface-white);padding:2rem;border-radius:var(--radius-xl);border:1px solid var(--border-subtle);box-shadow:var(--shadow-soft);text-align:left;display:flex;flex-direction:column;justify-content:space-between;transition:var(--transition-bounce);position:relative;overflow:hidden;}
+.product::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;background:linear-gradient(135deg,rgba(226,88,34,.04),rgba(255,140,96,.02),transparent);transition:opacity .4s;}
+.product:hover::before{opacity:1;}
+.product:hover{transform:translateY(-10px);box-shadow:var(--shadow-elevated),var(--shadow-glow);border-color:rgba(226,88,34,.2);}
+.product.hidden{display:none;}
+.discount-pill{position:absolute;top:1rem;right:1rem;background:var(--warm-100);color:#92400E;font-size:.75rem;font-weight:800;padding:.3rem .7rem;border-radius:8px;border:1px solid rgba(226,88,34,.15);}
+.product h3{color:var(--text-main);font-size:1.15rem;margin-bottom:.4rem;font-weight:700;}
+.product-meta{color:var(--text-muted);font-size:.88rem;margin-bottom:1.5rem;}
+.pricing-wrap{margin-bottom:1rem;display:flex;align-items:baseline;gap:.6rem;}
+.product .price{font-size:1.5rem;font-weight:800;color:var(--terracotta);font-family:'JetBrains Mono',monospace;}
+.product strike{color:#94A3B8;font-size:.95rem;}
+.qty-control{display:flex;align-items:center;gap:.5rem;margin-bottom:.9rem;}
+.qty-btn{width:30px;height:30px;border:1.5px solid var(--border-subtle);background:var(--warm-50);border-radius:8px;cursor:pointer;font-size:1rem;font-weight:700;color:var(--text-main);transition:var(--transition-bounce);display:flex;align-items:center;justify-content:center;padding:0;}
+.qty-btn:hover{background:var(--terracotta);color:#fff;border-color:var(--terracotta);transform:scale(1.1);}
+.qty-val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;min-width:28px;text-align:center;color:var(--text-main);}
+.btn-outline{width:100%;padding:.9rem;background:transparent;border:2px solid var(--border-hover);color:var(--text-main);font-weight:700;border-radius:10px;cursor:pointer;transition:var(--transition-bounce);position:relative;overflow:hidden;}
+.btn-outline:hover{background:var(--terracotta);color:#fff;border-color:var(--terracotta);transform:translateY(-2px);box-shadow:0 6px 18px rgba(226,88,34,.2);}
+
+/* ═══════════ TESTIMONIALS ═══════════ */
+.testimonials-section{padding:6rem 6%;background:var(--warm-50);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);text-align:center;transition:background .5s;position:relative;overflow:hidden;}
+.testimonials-section::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(226,88,34,.05),transparent 70%);pointer-events:none;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.8rem;margin-top:3rem;text-align:left;}
+.testimonial-card{background:var(--surface-white);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:2rem;transition:var(--transition-bounce);position:relative;}
+.testimonial-card::before{content:'"';position:absolute;top:.5rem;right:1.5rem;font-size:4rem;font-weight:800;color:rgba(226,88,34,.08);font-family:Georgia,serif;line-height:1;}
+.testimonial-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-card);border-color:rgba(226,88,34,.2);}
+.stars{color:#F59E0B;font-size:1rem;margin-bottom:.8rem;letter-spacing:3px;}
+.testimonial-text{font-size:.93rem;color:var(--text-muted);line-height:1.75;margin-bottom:1.3rem;font-style:italic;}
+.testimonial-author{display:flex;align-items:center;gap:.8rem;}
+.author-avatar{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#fff;flex-shrink:0;}
+.author-name{font-weight:700;font-size:.92rem;color:var(--text-main);}
+.author-role{font-size:.8rem;color:var(--text-muted);}
+
+/* ═══════════ CART DRAWER ═══════════ */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);z-index:2000;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s ease;}
+.cart-overlay.open{opacity:1;visibility:visible;}
+.cart-drawer{position:fixed;top:0;right:0;width:100%;max-width:460px;height:100%;background:var(--surface-white);box-shadow:-10px 0 50px rgba(0,0,0,.1);transform:translateX(105%);transition:transform .45s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;z-index:2001;}
+.cart-overlay.open .cart-drawer{transform:translateX(0);}
+.cart-header{padding:1.5rem;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;}
+.cart-header h3{color:var(--text-main);font-weight:800;}
+.close-cart{background:var(--warm-50);border:1px solid var(--border-subtle);width:34px;height:34px;border-radius:10px;font-size:1rem;cursor:pointer;color:var(--text-muted);transition:var(--transition-bounce);display:flex;align-items:center;justify-content:center;}
+.close-cart:hover{background:#EF4444;color:#fff;border-color:#EF4444;transform:rotate(90deg);}
+.cart-body{flex:1;padding:1.5rem;overflow-y:auto;}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border-subtle);animation:fadeInRow .35s ease;}
+.cart-item h5{font-size:.95rem;color:var(--text-main);margin-bottom:.2rem;}
+.cart-item p{font-size:.85rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;}
+.cart-item-remove{background:none;border:1.5px solid #FCA5A5;color:#EF4444;font-size:.78rem;font-weight:700;cursor:pointer;border-radius:8px;padding:.3rem .7rem;transition:var(--transition-bounce);}
+.cart-item-remove:hover{background:#EF4444;color:#fff;transform:scale(1.05);}
+.cart-footer{padding:1.5rem;border-top:1px solid var(--border-subtle);background:var(--warm-50);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:1.15rem;color:var(--text-main);margin-bottom:1rem;}
+
+/* ═══════════ TOAST ═══════════ */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface-white);color:var(--text-main);padding:.9rem 1.6rem;border-radius:14px;font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:.6rem;box-shadow:var(--shadow-elevated);border:1px solid var(--border-subtle);border-left:4px solid var(--terracotta);transform:translateY(120px);opacity:0;transition:var(--transition-bounce);z-index:3000;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ═══════════ SCROLL TO TOP ═══════════ */
+#scrollTop{position:fixed;bottom:2rem;left:2rem;width:48px;height:48px;background:var(--terracotta);color:#fff;border:none;border-radius:14px;cursor:pointer;font-size:1.1rem;font-weight:700;box-shadow:0 8px 24px rgba(226,88,34,.3);opacity:0;transform:translateY(20px) scale(.8);transition:var(--transition-bounce);z-index:999;}
+#scrollTop.visible{opacity:1;transform:translateY(0) scale(1);}
+#scrollTop:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 12px 32px rgba(226,88,34,.4);}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{background:var(--text-main);color:#94A3B8;padding:4.5rem 6% 3rem 6%;margin-top:5rem;border-top:none;position:relative;overflow:hidden;}
+[data-theme="dark"] footer{background:#060913;}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--terracotta),transparent);}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-brand p{font-size:.88rem;line-height:1.75;margin-top:.8rem;max-width:260px;}
+.footer-logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.footer-logo span{color:var(--terracotta);}
+.footer-col h5{color:#fff;font-size:.88rem;font-weight:700;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.8px;}
+.footer-col a{display:block;color:#64748B;text-decoration:none;font-size:.88rem;margin-bottom:.55rem;transition:color .3s,padding-left .3s;}
+.footer-col a:hover{color:var(--terracotta);padding-left:.3rem;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:1.5rem;text-align:center;font-size:.85rem;}
+.footer-bottom strong{color:#fff;}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}}
+@media(max-width:768px){
+  .nav-links{display:none;}.hamburger{display:flex;}.mobile-menu{display:flex;}
+  .hero{padding:4rem 5% 8rem 5%;}
+  .hero h1{font-size:clamp(1.8rem,7vw,2.8rem);letter-spacing:-.5px;}
+  .hero p{font-size:1rem;padding:0 .5rem;}
+  .hero-cta-group{flex-direction:column;align-items:center;}
+  .btn-hero-primary,.btn-hero-outline{width:100%;max-width:320px;text-align:center;}
+  .demo-container{margin-top:-20px;padding:1.4rem;border-radius:16px;}
+  .demo-header h2{font-size:1.5rem;}
+  .input-group{flex-direction:column;gap:.6rem;}
+  .btn-primary{width:100%;justify-content:center;}
+  .dashboard-grid{grid-template-columns:1fr 1fr;}
+  .cart-drawer{width:100%;max-width:100%;}
+  .footer-grid{grid-template-columns:1fr;gap:1.5rem;}
+  .hiw-section{padding:3.5rem 5%;}
+  .steps-grid{grid-template-columns:1fr 1fr;gap:1rem;}
+  .step-card{padding:1.5rem 1.2rem;}
+  .stats-bar{grid-template-columns:1fr 1fr;gap:1rem;padding:2rem 5%;}
+  .stat-number{font-size:1.8rem;}
+  .store-grid{grid-template-columns:1fr;}
+  .testimonials-grid{grid-template-columns:1fr;}
+  .marketplace{padding:4rem 5%;}
+  .testimonials-section{padding:4rem 5%;}
+  .category-tabs{gap:.4rem;}
+  .cat-tab{font-size:.78rem;padding:.45rem .9rem;}
+  .prompt-pills{gap:.4rem;}
+  .prompt-pill{font-size:.76rem;padding:.4rem .85rem;}
+  #scrollTop{left:1rem;bottom:1rem;width:42px;height:42px;}
+  .toast{right:1rem;bottom:1rem;left:1rem;font-size:.84rem;}
+  .floating-elements{display:none;}
+  .hero-skyline svg{height:60px;}
+  .materials-list{padding:1.2rem;}
+  .results-header-actions{flex-direction:column;align-items:flex-start;}
+  footer{padding:3rem 5% 2rem 5%;}
+  .section-title{font-size:clamp(1.5rem,5vw,2rem);}
+}
+@media(max-width:420px){
+  .steps-grid{grid-template-columns:1fr;}
+  .dashboard-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:1.7rem;}
+  .stat-number{font-size:1.6rem;}
+  nav{padding:.9rem 4%;}
+  .logo{font-size:1.3rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Page Loader with SVG Crane -->
+<div id="page-loader">
+  <div class="loader-logo">Ghar<span>Setu</span></div>
+  <svg class="loader-crane" viewBox="0 0 80 80" fill="none">
+    <rect x="36" y="20" width="8" height="55" rx="2" fill="#E25822" opacity=".3"/>
+    <rect x="16" y="18" width="48" height="4" rx="2" fill="#E25822" opacity=".5"/>
+    <g class="crane-hook">
+      <line class="crane-cable" x1="24" y1="22" x2="24" y2="52" stroke="#E25822" stroke-width="1.5"/>
+      <rect x="18" y="52" width="12" height="10" rx="2" fill="#FF8C60"/>
+      <rect x="20" y="54" width="8" height="3" rx="1" fill="#E25822"/>
+    </g>
+    <rect x="34" y="70" width="12" height="6" rx="1" fill="#E25822" opacity=".2"/>
+  </svg>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- Scroll Progress -->
+<div id="scroll-progress"></div>
+
+<!-- Interactive Building Blocks Canvas -->
+<canvas id="blocks-canvas"></canvas>
+
+<!-- Cursor Glow -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAVBAR -->
+<nav id="mainNav">
+  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    Ghar<span>Setu</span><div class="logo-badge">v2.4</div>
+  </div>
+  <div class="nav-links">
+    <a href="#hiw">How it Works</a>
+    <a href="#demo">AI Scoper</a>
+    <a href="#marketplace">B2B Store</a>
+    <div style="display:flex;align-items:center;gap:.4rem;">
+      <span class="theme-label" id="themeLabel">☀️</span>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode"></button>
+    </div>
+    <div class="cart-trigger" onclick="toggleCart(true)">
+      <span>📦 Job Cart</span>
+      <span class="cart-badge" id="cartCount">0</span>
+    </div>
+    <a href="#" class="btn-nav">Contractor Login</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hiw" onclick="closeMobileMenu()">How it Works</a>
+  <a href="#demo" onclick="closeMobileMenu()">AI Scoper</a>
+  <a href="#marketplace" onclick="closeMobileMenu()">B2B Store</a>
+  <a href="#" onclick="closeMobileMenu()">Contractor Login</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <!-- WebGL Shader Background -->
+  <canvas id="webgl-bg"></canvas>
+  <canvas id="hero-canvas"></canvas>
+  <div class="floating-elements">
+    <div class="float-el">🧱</div>
+    <div class="float-el">🔧</div>
+    <div class="float-el">🏗️</div>
+    <div class="float-el">⚡</div>
+    <div class="float-el">🎨</div>
+    <div class="float-el">🔩</div>
+    <div class="float-el">📐</div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-pill">
+      <div class="dot"></div>
+      Powered by LLM Vector Parsing &amp; Regional Price Index
+    </div>
+    <h1>Turn Renovation Chaos Into<br><span class="gradient-text" id="typewriterTarget"></span><span class="typewriter-cursor"></span></h1>
+    <p class="reveal">Type what needs work in plain language. GharSetu generates the BoQ bill, verifies regional wholesaler rates, and provisions local trades automatically.</p>
+    <div class="hero-cta-group reveal stagger-1">
+      <button class="btn-hero-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Generate My Scope ⚡</button>
+      <button class="btn-hero-outline" onclick="document.getElementById('marketplace').scrollIntoView({behavior:'smooth'})">Browse B2B Store →</button>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><path d="M8 0v16M2 10l6 8 6-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/></svg>
+  </div>
+
+  <!-- SVG Animated Construction Skyline -->
+  <div class="hero-skyline">
+    <svg viewBox="0 0 1440 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background buildings -->
+      <rect class="skyline-building" x="60" y="60" width="50" height="80" rx="2"/>
+      <rect class="skyline-building" x="120" y="40" width="40" height="100" rx="2"/>
+      <rect class="skyline-building" x="170" y="70" width="55" height="70" rx="2"/>
+      <rect class="skyline-building" x="250" y="50" width="45" height="90" rx="2"/>
+      <rect class="skyline-building" x="310" y="75" width="60" height="65" rx="2"/>
+      <rect class="skyline-building" x="400" y="35" width="35" height="105" rx="2"/>
+      <rect class="skyline-building" x="450" y="55" width="50" height="85" rx="2"/>
+      <rect class="skyline-building" x="520" y="65" width="40" height="75" rx="2"/>
+      <rect class="skyline-building" x="580" y="45" width="55" height="95" rx="2"/>
+      <rect class="skyline-building" x="660" y="70" width="45" height="70" rx="2"/>
+      <rect class="skyline-building" x="730" y="30" width="50" height="110" rx="2"/>
+      <rect class="skyline-building" x="800" y="55" width="40" height="85" rx="2"/>
+      <rect class="skyline-building" x="860" y="50" width="55" height="90" rx="2"/>
+      <rect class="skyline-building" x="940" y="65" width="35" height="75" rx="2"/>
+      <rect class="skyline-building" x="1000" y="40" width="50" height="100" rx="2"/>
+      <rect class="skyline-building" x="1070" y="60" width="45" height="80" rx="2"/>
+      <rect class="skyline-building" x="1140" y="50" width="40" height="90" rx="2"/>
+      <rect class="skyline-building" x="1200" y="70" width="55" height="70" rx="2"/>
+      <rect class="skyline-building" x="1280" y="45" width="45" height="95" rx="2"/>
+      <rect class="skyline-building" x="1350" y="60" width="50" height="80" rx="2"/>
+
+      <!-- Windows (small dots on buildings) -->
+      <g fill="rgba(226,88,34,0.15)">
+        <rect x="70" y="70" width="6" height="6" rx="1"/><rect x="84" y="70" width="6" height="6" rx="1"/>
+        <rect x="70" y="84" width="6" height="6" rx="1"/><rect x="84" y="84" width="6" height="6" rx="1"/>
+        <rect x="70" y="98" width="6" height="6" rx="1"/><rect x="84" y="98" width="6" height="6" rx="1"/>
+        <rect x="130" y="50" width="5" height="5" rx="1"/><rect x="142" y="50" width="5" height="5" rx="1"/>
+        <rect x="130" y="62" width="5" height="5" rx="1"/><rect x="142" y="62" width="5" height="5" rx="1"/>
+        <rect x="130" y="74" width="5" height="5" rx="1"/><rect x="142" y="74" width="5" height="5" rx="1"/>
+        <rect x="740" y="42" width="6" height="6" rx="1"/><rect x="756" y="42" width="6" height="6" rx="1"/>
+        <rect x="740" y="58" width="6" height="6" rx="1"/><rect x="756" y="58" width="6" height="6" rx="1"/>
+        <rect x="740" y="74" width="6" height="6" rx="1"/><rect x="756" y="74" width="6" height="6" rx="1"/>
+        <rect x="740" y="90" width="6" height="6" rx="1"/><rect x="756" y="90" width="6" height="6" rx="1"/>
+      </g>
+
+      <!-- Animated Crane -->
+      <g class="skyline-crane" transform="translate(680,0)">
+        <rect x="-3" y="10" width="6" height="130" fill="rgba(226,88,34,0.2)" rx="1"/>
+        <g class="crane-arm">
+          <rect x="-60" y="8" width="120" height="4" fill="rgba(226,88,34,0.25)" rx="1"/>
+          <g class="crane-ball">
+            <line x1="-40" y1="12" x2="-40" y2="45" stroke="rgba(226,88,34,0.2)" stroke-width="1"/>
+            <rect x="-48" y="45" width="16" height="12" rx="2" fill="rgba(226,88,34,0.2)"/>
+          </g>
+        </g>
+        <!-- Support cables -->
+        <line x1="0" y1="8" x2="-55" y2="12" stroke="rgba(226,88,34,0.12)" stroke-width="1"/>
+        <line x1="0" y1="8" x2="55" y2="12" stroke="rgba(226,88,34,0.12)" stroke-width="1"/>
+      </g>
+
+      <!-- Second Crane -->
+      <g class="skyline-crane" transform="translate(1100,0)" style="animation-delay:2s;animation-duration:10s;">
+        <rect x="-2" y="20" width="4" height="120" fill="rgba(226,88,34,0.15)" rx="1"/>
+        <g class="crane-arm" style="animation-delay:1s;">
+          <rect x="-50" y="18" width="100" height="3" fill="rgba(226,88,34,0.18)" rx="1"/>
+          <g class="crane-ball" style="animation-delay:0.5s;">
+            <line x1="-30" y1="21" x2="-30" y2="50" stroke="rgba(226,88,34,0.15)" stroke-width="1"/>
+            <rect x="-36" y="50" width="12" height="10" rx="2" fill="rgba(226,88,34,0.15)"/>
+          </g>
+        </g>
+        <line x1="0" y1="18" x2="-45" y2="21" stroke="rgba(226,88,34,0.1)" stroke-width="1"/>
+        <line x1="0" y1="18" x2="45" y2="21" stroke="rgba(226,88,34,0.1)" stroke-width="1"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <div class="stat-number" data-target="12400" data-prefix="">0</div>
+    <div class="stat-label">Projects Scoped</div>
+  </div>
+  <div class="stat-item reveal stagger-1">
+    <div class="stat-number" data-target="97" data-prefix="">0</div>
+    <div class="stat-label">Accuracy Rate (%)</div>
+  </div>
+  <div class="stat-item reveal stagger-2">
+    <div class="stat-number" data-target="840" data-prefix="">0</div>
+    <div class="stat-label">Verified Contractors</div>
+  </div>
+  <div class="stat-item reveal stagger-3">
+    <div class="stat-number" data-target="32" data-prefix="">0</div>
+    <div class="stat-label">Cities Live</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="hiw" class="hiw-section">
+  <span class="section-badge reveal">Simple 4-Step Process</span>
+  <h2 class="section-title reveal stagger-1">From Description to Dispatch</h2>
+  <p class="section-sub reveal stagger-2">No expertise needed. Plain language in, structured protocol out.</p>
+  <div class="steps-grid">
+    <!-- Step 1: Pencil/Write Icon -->
+    <div class="step-card reveal stagger-1">
+      <div class="step-icon-wrap">
+        <svg class="step-svg-icon" viewBox="0 0 64 64">
+          <rect class="icon-fill" x="12" y="10" width="40" height="48" rx="4"/>
+          <path class="icon-path" d="M20 20h24M20 28h18M20 36h22M20 44h14"/>
+          <path class="icon-path" d="M44 8l8 8-24 24H20v-8L44 8z"/>
+        </svg>
+        <div class="step-num-badge">1</div>
+      </div>
+      <h4>Describe the Work</h4>
+      <p>Type what needs renovation in plain conversational language — no technical jargon required.</p>
+    </div>
+    <!-- Step 2: AI/Brain Icon -->
+    <div class="step-card reveal stagger-2">
+      <div class="step-icon-wrap">
+        <svg class="step-svg-icon" viewBox="0 0 64 64">
+          <circle class="icon-fill" cx="32" cy="32" r="20"/>
+          <path class="icon-path" d="M32 12a20 20 0 1 1 0 40 20 20 0 0 1 0-40"/>
+          <path class="icon-path" d="M24 22c0-4 4-6 8-6s8 2 8 6-4 6-8 8v4"/>
+          <circle class="icon-path" cx="32" cy="44" r="2" fill="currentColor" style="stroke-dasharray:8;stroke-dashoffset:8;"/>
+          <path class="icon-path" d="M10 32h6M48 32h6M32 10v6M32 48v6"/>
+        </svg>
+        <div class="step-num-badge">2</div>
+      </div>
+      <h4>AI Parses &amp; Scopes</h4>
+      <p>Our LLM engine extracts entities, spatial estimates, and trade requirements in seconds.</p>
+    </div>
+    <!-- Step 3: Checklist Icon -->
+    <div class="step-card reveal stagger-3">
+      <div class="step-icon-wrap">
+        <svg class="step-svg-icon" viewBox="0 0 64 64">
+          <rect class="icon-fill" x="14" y="8" width="36" height="48" rx="4"/>
+          <path class="icon-path" d="M14 8h36a4 4 0 0 1 4 4v40a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z"/>
+          <path class="icon-path" d="M20 22l4 4 8-8"/>
+          <path class="icon-path" d="M38 22h8"/>
+          <path class="icon-path" d="M20 34l4 4 8-8"/>
+          <path class="icon-path" d="M38 34h8"/>
+          <path class="icon-path" d="M20 46l4 4 8-8"/>
+          <path class="icon-path" d="M38 46h8"/>
+        </svg>
+        <div class="step-num-badge">3</div>
+      </div>
+      <h4>Review BoQ &amp; Prices</h4>
+      <p>Get a live Bill of Quantities with regional wholesale rates. Tick items to customize your scope.</p>
+    </div>
+    <!-- Step 4: Truck/Dispatch Icon -->
+    <div class="step-card reveal stagger-4">
+      <div class="step-icon-wrap">
+        <svg class="step-svg-icon" viewBox="0 0 64 64">
+          <rect class="icon-fill" x="4" y="18" width="36" height="24" rx="3"/>
+          <path class="icon-path" d="M4 18h36v24H4z"/>
+          <path class="icon-path" d="M40 26h12l8 10v6H40z"/>
+          <circle class="icon-path" cx="16" cy="46" r="5"/>
+          <circle class="icon-path" cx="48" cy="46" r="5"/>
+          <path class="icon-path" d="M21 42h22"/>
+        </svg>
+        <div class="step-num-badge">4</div>
+      </div>
+      <h4>Dispatch to Depot</h4>
+      <p>Push your cart to the nearest regional depot at zero-margin B2B pass-through pricing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI DEMO WORKBENCH -->
+<section id="demo" class="demo-container gradient-border">
+  <div class="demo-header reveal">
+    <h2>⚡ Instant Scope &amp; BoQ Generator</h2>
+    <p style="color:var(--text-muted);font-size:.95rem;margin-top:.5rem;">Try a preset or type your own renovation requirements below</p>
+  </div>
+  <div class="prompt-pills reveal stagger-1">
+    <span class="prompt-pill" onclick="setPrompt('Repaint 10x12 bedroom with primer and fix broken kitchen cabinet')">🎨 Bedroom Paint &amp; Cabinet Fix</span>
+    <span class="prompt-pill" onclick="setPrompt('Fix leaking bathroom CPVC pipe and replace mixer tap')">🚰 Leaking CPVC &amp; Tap Replacement</span>
+    <span class="prompt-pill" onclick="setPrompt('Complete rewiring of 2BHK and install 6 modular switchboards')">⚡ 2BHK Electrical Rewiring</span>
+  </div>
+  <div class="input-group reveal stagger-2">
+    <input type="text" id="userInput" placeholder="e.g., Repaint my 10x12 bedroom and fix a broken wooden cabinet..." value="Repaint 10x12 bedroom with primer and fix broken kitchen cabinet">
+    <button class="btn-primary" onclick="simulateAI(event)">Generate Scope ⚡</button>
+  </div>
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <div class="pipeline-wrap">
+      <div class="pipeline-track"><div class="pipeline-fill" id="pipelineFill"></div></div>
+      <div class="pipeline-status" id="pipelineStatus">Analyzing task scope...</div>
+    </div>
+  </div>
+  <div class="results-dashboard" id="results">
+    <div class="results-header-actions">
+      <div class="results-badge">✓ Scope &amp; BoQ Synthesized (Confidence: 97.2%)</div>
+      <button class="btn-copy" onclick="copyProjectSummary()">📋 Copy Summary</button>
+    </div>
+    <div class="dashboard-grid">
+      <div class="metric-card"><h4>Required Trades</h4><div class="value" id="resTrades">--</div></div>
+      <div class="metric-card"><h4>Estimated Duration</h4><div class="value" id="resDuration">--</div></div>
+      <div class="metric-card"><h4>Baseline Cost Estimate</h4><div class="value" id="resCost">Rs.0</div></div>
+    </div>
+    <div class="materials-list">
+      <div class="materials-list-header">
+        <h4>📋 Automated Bill of Quantities (BoQ)</h4>
+        <span style="font-size:.8rem;color:var(--text-muted);font-weight:600;">Uncheck to exclude</span>
+      </div>
+      <ul id="resMaterialsList"></ul>
+      <div class="tag-row">
+        <span style="font-size:.85rem;color:var(--text-muted);font-weight:600;">💡 Total auto-tracks selected items</span>
+        <button class="btn-primary" style="padding:.65rem 1.3rem;font-size:.85rem;" onclick="addBoQToCart(event)">Push to Job Cart 📦</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETPLACE -->
+<section id="marketplace" class="marketplace">
+  <span class="section-badge reveal">Zero-Margin Depot Pass-Through</span>
+  <h2 class="section-title reveal stagger-1">Integrated B2B Material Store</h2>
+  <p style="color:var(--text-muted);margin-top:.4rem;" class="reveal stagger-2">Workers and contractors order directly at wholesale regional discounts.</p>
+  <div class="market-search-bar reveal stagger-3">
+    <span class="search-icon-fixed">🔍</span>
+    <input type="text" id="marketSearch" placeholder="Search cement, pipes, emulsion..." oninput="filterMarketplace()">
+  </div>
+  <div class="category-tabs reveal stagger-4" id="categoryTabs">
+    <button class="cat-tab active" data-cat="all" onclick="filterByCategory(this,'all')">All Products</button>
+    <button class="cat-tab" data-cat="cement" onclick="filterByCategory(this,'cement')">🧱 Cement</button>
+    <button class="cat-tab" data-cat="plumbing" onclick="filterByCategory(this,'plumbing')">🚰 Plumbing</button>
+    <button class="cat-tab" data-cat="paint" onclick="filterByCategory(this,'paint')">🎨 Paint</button>
+    <button class="cat-tab" data-cat="electrical" onclick="filterByCategory(this,'electrical')">⚡ Electrical</button>
+    <button class="cat-tab" data-cat="hardware" onclick="filterByCategory(this,'hardware')">🔩 Hardware</button>
+  </div>
+  <div class="store-grid" id="storeGrid">
+    <div class="product reveal stagger-1" data-name="ambuja portland cement 50kg bag" data-cat="cement">
+      <div class="discount-pill">15% OFF</div>
+      <div><h3>Ambuja Portland Cement</h3><p class="product-meta">50kg Bag • Grade 53 • Verified Depot</p></div>
+      <div>
+        <div class="pricing-wrap"><span class="price">Rs.380</span><strike>Rs.450</strike></div>
+        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        <button class="btn-outline" onclick="addToCartQty(this,'Ambuja Portland Cement (50kg)',380)">Add to Job Cart</button>
+      </div>
+    </div>
+    <div class="product reveal stagger-2" data-name="astral cpvc pipes heavy duty 3m plumbing" data-cat="plumbing">
+      <div class="discount-pill">18% OFF</div>
+      <div><h3>Astral CPVC Pipes (Heavy Duty)</h3><p class="product-meta">3m Length • 1-inch • Plumbing Grade</p></div>
+      <div>
+        <div class="pricing-wrap"><span class="price">Rs.420</span><strike>Rs.510</strike></div>
+        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        <button class="btn-outline" onclick="addToCartQty(this,'Astral CPVC Pipe (3m)',420)">Add to Job Cart</button>
+      </div>
+    </div>
+    <div class="product reveal stagger-3" data-name="asian paints tractor emulsion 20l bucket matte paint" data-cat="paint">
+      <div class="discount-pill">12% OFF</div>
+      <div><h3>Asian Paints Tractor Emulsion</h3><p class="product-meta">20L Bucket • Matte White Finish</p></div>
+      <div>
+        <div class="pricing-wrap"><span class="price">Rs.2,850</span><strike>Rs.3,240</strike></div>
+        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        <button class="btn-outline" onclick="addToCartQty(this,'Asian Paints Tractor Emulsion (20L)',2850)">Add to Job Cart</button>
+      </div>
+    </div>
+    <div class="product reveal stagger-1" data-name="polycab fr wire 1.5 sqmm electrical wiring coil" data-cat="electrical">
+      <div class="discount-pill">10% OFF</div>
+      <div><h3>Polycab FR Wire 1.5 sq mm</h3><p class="product-meta">90m Coil • Fire Retardant • ISI Marked</p></div>
+      <div>
+        <div class="pricing-wrap"><span class="price">Rs.1,580</span><strike>Rs.1,750</strike></div>
+        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        <button class="btn-outline" onclick="addToCartQty(this,'Polycab FR Wire 1.5sqmm (90m)',1580)">Add to Job Cart</button>
+      </div>
+    </div>
+    <div class="product reveal stagger-2" data-name="ebco soft close cabinet hinges hardware fittings" data-cat="hardware">
+      <div class="discount-pill">20% OFF</div>
+      <div><h3>Ebco Soft-Close Cabinet Hinges</h3><p class="product-meta">Pack of 4 Pairs • Concealed Mount</p></div>
+      <div>
+        <div class="pricing-wrap"><span class="price">Rs.960</span><strike>Rs.1,200</strike></div>
+        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        <button class="btn-outline" onclick="addToCartQty(this,'Ebco Soft-Close Hinges (4 pairs)',960)">Add to Job Cart</button>
+      </div>
+    </div>
+    <div class="product reveal stagger-3" data-name="birla white primer wall seal bag paint interior" data-cat="paint">
+      <div class="discount-pill">8% OFF</div>
+      <div><h3>Birla White Wall Seal Primer</h3><p class="product-meta">1 Bag (30kg) • Interior/Exterior</p></div>
+      <div>
+        <div class="pricing-wrap"><span class="price">Rs.755</span><strike>Rs.820</strike></div>
+        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        <button class="btn-outline" onclick="addToCartQty(this,'Birla White Wall Seal Primer (30kg)',755)">Add to Job Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div style="max-width:1100px;margin:0 auto;">
+    <span class="section-badge reveal">Trusted by Contractors</span>
+    <h2 class="section-title reveal stagger-1">What Our Partners Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal stagger-1">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"GharSetu cut my estimation time from 2 days to under 10 minutes. The BoQ accuracy is incredible — I barely need to revise anything before sending to clients."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#E25822,#FF8C60)">R</div>
+          <div><div class="author-name">Rahul Mehta</div><div class="author-role">General Contractor, Pune</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal stagger-2">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"The B2B depot pricing is genuinely wholesale. Saved almost 18% on materials last quarter. The cart-to-dispatch flow is seamless and fast."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#1A1D26,#3A4055)">P</div>
+          <div><div class="author-name">Priya Sharma</div><div class="author-role">Interior Designer, Mumbai</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal stagger-3">
+        <div class="stars">★★★★☆</div>
+        <p class="testimonial-text">"Finally, a tool built for Indian construction realities. Regional pricing, local trade provisioning, and CPVC-specific scoping. My crew uses it daily."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">A</div>
+          <div><div class="author-name">Arjun Nair</div><div class="author-role">Master Plumber, Bengaluru</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)">
+  <div class="cart-drawer" onclick="event.stopPropagation()">
+    <div class="cart-header">
+      <h3>📦 Job Procurement Cart</h3>
+      <button class="close-cart" onclick="toggleCart(false)">✕</button>
+    </div>
+    <div class="cart-body" id="cartItemList">
+      <p style="color:var(--text-muted);text-align:center;margin-top:3rem;font-size:.92rem;">Your Job Cart is empty.<br><span style="font-size:2rem">🧱</span></p>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Estimated Total</span>
+        <span id="cartTotalDisplay" style="font-family:'JetBrains Mono',monospace;color:var(--terracotta);">Rs.0</span>
+      </div>
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:1rem;" onclick="checkoutCart(event)">Proceed to B2B Dispatch 🚚</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toastMessage">
+  <span id="toastIcon">✓</span>
+  <span id="toastText">Item updated!</span>
+</div>
+
+<!-- Scroll To Top -->
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">Ghar<span>Setu</span></div>
+      <p>Standardized Construction Protocol and AI Scoping Engine. Connecting contractors with zero-margin wholesale depots across India.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Platform</h5>
+      <a href="#">AI Scoper</a><a href="#">B2B Store</a><a href="#">Contractor Portal</a><a href="#">Regional Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Trades</h5>
+      <a href="#">Painting</a><a href="#">Plumbing</a><a href="#">Electrical</a><a href="#">Carpentry</a>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="#">About Us</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <strong>GharSetu</strong>. All rights reserved. Built for Indian construction professionals.</p>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   1. PAGE LOADER
+   ═══════════════════════════════════════════════════════════════════ */
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('page-loader').classList.add('hidden'),1600));
+
+/* ═══════════════════════════════════════════════════════════════════
+   2. CURSOR GLOW — smooth lerp follow (JS)
+   ═══════════════════════════════════════════════════════════════════ */
+const glow=document.getElementById('cursorGlow');
+let mouseX=0,mouseY=0,glowX=0,glowY=0;
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;});
+function animateGlow(){
+  glowX+=(mouseX-glowX)*0.07;glowY+=(mouseY-glowY)*0.07;
+  glow.style.left=glowX+'px';glow.style.top=glowY+'px';
+  requestAnimationFrame(animateGlow);
+}
+animateGlow();
+
+/* ═══════════════════════════════════════════════════════════════════
+   3. WebGL GLSL SHADER — Subtle animated noise for hero (WebGL)
+   ═══════════════════════════════════════════════════════════════════ */
+(function initWebGL(){
+  const canvas=document.getElementById('webgl-bg');
+  const gl=canvas.getContext('webgl');
+  if(!gl){canvas.style.display='none';return;}
+
+  function resize(){canvas.width=canvas.clientWidth;canvas.height=canvas.clientHeight;gl.viewport(0,0,canvas.width,canvas.height);}
+  resize();window.addEventListener('resize',resize);
+
+  // GLSL Vertex Shader
+  const vsSrc=`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0,1);}`;
+
+  // GLSL Fragment Shader — organic noise gradient
+  const fsSrc=`
+    precision mediump float;
+    uniform float u_time;
+    uniform vec2 u_res;
+    
+    float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    float noise(vec2 p){
+      vec2 i=floor(p),f=fract(p);
+      f=f*f*(3.0-2.0*f);
+      float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
+      return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);
+    }
+    float fbm(vec2 p){
+      float v=0.0,a=0.5;
+      for(int i=0;i<4;i++){v+=a*noise(p);p*=2.0;a*=0.5;}
+      return v;
+    }
+    void main(){
+      vec2 uv=gl_FragCoord.xy/u_res;
+      float n=fbm(uv*3.0+u_time*0.08);
+      float n2=fbm(uv*5.0-u_time*0.05+10.0);
+      vec3 c1=vec3(0.886,0.345,0.133);  // terracotta
+      vec3 c2=vec3(1.0,0.55,0.35);       // light orange
+      vec3 c3=vec3(1.0,0.97,0.94);       // warm white
+      vec3 col=mix(c3,mix(c2,c1,n*0.5),n2*0.15);
+      gl_FragColor=vec4(col,0.12);
+    }
+  `;
+
+  function compileShader(src,type){
+    const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;
+  }
+  const prog=gl.createProgram();
+  gl.attachShader(prog,compileShader(vsSrc,gl.VERTEX_SHADER));
+  gl.attachShader(prog,compileShader(fsSrc,gl.FRAGMENT_SHADER));
+  gl.linkProgram(prog);gl.useProgram(prog);
+
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const aPos=gl.getAttribLocation(prog,'a_pos');
+  gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+
+  const uTime=gl.getUniformLocation(prog,'u_time');
+  const uRes=gl.getUniformLocation(prog,'u_res');
+
+  function draw(t){
+    gl.uniform1f(uTime,t*0.001);
+    gl.uniform2f(uRes,canvas.width,canvas.height);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   4. INTERACTIVE BUILDING BLOCKS — Canvas 2D with cursor parallax
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('blocks-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  const blocks=[];
+  const COLORS=['#E25822','#FF8C60','#FFB088','#D4A574','#C49A6C','#B8860B','#CD853F'];
+
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+
+  for(let i=0;i<35;i++){
+    const w=Math.random()*30+12,h=Math.random()*20+8;
+    blocks.push({
+      x:Math.random()*2000,y:Math.random()*2000,w,h,
+      baseX:Math.random()*2000,baseY:Math.random()*2000,
+      vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,
+      rotation:Math.random()*Math.PI*2,rotSpeed:(Math.random()-.5)*.003,
+      color:COLORS[Math.floor(Math.random()*COLORS.length)],
+      opacity:Math.random()*.12+.03,
+      parallaxFactor:Math.random()*.02+.005,
+      bobPhase:Math.random()*Math.PI*2,bobSpeed:Math.random()*.008+.003,bobAmp:Math.random()*8+3,
+    });
+  }
+
+  let mxC=W/2,myC=H/2;
+  document.addEventListener('mousemove',e=>{mxC=e.clientX;myC=e.clientY;});
+
+  let time=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);time++;
+    blocks.forEach(b=>{
+      b.baseX+=b.vx;b.baseY+=b.vy;
+      if(b.baseX<-50)b.baseX=W+50;if(b.baseX>W+50)b.baseX=-50;
+      if(b.baseY<-50)b.baseY=H+50;if(b.baseY>H+50)b.baseY=-50;
+      const dx=(mxC-W/2)*b.parallaxFactor;
+      const dy=(myC-H/2)*b.parallaxFactor;
+      const bob=Math.sin(time*b.bobSpeed+b.bobPhase)*b.bobAmp;
+      b.x=b.baseX+dx;b.y=b.baseY+dy+bob;
+      b.rotation+=b.rotSpeed;
+      ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.rotation);ctx.globalAlpha=b.opacity;
+      ctx.beginPath();ctx.roundRect(-b.w/2,-b.h/2,b.w,b.h,3);ctx.fillStyle=b.color;ctx.fill();
+      ctx.beginPath();ctx.roundRect(-b.w/2,-b.h/2,b.w,b.h*0.3,3);ctx.fillStyle='rgba(255,255,255,0.15)';ctx.fill();
+      ctx.restore();
+    });
+    for(let i=0;i<blocks.length;i++){for(let j=i+1;j<blocks.length;j++){
+      const dx=blocks[i].x-blocks[j].x,dy=blocks[i].y-blocks[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<150){ctx.beginPath();ctx.strokeStyle='rgba(226,88,34,'+(0.03*(1-d/150))+')';ctx.lineWidth=.5;
+      ctx.moveTo(blocks[i].x,blocks[i].y);ctx.lineTo(blocks[j].x,blocks[j].y);ctx.stroke();}
+    }}
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   5. FLOATING ELEMENTS — CSS transform parallax via JS
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  const floats=document.querySelectorAll('.float-el');
+  document.addEventListener('mousemove',e=>{
+    const cx=e.clientX/window.innerWidth-.5;
+    const cy=e.clientY/window.innerHeight-.5;
+    floats.forEach((el,i)=>{
+      const f=(i+1)*10;
+      el.style.transform=`translate(${-cx*f}px,${-cy*f}px) rotate(${cx*8}deg)`;
+    });
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   6. SVG ICON DRAW-ON-SCROLL — Web Animations API
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const card=entry.target;
+        card.classList.add('drawn');
+        // Use Web Animations API for bounce entrance
+        card.animate([
+          {transform:'translateY(30px) scale(0.95)',opacity:0},
+          {transform:'translateY(-8px) scale(1.02)',opacity:1},
+          {transform:'translateY(0) scale(1)',opacity:1}
+        ],{duration:700,easing:'cubic-bezier(0.34,1.56,0.64,1)',fill:'forwards'});
+        observer.unobserve(card);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.step-card').forEach(c=>observer.observe(c));
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   7. 3D TILT EFFECT — JS transform on mousemove
+   ═══════════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.product, .testimonial-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const rect=card.getBoundingClientRect();
+    const x=(e.clientX-rect.left)/rect.width-.5;
+    const y=(e.clientY-rect.top)/rect.height-.5;
+    card.style.transform=`translateY(-10px) perspective(600px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='';
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   8. SCROLL: progress bar, nav shrink, scroll-to-top
+   ═══════════════════════════════════════════════════════════════════ */
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY,max=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('scroll-progress').style.width=(s/max*100)+'%';
+  document.getElementById('mainNav').classList.toggle('scrolled',s>60);
+  document.getElementById('scrollTop').classList.toggle('visible',s>400);
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   9. DARK MODE TOGGLE
+   ═══════════════════════════════════════════════════════════════════ */
+function toggleTheme(){
+  const root=document.documentElement;
+  const dark=root.getAttribute('data-theme')==='dark';
+  root.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('themeLabel').textContent=dark?'☀️':'🌙';
+  localStorage.setItem('gs-theme',dark?'light':'dark');
+}
+(function(){
+  const saved=localStorage.getItem('gs-theme');
+  if(saved==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('themeLabel').textContent='🌙';}
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   10. MOBILE MENU
+   ═══════════════════════════════════════════════════════════════════ */
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}
+
+/* ═══════════════════════════════════════════════════════════════════
+   11. SCROLL REVEAL — IntersectionObserver
+   ═══════════════════════════════════════════════════════════════════ */
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ═══════════════════════════════════════════════════════════════════
+   12. STAT COUNTERS
+   ═══════════════════════════════════════════════════════════════════ */
+const so=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const t=parseInt(e.target.getAttribute('data-target'));
+      animateCounter(e.target,t,'',1800);
+      so.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>so.observe(el));
+
+/* ═══════════════════════════════════════════════════════════════════
+   13. TYPEWRITER
+   ═══════════════════════════════════════════════════════════════════ */
+const phrases=['Structured Code','Clear BoQ Plans','Verified Contracts','On-Budget Jobs'];
+let pi=0,ci=0,del=false;
+const tw=document.getElementById('typewriterTarget');
+function typewrite(){
+  const cur=phrases[pi];
+  if(!del){tw.textContent=cur.slice(0,++ci);if(ci===cur.length){del=true;setTimeout(typewrite,1800);return;}}
+  else{tw.textContent=cur.slice(0,--ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;}}
+  setTimeout(typewrite,del?55:95);
+}
+setTimeout(typewrite,1700);
+
+/* ═══════════════════════════════════════════════════════════════════
+   14. HERO PARTICLES — Canvas 2D
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('hero-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,pts=[];
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<50;i++)pts.push({x:Math.random()*1400,y:Math.random()*700,r:Math.random()*2+.5,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,o:Math.random()*.3+.1});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(226,88,34,'+p.o+')';ctx.fill();
+    });
+    for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ctx.beginPath();ctx.strokeStyle='rgba(226,88,34,'+(0.1*(1-d/120))+')';ctx.lineWidth=.5;ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}
+    }}
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   15. RIPPLE — click effect on buttons
+   ═══════════════════════════════════════════════════════════════════ */
+document.addEventListener('click',function(e){
+  const btn=e.target.closest('.btn-primary,.btn-hero-primary,.btn-outline');
+  if(!btn)return;
+  const rect=btn.getBoundingClientRect();
+  const r=document.createElement('span');
+  r.className='ripple';
+  const sz=Math.max(rect.width,rect.height)*2;
+  r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+  btn.appendChild(r);
+  setTimeout(()=>r.remove(),650);
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   16. TOAST
+   ═══════════════════════════════════════════════════════════════════ */
+function showToast(text,icon='✓'){
+  const t=document.getElementById('toastMessage');
+  document.getElementById('toastText').innerText=text;
+  document.getElementById('toastIcon').innerText=icon;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   17. CART
+   ═══════════════════════════════════════════════════════════════════ */
+let cartItems=[];
+function toggleCart(open){const o=document.getElementById('cartOverlay');if(open){renderCart();o.classList.add('open');}else o.classList.remove('open');}
+function addToCartQty(btn,name,base){
+  const q=parseInt(btn.closest('.product').querySelector('.qty-val').textContent);
+  for(let i=0;i<q;i++)cartItems.push({name,price:base,qty:1});
+  updateCartCounter();showToast('Added '+q+'x '+name,'📦');
+}
+function removeFromCart(i){cartItems.splice(i,1);updateCartCounter();renderCart();showToast('Item removed','🗑');}
+function updateCartCounter(){
+  const b=document.getElementById('cartCount');
+  b.innerText=cartItems.length;b.classList.add('cart-bump');
+  setTimeout(()=>b.classList.remove('cart-bump'),350);
+}
+function renderCart(){
+  const c=document.getElementById('cartItemList'),td=document.getElementById('cartTotalDisplay');
+  if(!cartItems.length){c.innerHTML='<p style="color:var(--text-muted);text-align:center;margin-top:3rem;font-size:.92rem;">Cart is empty<br><span style="font-size:2rem">🧱</span></p>';td.innerText='Rs.0';return;}
+  let html='',total=0;
+  cartItems.forEach((item,i)=>{total+=item.price;html+=`<div class="cart-item"><div><h5>${item.name}</h5><p>Rs.${item.price.toLocaleString('en-IN')}</p></div><button class="cart-item-remove" onclick="removeFromCart(${i})">Remove</button></div>`;});
+  c.innerHTML=html;td.innerText='Rs.'+total.toLocaleString('en-IN');
+}
+
+// ── Real API Checkout ──────────────────────────────────────────────────────
+async function checkoutCart(e){
+  if(!cartItems.length){showToast('Add items first','⚠️');return;}
+  const btn=e.target;
+  btn.disabled=true;btn.innerText='Placing Order...';
+  try{
+    const res=await fetch('/api/orders',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        items:cartItems,
+        city:'Mumbai',
+        notes:'Placed from GharSetu web app'
+      })
+    });
+    const data=await res.json();
+    if(data.success){
+      showToast(`${data.order.id} confirmed! Dispatch in 2 days 🚚`,'✓');
+      cartItems=[];updateCartCounter();
+      setTimeout(()=>toggleCart(false),1200);
+    } else {
+      showToast(data.message||'Order failed','⚠️');
+    }
+  }catch(err){
+    console.error(err);
+    showToast('Server offline — order saved locally','⚠️');
+    cartItems=[];updateCartCounter();setTimeout(()=>toggleCart(false),800);
+  }finally{
+    btn.disabled=false;btn.innerText='Proceed to B2B Dispatch 🚚';
+  }
+}
+
+function changeQty(btn,d){
+  const v=btn.parentElement.querySelector('.qty-val');
+  let q=parseInt(v.textContent)+d;
+  if(q<1)q=1;if(q>20)q=20;v.textContent=q;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   18. AI SCOPE — Real API call to /api/scope/generate
+   ═══════════════════════════════════════════════════════════════════ */
+let currentBoQ=[],laborBaseCost=5000;
+
+function setPrompt(t){document.getElementById('userInput').value=t;simulateAI();}
+
+async function simulateAI(){
+  const input=document.getElementById('userInput').value;
+  if(!input.trim()){showToast('Describe your project first','⚠️');return;}
+  const loader=document.getElementById('loader'),results=document.getElementById('results'),
+        fill=document.getElementById('pipelineFill'),status=document.getElementById('pipelineStatus');
+  results.style.display='none';loader.style.display='block';fill.style.width='0%';
+
+  // Animate pipeline progress bar
+  const steps=[[0,'Tokenizing requirements...'],[28,'Extracting entities & estimating scope...'],[55,'Cross-referencing materials catalog...'],[80,'Compiling labor schedule & BoQ...'],[100,'Finalizing scope document...']];
+  let si=0;
+  const pipelineInterval=setInterval(()=>{
+    if(si>=steps.length){clearInterval(pipelineInterval);return;}
+    const[p,m]=steps[si++];fill.style.width=p+'%';status.innerText=m;
+  },400);
+
+  try{
+    const res=await fetch('/api/scope/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({description:input})
+    });
+    const data=await res.json();
+    clearInterval(pipelineInterval);fill.style.width='100%';
+
+    if(data.success){
+      const s=data.scope;
+      document.getElementById('resTrades').innerText=s.trades;
+      document.getElementById('resDuration').innerText=s.duration;
+      document.querySelector('.results-badge').innerHTML=`✓ Scope Synthesized (Confidence: ${s.confidence}%)`;
+      laborBaseCost=s.laborCost;
+      currentBoQ=s.boq.map(item=>({...item,checked:true}));
+      renderBoQ();
+    } else {
+      showToast('Could not generate scope','⚠️');
+    }
+  }catch(err){
+    clearInterval(pipelineInterval);
+    console.warn('API unreachable, using local fallback',err);
+    setupScopeDataFallback(input.toLowerCase());
+  }finally{
+    setTimeout(()=>{
+      loader.style.display='none';
+      results.style.display='block';
+      setTimeout(()=>results.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+    },500);
+  }
+}
+
+// Fallback (when server is offline)
+function setupScopeDataFallback(input){
+  const tr=document.getElementById('resTrades'),du=document.getElementById('resDuration');
+  if(input.includes('leak')||input.includes('pipe')||input.includes('tap')||input.includes('plumb')){
+    tr.innerText='1 Master Plumber';du.innerText='1 Day (3–5 hrs)';laborBaseCost=1200;
+    currentBoQ=[{name:'Astral CPVC Pipe (1-inch, 2×3m)',price:840,checked:true},{name:'Brass Concealed Stop Cock Valve',price:650,checked:true},{name:'Teflon Tape + CPVC Solvent Cement',price:180,checked:true},{name:'Chrome Finish Basin Mixer Tap',price:1150,checked:true}];
+  }else if(input.includes('wire')||input.includes('electr')||input.includes('switch')){
+    tr.innerText='2 Certified Electricians';du.innerText='2 Days';laborBaseCost=3500;
+    currentBoQ=[{name:'Polycab 1.5 sq mm FR Wire (2 Coils)',price:3200,checked:true},{name:'Modular 8-Module Switch Plates (4 Units)',price:1800,checked:true},{name:'Schneider 16A MCB Single Pole',price:650,checked:true},{name:'PVC Conduit Pipes & Junction Boxes',price:950,checked:true}];
+  }else{
+    tr.innerText='1 Painter, 1 Carpenter';du.innerText='2–3 Days';laborBaseCost=5500;
+    currentBoQ=[{name:'Asian Paints Royale Emulsion (10L)',price:3850,checked:true},{name:'Birla White Wall Seal Primer (1 Bag)',price:820,checked:true},{name:'Commercial Grade Marine Ply (19mm, ½ Sheet)',price:1100,checked:true},{name:'Ebco Soft-Close Cabinet Hinges (2 Pairs)',price:480,checked:true}];
+  }
+  renderBoQ();
+}
+
+function renderBoQ(){
+  const list=document.getElementById('resMaterialsList');
+  let html='',mt=0;
+  currentBoQ.forEach((item,i)=>{
+    if(item.checked)mt+=item.price;
+    html+=`<li><label class="boq-item-label"><input type="checkbox" class="boq-checkbox" ${item.checked?'checked':''} onchange="toggleBoQItem(${i})"><span>${item.name}</span></label><span class="item-price">Rs.${item.price.toLocaleString('en-IN')}</span></li>`;
+  });
+  list.innerHTML=html;
+  animateCounter(document.getElementById('resCost'),laborBaseCost+mt);
+}
+function toggleBoQItem(i){currentBoQ[i].checked=!currentBoQ[i].checked;renderBoQ();}
+function addBoQToCart(){
+  const sel=currentBoQ.filter(i=>i.checked);
+  if(!sel.length){showToast('Select at least one item','⚠️');return;}
+  sel.forEach(item=>cartItems.push({name:item.name,price:item.price,qty:1}));
+  updateCartCounter();showToast('Pushed '+sel.length+' items to Job Cart!','📦');
+}
+function copyProjectSummary(){
+  const text='GharSetu Scope\nTrades: '+document.getElementById('resTrades').innerText+'\nDuration: '+document.getElementById('resDuration').innerText+'\nTotal: '+document.getElementById('resCost').innerText+'\nSource: GharSetu AI Engine v2.4';
+  navigator.clipboard.writeText(text).then(()=>showToast('Scope copied to clipboard!','📋'));
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   19. MARKETPLACE FILTER
+   ═══════════════════════════════════════════════════════════════════ */
+let activeCat='all';
+function filterMarketplace(){
+  const q=document.getElementById('marketSearch').value.toLowerCase();
+  document.querySelectorAll('#storeGrid .product').forEach(p=>{
+    const n=p.getAttribute('data-name'),c=p.getAttribute('data-cat');
+    const show=n.includes(q)&&(activeCat==='all'||c===activeCat);
+    p.classList.toggle('hidden',!show);
+    // Web Animations API: animate filter results
+    if(show){p.animate([{opacity:0,transform:'scale(0.95)'},{opacity:1,transform:'scale(1)'}],{duration:300,easing:'ease-out'});}
+  });
+}
+function filterByCategory(btn,cat){
+  activeCat=cat;document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');filterMarketplace();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   20. COUNTER ANIMATION
+   ═══════════════════════════════════════════════════════════════════ */
+function animateCounter(el,target,prefix='Rs.',duration=1200){
+  const start=performance.now();
+  function update(now){
+    const t=Math.min((now-start)/duration,1);
+    const e=t<.5?2*t*t:-1+(4-2*t)*t;
+    el.innerText=prefix+Math.floor(e*target).toLocaleString('en-IN');
+    if(t<1)requestAnimationFrame(update);
+    else el.innerText=prefix+target.toLocaleString('en-IN');
+  }
+  requestAnimationFrame(update);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   21. INIT — Check API health, then load scope default
+   ═══════════════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', async ()=>{
+  try{
+    const r=await fetch('/api/health');
+    const d=await r.json();
+    if(d.status==='ok'){
+      console.log(`%c✅ GharSetu API v${d.version} connected (uptime: ${d.uptime})`,'color:#10B981;font-weight:bold;font-size:12px;');
+    }
+  }catch(e){
+    console.warn('%c⚠️ GharSetu API offline — running in static mode','color:#E25822;font-weight:bold;font-size:12px;');
+  }
+  setupScopeDataFallback(document.getElementById('userInput').value.toLowerCase());
+});
+</script>
+</body>
+</html>
