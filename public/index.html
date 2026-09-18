@@ -479,7 +479,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <span>📦 Job Cart</span>
       <span class="cart-badge" id="cartCount">0</span>
     </div>
-    <a href="#" class="btn-nav">Contractor Login</a>
+    <a href="#" class="btn-nav" id="authNavBtn" onclick="openAuthModal();return false;">Contractor Login</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
     <span></span><span></span><span></span>
@@ -1416,6 +1416,200 @@ window.addEventListener('DOMContentLoaded', async ()=>{
   }
   setupScopeDataFallback(document.getElementById('userInput').value.toLowerCase());
 });
+</script>
+
+<!-- ═══ CONTRACTOR AUTH MODAL ═══ -->
+<div id="authModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div style="background:var(--card-bg,#fff);border-radius:20px;padding:2.5rem;width:90%;max-width:420px;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.25);animation:slideUp .3s ease;">
+    <button onclick="closeAuthModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted,#888);">✕</button>
+    <!-- Tabs -->
+    <div style="display:flex;gap:.5rem;margin-bottom:1.8rem;background:var(--glass-bg,#f5f5f5);border-radius:12px;padding:.3rem;">
+      <button id="tabLogin" onclick="switchTab('login')" style="flex:1;padding:.7rem;border:none;border-radius:10px;font-weight:600;cursor:pointer;background:#E25822;color:#fff;transition:.2s;">Login</button>
+      <button id="tabRegister" onclick="switchTab('register')" style="flex:1;padding:.7rem;border:none;border-radius:10px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-muted,#666);transition:.2s;">Register</button>
+    </div>
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;">🏗️</div>
+      <h2 id="authTitle" style="margin:.4rem 0 .2rem;font-size:1.4rem;">Contractor Login</h2>
+      <p style="color:var(--text-muted,#888);font-size:.88rem;" id="authSubtitle">Access your Build-IQ contractor dashboard</p>
+    </div>
+    <!-- Login Form -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">EMAIL</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.95rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;transition:.2s;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+      </div>
+      <div style="margin-bottom:1.4rem;">
+        <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PASSWORD</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.95rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;transition:.2s;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+      </div>
+      <button type="submit" id="loginBtn" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;">Login →</button>
+    </form>
+    <!-- Register Form -->
+    <form id="registerForm" onsubmit="handleRegister(event)" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
+        <div>
+          <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">NAME</label>
+          <input type="text" id="regName" placeholder="Your name" required style="width:100%;padding:.8rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+        </div>
+        <div>
+          <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">CITY</label>
+          <input type="text" id="regCity" placeholder="Mumbai" style="width:100%;padding:.8rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+        </div>
+      </div>
+      <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">EMAIL</label>
+        <input type="email" id="regEmail" placeholder="you@example.com" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+      </div>
+      <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PHONE</label>
+        <input type="tel" id="regPhone" placeholder="9876543210" style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+      </div>
+      <div style="margin-bottom:1.4rem;">
+        <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PASSWORD</label>
+        <input type="password" id="regPassword" placeholder="Min 6 characters" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+      </div>
+      <button type="submit" id="registerBtn" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;">Create Account →</button>
+    </form>
+    <p id="authMsg" style="text-align:center;margin-top:1rem;font-size:.88rem;min-height:1.2rem;color:#E25822;font-weight:600;"></p>
+  </div>
+</div>
+
+<style>
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+#authModal.open{display:flex!important;}
+.contractor-chip{display:flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;padding:.45rem 1rem;border-radius:20px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;}
+</style>
+
+<script>
+// ── Auth State ────────────────────────────────────────────────
+let authToken = localStorage.getItem('buildiq_token');
+let authUser  = JSON.parse(localStorage.getItem('buildiq_user') || 'null');
+
+function openAuthModal() {
+  if (authUser) { showContractorMenu(); return; }
+  document.getElementById('authModal').classList.add('open');
+  document.getElementById('authModal').style.display = 'flex';
+}
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('open');
+  document.getElementById('authModal').style.display = 'none';
+  document.getElementById('authMsg').textContent = '';
+}
+document.getElementById('authModal').addEventListener('click', function(e){ if(e.target===this) closeAuthModal(); });
+
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('loginForm').style.display    = isLogin ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = isLogin ? 'none'  : 'block';
+  document.getElementById('tabLogin').style.background    = isLogin ? '#E25822' : 'transparent';
+  document.getElementById('tabLogin').style.color         = isLogin ? '#fff' : 'var(--text-muted,#666)';
+  document.getElementById('tabRegister').style.background = isLogin ? 'transparent' : '#E25822';
+  document.getElementById('tabRegister').style.color      = isLogin ? 'var(--text-muted,#666)' : '#fff';
+  document.getElementById('authTitle').textContent    = isLogin ? 'Contractor Login' : 'Create Account';
+  document.getElementById('authSubtitle').textContent = isLogin ? 'Access your Build-IQ dashboard' : 'Join thousands of contractors on Build-IQ';
+  document.getElementById('authMsg').textContent = '';
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = 'Logging in...'; btn.disabled = true;
+  try {
+    const res = await fetch('/api/auth/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: document.getElementById('loginEmail').value, password: document.getElementById('loginPassword').value })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('buildiq_token', data.token);
+      localStorage.setItem('buildiq_user', JSON.stringify(data.contractor));
+      authToken = data.token; authUser = data.contractor;
+      closeAuthModal();
+      updateNavForLoggedIn();
+      showToast('Welcome back, ' + data.contractor.name + '! 🎉');
+    } else {
+      document.getElementById('authMsg').textContent = '❌ ' + data.message;
+    }
+  } catch(err) {
+    document.getElementById('authMsg').textContent = '❌ Connection error. Try again.';
+  }
+  btn.textContent = 'Login →'; btn.disabled = false;
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('registerBtn');
+  btn.textContent = 'Creating account...'; btn.disabled = true;
+  try {
+    const res = await fetch('/api/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: document.getElementById('regName').value,
+        email: document.getElementById('regEmail').value,
+        password: document.getElementById('regPassword').value,
+        phone: document.getElementById('regPhone').value,
+        city: document.getElementById('regCity').value
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('buildiq_token', data.token);
+      localStorage.setItem('buildiq_user', JSON.stringify(data.contractor));
+      authToken = data.token; authUser = data.contractor;
+      closeAuthModal();
+      updateNavForLoggedIn();
+      showToast('Welcome to Build-IQ, ' + data.contractor.name + '! 🏗️');
+    } else {
+      document.getElementById('authMsg').textContent = '❌ ' + data.message;
+    }
+  } catch(err) {
+    document.getElementById('authMsg').textContent = '❌ Connection error. Try again.';
+  }
+  btn.textContent = 'Create Account →'; btn.disabled = false;
+}
+
+function updateNavForLoggedIn() {
+  const btn = document.getElementById('authNavBtn');
+  if (authUser && btn) {
+    btn.innerHTML = '👷 ' + authUser.name.split(' ')[0];
+    btn.style.background = 'linear-gradient(135deg,#E25822,#ff7043)';
+    btn.style.color = '#fff';
+    btn.style.padding = '.45rem 1rem';
+    btn.style.borderRadius = '20px';
+    btn.style.fontWeight = '700';
+    btn.onclick = function(e){ e.preventDefault(); showContractorMenu(); };
+  }
+}
+
+function showContractorMenu() {
+  const existing = document.getElementById('contractorMenu');
+  if (existing) { existing.remove(); return; }
+  const menu = document.createElement('div');
+  menu.id = 'contractorMenu';
+  menu.style.cssText = 'position:fixed;top:70px;right:2rem;background:var(--card-bg,#fff);border-radius:14px;padding:1rem;box-shadow:0 12px 40px rgba(0,0,0,.15);z-index:9998;min-width:200px;animation:slideUp .2s ease;';
+  menu.innerHTML = `
+    <div style="font-weight:700;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px solid var(--border,#eee);">👷 ${authUser.name}</div>
+    <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.8rem;">📧 ${authUser.email}</div>
+    <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:1rem;">🏙️ ${authUser.city||'Not set'}</div>
+    <button onclick="logoutContractor()" style="width:100%;padding:.6rem;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:.9rem;">Logout</button>
+  `;
+  document.body.appendChild(menu);
+  setTimeout(()=>{ document.addEventListener('click', function handler(e){ if(!menu.contains(e.target) && e.target!==document.getElementById('authNavBtn')){ menu.remove(); document.removeEventListener('click',handler); }}); }, 100);
+}
+
+function logoutContractor() {
+  localStorage.removeItem('buildiq_token');
+  localStorage.removeItem('buildiq_user');
+  authToken = null; authUser = null;
+  const btn = document.getElementById('authNavBtn');
+  if (btn) { btn.innerHTML = 'Contractor Login'; btn.style = ''; btn.onclick = function(e){ e.preventDefault(); openAuthModal(); }; }
+  const menu = document.getElementById('contractorMenu');
+  if (menu) menu.remove();
+  showToast('Logged out successfully');
+}
+
+// Auto-restore session on page load
+if (authUser) { document.addEventListener('DOMContentLoaded', updateNavForLoggedIn); updateNavForLoggedIn(); }
 </script>
 </body>
 </html>
