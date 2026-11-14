@@ -15,8 +15,8 @@
 
 Homeowners usually struggle with vague scopes, repeated contractor site visits, and opaque pricing. With GharSetu:
 1. **Describe Once:** The homeowner explains the issue in plain language (e.g., bathroom pipe leak, bedroom repainting, or tripping MCB).
-2. **Editable Preliminary Scope:** GharSetu breaks the job into an itemized preliminary work scope with standard material and labor cost benchmarks.
-3. **Request Local Quotes:** Homeowners share the standardized, editable scope with relevant local professionals to receive transparent, comparable quotes.
+2. **Customizable Preliminary Scope:** GharSetu breaks the job into an itemized preliminary work scope with standard material and labor cost benchmarks.
+3. **Request Local Quotes:** Homeowners share the standardized, customizable scope with relevant local professionals in our future pilot network to receive transparent, comparable quotes.
 4. **Coordinate & Track:** Compare quotes, schedule visits, and track repair milestones in a single unified dashboard.
 
 ### Initial 5 Focus Services:
@@ -28,11 +28,13 @@ Homeowners usually struggle with vague scopes, repeated contractor site visits, 
 
 ---
 
-## ⚠️ Prototype Status & Pitch Demo Constraints
+## ⚠️ Prototype Status & Pitch Scope
 
 > **Important Notice:** This application is an interactive prototype prepared for a startup pitch demonstration.
+> - **Planning & Standardisation Layer:** The current prototype solves the planning and standardisation layer. Provider matching, verified onboarding, and live quote comparison are the next pilot phase.
+> - **Workflow Demonstration:** The platform demonstrates how that workflow will work; it does not connect homeowners to live contractors in this prototype phase.
 > - **Demo Data:** All seeded professionals, prices, quotes, and project statuses are clearly marked as illustrative prototype demo data.
-> - **Preliminary Estimates:** Cost estimates are indicative reference benchmarks based on standard CPWD schedules and market rates, not guaranteed contractor prices.
+> - **Customizable Preliminary Scopes:** Cost estimates are indicative reference benchmarks based on standard CPWD schedules and market rates, not guaranteed contractor prices.
 > - **No False Claims:** This prototype does not claim live warehouse inventory, automatic dispatch, nationwide coverage, or real-time payments.
 
 ---
@@ -46,7 +48,7 @@ Homeowners usually struggle with vague scopes, repeated contractor site visits, 
 ## ✨ Prototype Features
 
 ### 1. Conversational Repair Scoper
-- Converts natural language homeowner requests into an itemized, 100% editable preliminary scope.
+- Converts natural language homeowner requests into an itemized, customizable preliminary scope.
 - Auto-detects required trade categories and typical execution duration across the 5 focus trades.
 - Offline-resilient civil estimation core ensures deterministic preliminary scopes even when external AI APIs are offline.
 

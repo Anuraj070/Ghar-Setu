@@ -312,7 +312,7 @@ document.querySelectorAll('[data-target]').forEach(el => statsObserver.observe(e
 (function initTypewriter() {
   const tw = document.getElementById('typewriterTarget');
   if (!tw) return;
-  const phrases = ['Clear Preliminary Scopes', 'Fair Price Benchmarks', 'Trusted Local Quotes', 'Stress-Free Repairs'];
+  const phrases = ['Customizable preliminary scope', 'Fair Price Benchmarks', 'Transparent Local Quotes', 'Stress-Free Repairs'];
   let pi = 0, ci = 0, del = false;
   function typewrite() {
     const cur = phrases[pi];
@@ -649,7 +649,7 @@ async function simulateAI() {
     [25, 'Identifying relevant trade skills (Plumbing, Electrical, etc.)...'],
     [55, 'Cross-referencing standard material specs & CPWD benchmarks...'],
     [80, 'Synthesizing labor schedules & scope checklist...'],
-    [100, 'Finalizing editable preliminary scope...']
+    [100, 'Finalizing customizable preliminary scope...']
   ];
   let stepIdx = 0;
   const pipelineInterval = setInterval(() => {
@@ -743,7 +743,7 @@ function applyScopeData(s, originalInput, city) {
   if (tradesEl) tradesEl.innerText = normTrades;
   if (durEl) durEl.innerText = normDuration;
   if (badgeEl) {
-    badgeEl.innerHTML = `✓ Preliminary Scope Generated • 100% Editable <small style="font-weight:700;color:var(--terracotta);margin-left:.4rem;">(Prototype Demo)</small>`;
+    badgeEl.innerHTML = `✓ Preliminary Scope Generated • Customizable preliminary scope <small style="font-weight:700;color:var(--terracotta);margin-left:.4rem;">(Prototype Demo)</small>`;
   }
 
   laborBaseCost = normLabor;
