@@ -1,7 +1,7 @@
 {
-  "name": "build-iq",
-  "version": "3.0.0",
-  "description": "Build-IQ - AI Renovation & B2B Construction Platform",
+  "name": "ghar-setu",
+  "version": "4.0.0",
+  "description": "GharSetu - AI Renovation Scoping & B2B Construction Platform India",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -10,6 +10,7 @@
     "@supabase/supabase-js": "^2.45.4",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^18.0.10",
     "express": "^4.18.2",
     "express-rate-limit": "^7.4.0",
     "jsonwebtoken": "^9.0.2",
