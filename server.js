@@ -44,18 +44,18 @@ function authRequired(req, res, next) {
   catch(e) { return res.status(401).json({ success:false, message:'Invalid or expired token' }); }
 }
 
-// Verified Indian Wholesale Products Catalog
+// Verified Benchmark Catalog (Demo Data across 5 services)
 const PRODUCTS = [
-  { id:'prod-001', name:'Ambuja Portland Cement', meta:'50kg Bag • Grade 53 • Verified Depot', price:380, originalPrice:450, discount:15, category:'cement', stock:240, unit:'bag', tags:['cement','grade53','portland','ambuja'] },
-  { id:'prod-002', name:'Astral CPVC Pipes (Heavy Duty)', meta:'3m Length • 1-inch • Plumbing Grade', price:420, originalPrice:510, discount:18, category:'plumbing', stock:180, unit:'piece', tags:['cpvc','pipe','plumbing','astral'] },
-  { id:'prod-003', name:'Asian Paints Tractor Emulsion', meta:'20L Bucket • Matte White Finish', price:2850, originalPrice:3240, discount:12, category:'paint', stock:90, unit:'bucket', tags:['paint','emulsion','asian paints'] },
-  { id:'prod-004', name:'Polycab FR Wire 1.5 sq mm', meta:'90m Coil • Fire Retardant • ISI Marked', price:1580, originalPrice:1750, discount:10, category:'electrical', stock:120, unit:'coil', tags:['wire','electrical','fr','polycab'] },
-  { id:'prod-005', name:'Ebco Soft-Close Cabinet Hinges', meta:'Pack of 4 Pairs • Concealed Mount', price:960, originalPrice:1200, discount:20, category:'hardware', stock:300, unit:'pack', tags:['hinge','cabinet','hardware','ebco'] },
-  { id:'prod-006', name:'Birla White Wall Seal Primer', meta:'1 Bag (30kg) • Interior/Exterior', price:755, originalPrice:820, discount:8, category:'paint', stock:150, unit:'bag', tags:['primer','paint','wall','birla'] },
-  { id:'prod-007', name:'UltraTech Super Cement', meta:'50kg Bag • Grade 53 PPC/OPC', price:395, originalPrice:455, discount:13, category:'cement', stock:320, unit:'bag', tags:['cement','ultratech','ppc'] },
-  { id:'prod-008', name:'Finolex CPVC Ball Valve', meta:'1-inch • Heavy Duty Brass Core', price:280, originalPrice:340, discount:18, category:'plumbing', stock:200, unit:'piece', tags:['valve','cpvc','finolex'] },
-  { id:'prod-009', name:'Dr. Fixit Damp Shield Elasto', meta:'4kg Bucket • Polymer Waterproofing', price:1450, originalPrice:1720, discount:16, category:'paint', stock:110, unit:'bucket', tags:['waterproofing','seepage','dr fixit','primer'] },
-  { id:'prod-010', name:'Schneider Electric 16A MCB', meta:'Single Pole • C-Curve Industrial Grade', price:220, originalPrice:275, discount:20, category:'electrical', stock:160, unit:'piece', tags:['mcb','switch','electrical','schneider'] }
+  { id:'prod-001', name:'Astral CPVC Pipes (Heavy Duty)', meta:'3m Length • 1-inch • Plumbing Grade (Demo)', price:420, originalPrice:510, discount:18, category:'plumbing', stock:180, unit:'piece', tags:['cpvc','pipe','plumbing','astral'] },
+  { id:'prod-002', name:'Jaquar Brass Bib Cock Tap', meta:'Chrome Plated • Quarter Turn (Demo)', price:1150, originalPrice:1400, discount:18, category:'plumbing', stock:150, unit:'piece', tags:['tap','bibcock','jaquar','plumbing'] },
+  { id:'prod-003', name:'Asian Paints Tractor Emulsion', meta:'20L Bucket • Matte White Finish (Demo)', price:2850, originalPrice:3240, discount:12, category:'paint', stock:90, unit:'bucket', tags:['paint','emulsion','asian paints'] },
+  { id:'prod-004', name:'Polycab FR Wire 1.5 sq mm', meta:'90m Coil • Fire Retardant • ISI Marked (Demo)', price:1580, originalPrice:1750, discount:10, category:'electrical', stock:120, unit:'coil', tags:['wire','electrical','fr','polycab'] },
+  { id:'prod-005', name:'Ebco Soft-Close Cabinet Hinges', meta:'Pack of 4 Pairs • Concealed Hydraulic (Demo)', price:960, originalPrice:1200, discount:20, category:'carpentry', stock:300, unit:'pack', tags:['hinge','cabinet','carpentry','ebco'] },
+  { id:'prod-006', name:'Birla White Wall Seal Primer', meta:'1 Bag (30kg) • Interior/Exterior Plaster (Demo)', price:755, originalPrice:820, discount:8, category:'paint', stock:150, unit:'bag', tags:['primer','paint','wall','birla'] },
+  { id:'prod-007', name:'CenturyPly 19mm MR Commercial Plywood', meta:'8x4 Sheet • IS:303 Moisture Resistant (Demo)', price:2450, originalPrice:2900, discount:15, category:'carpentry', stock:85, unit:'sheet', tags:['plywood','woodwork','carpentry'] },
+  { id:'prod-008', name:'Finolex CPVC Ball Valve', meta:'1-inch • Heavy Duty Brass Core (Demo)', price:280, originalPrice:340, discount:18, category:'plumbing', stock:200, unit:'piece', tags:['valve','cpvc','finolex'] },
+  { id:'prod-009', name:'Dr. Fixit Damp Shield Elasto', meta:'4kg Bucket • Polymer Waterproofing (Demo)', price:1450, originalPrice:1720, discount:16, category:'waterproofing', stock:110, unit:'bucket', tags:['waterproofing','seepage','dr fixit','primer'] },
+  { id:'prod-010', name:'Schneider Electric 16A MCB', meta:'Single Pole • C-Curve Industrial Grade (Demo)', price:220, originalPrice:275, discount:20, category:'electrical', stock:160, unit:'piece', tags:['mcb','switch','electrical','schneider'] }
 ];
 
 // Fallback Parametric Construction Rules (Indian Standards / CPWD baseline)
@@ -159,14 +159,13 @@ async function generateScopeWithGemini(description, city) {
   const systemInstruction = `You are GharSetu AI, India's leading civil engineering estimator and quantity surveyor.
 You evaluate home renovation, interior repair, and civil construction requirements according to CPWD (Central Public Works Department) norms and Indian Standards (IS codes).
 Context: Indian residential property in ${location}.
-Your task: Take the natural language scope, estimate required Indian skilled trades, timeline, labor charges (INR), and generate an accurate Bill of Quantities (BoQ) with real Indian brand materials (e.g., Ambuja, UltraTech, Astral, Finolex, Asian Paints, Berger, Dr. Fixit, Polycab, Havells, Ebco).
+Your task: Take the natural language scope, estimate required Indian skilled trades, timeline, labor charges (INR), and generate an accurate Bill of Quantities (BoQ) with standard Indian brand materials (e.g., Astral, Finolex, Asian Paints, Dr. Fixit, Polycab, Ebco).
 
 Return ONLY valid JSON matching this schema exactly:
 {
   "type": "string (Specific Category, e.g. 'Balcony Waterproofing & Tiling')",
   "trades": "string (e.g. '1 Master Plumber, 1 Tile Mason')",
   "duration": "string (e.g. '2-3 Days (16 hrs)')",
-  "confidence": number (between 94.0 and 99.2),
   "laborCost": number (realistic labor cost in INR based on standard daily artisan rates),
   "technicalNotes": ["string (2-3 practical construction risks/recommendations)"],
   "boq": [
@@ -174,7 +173,7 @@ Return ONLY valid JSON matching this schema exactly:
       "name": "string (Specific Indian brand, grade, and size)",
       "qty": number,
       "unit": "string (e.g. bag, bucket, coil, sheet, piece, kit)",
-      "price": number (realistic wholesale/depot price in INR per unit)
+      "price": number (realistic market benchmark price in INR per unit)
     }
   ]
 }`;
@@ -348,6 +347,28 @@ app.post('/api/scope/generate', scopeLimiter, async (req, res) => {
     checked: true
   }));
 
+  // Dynamic Spatial Parsing
+  let floorSqft = 120;
+  let wallSqft = 440;
+  let areaDisplay = "120 sq.ft (Standard room)";
+  const dimMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:x|by|\*|\s+by\s+)\s*(\d+(?:\.\d+)?)/);
+  if (dimMatch) {
+    const d1 = parseFloat(dimMatch[1]);
+    const d2 = parseFloat(dimMatch[2]);
+    floorSqft = Math.max(20, Math.round(d1 * d2));
+    wallSqft = Math.max(80, Math.round(2 * (d1 + d2) * 10));
+    areaDisplay = `${floorSqft} sq.ft (${Math.round(d1)}' × ${Math.round(d2)}' room)`;
+  } else {
+    const areaMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:sq\s*ft|sqft|square\s*feet|sq\s*meter|sqm)/);
+    if (areaMatch) {
+      let val = parseFloat(areaMatch[1]);
+      if (lower.includes('meter') || lower.includes('sqm')) val *= 10.764;
+      floorSqft = Math.round(val);
+      wallSqft = Math.round(floorSqft * 3.5);
+      areaDisplay = `${floorSqft} sq.ft`;
+    }
+  }
+
   const materialTotal = boqItems.reduce((acc, item) => acc + (item.price * item.qty), 0);
   const laborCost = Number(aiScope.laborCost) || 2500;
   const grandTotal = materialTotal + laborCost;
@@ -355,20 +376,24 @@ app.post('/api/scope/generate', scopeLimiter, async (req, res) => {
   res.json({
     success: true,
     input: promptText,
-    city: city || 'Mumbai (West)',
+    city: city || 'Mumbai',
     scope: {
-      type: aiScope.type || 'Custom Renovation',
+      type: aiScope.type || 'Custom Repair & Renovation',
       trades: aiScope.trades || '1 General Contractor, 1 Artisan',
       duration: aiScope.duration || '2-3 Days',
-      confidence: Number(aiScope.confidence) || 96.5,
+      estimated_area_sqft: floorSqft,
+      estimated_area_display: areaDisplay,
+      wall_surface_sqft: wallSqft,
       laborCost,
       materialCost: materialTotal,
       grandTotal,
       technicalNotes: aiScope.technicalNotes || [
-        'Adhere to IS:456 concrete and masonry tolerances',
+        'Adhere to standard trade tolerances',
         'Verify moisture and plumbing line pressure before final seal'
       ],
       boq: boqItems,
+      estimate_type: 'Customizable Preliminary Scope (Prototype Demo)',
+      disclaimer: 'Indicative benchmark estimate for quotation comparison. Not a guaranteed price. (Demo data)',
       generatedAt: new Date().toISOString(),
       engine: usedEngine
     }
@@ -377,22 +402,41 @@ app.post('/api/scope/generate', scopeLimiter, async (req, res) => {
 
 // ── Orders API ────────────────────────────────────────────────────────────────
 app.post('/api/orders', async (req, res) => {
-  const { items, contactName, contactPhone, city, notes } = req.body;
+  const { items, customer_name, customer_email, city, notes } = req.body;
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ success:false, message:'Cart is empty' });
   }
   const total = items.reduce((s, i) => s + (i.price * (i.qty || 1)), 0);
   const order = {
     id: 'GS-' + uuidv4().split('-')[0].toUpperCase(),
-    status: 'depot_allocated',
+    status: 'Quotes Requested (Demo)',
     items,
     total,
-    contact_name: contactName || 'Contractor / Homeowner',
-    contact_phone: contactPhone || '9876543210',
+    customer_name: customer_name || 'Homeowner',
+    customer_email: customer_email || 'homeowner@example.com',
     city: city || 'Mumbai',
-    notes: notes || 'Dispatched via GharSetu Authorized Depot Hub',
+    notes: notes || 'Submitted for local trade quote matching (Demo)',
     created_at: new Date().toISOString(),
-    estimated_dispatch: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
+    matched_quotes: [
+      {
+        quote_id: 'Q-' + Math.floor(1000 + Math.random() * 9000),
+        provider_name: 'Apex Trade Specialists',
+        trade: 'Plumbing & Repairs',
+        rating: 4.9,
+        total_quote: Math.round(total * 0.97),
+        status: 'Quote Received',
+        earliest_inspection: 'Tomorrow, 10:00 AM'
+      },
+      {
+        quote_id: 'Q-' + Math.floor(1000 + Math.random() * 9000),
+        provider_name: 'Metro Craftsmen Hub',
+        trade: 'General Repairs',
+        rating: 4.8,
+        total_quote: Math.round(total * 1.03),
+        status: 'Quote Received',
+        earliest_inspection: 'Tomorrow, 2:30 PM'
+      }
+    ]
   };
 
   try {
@@ -404,11 +448,11 @@ app.post('/api/orders', async (req, res) => {
     }
     res.status(201).json({
       success: true,
-      message: `Order ${order.id} allocated to nearest regional depot!`,
+      message: `Quote request ${order.id} submitted for local trade matching (Demo)`,
       order
     });
   } catch(e) {
-    res.status(500).json({ success:false, message:'Order allocation failed', error: e.message });
+    res.status(500).json({ success:false, message:'Order creation failed', error: e.message });
   }
 });
 
@@ -423,6 +467,74 @@ app.get('/api/orders', async (req, res) => {
   } catch(e) {
     res.status(500).json({ success:false, message:'Failed to fetch orders' });
   }
+});
+
+// ── Provider Matching & Quote Acceptance ──────────────────────────────────────
+app.post('/api/providers/match', (req, res) => {
+  const { city, trades, labor_subtotal, material_subtotal } = req.body;
+  const labor = Number(labor_subtotal) || 3000;
+  const materials = Number(material_subtotal) || 2500;
+  const base = labor + materials;
+
+  const providers = [
+    {
+      quote_id: 'Q-' + Math.floor(1000 + Math.random() * 9000),
+      provider_id: 'pro-001',
+      provider_name: 'Apex Trade Specialists',
+      trade: (trades && trades[0]) || 'Plumbing',
+      city: city || 'Mumbai',
+      rating: 4.9,
+      review_count: 58,
+      experience_years: 11,
+      badge: 'Top Rated Pro',
+      avatar_color: 'linear-gradient(135deg,#0284C7,#0369A1)',
+      labor_quote: Math.round(labor * 0.98),
+      material_quote: Math.round(materials),
+      total_quote: Math.round(base * 0.98),
+      variance: '-2% (Competitive)',
+      earliest_inspection: 'Tomorrow, 10:00 AM - 12:00 PM',
+      specialties: ['Standardized BoQ verification', 'Rapid mobilization', '1-year warranty']
+    },
+    {
+      quote_id: 'Q-' + Math.floor(1000 + Math.random() * 9000),
+      provider_id: 'pro-002',
+      provider_name: 'Metro Craftsmen Hub',
+      trade: (trades && trades[0]) || 'Electrical',
+      city: city || 'Mumbai',
+      rating: 4.8,
+      review_count: 42,
+      experience_years: 9,
+      badge: 'Fastest Availability',
+      avatar_color: 'linear-gradient(135deg,#F59E0B,#D97706)',
+      labor_quote: Math.round(labor * 1.04),
+      material_quote: Math.round(materials),
+      total_quote: Math.round(base * 1.04),
+      variance: '+4% (Premium Service)',
+      earliest_inspection: 'Today, 4:00 PM - 6:00 PM',
+      specialties: ['Licensed team', 'Material pickup assistance', 'Site cleanup included']
+    }
+  ];
+
+  res.json({ success: true, count: providers.length, city: city || 'Mumbai', providers });
+});
+
+app.post('/api/quotes/accept', (req, res) => {
+  const { request_id, quote_id, provider_name, slot } = req.body;
+  const order = _orders.find(o => o.id === request_id);
+  if (order) {
+    order.status = `Inspection Scheduled with ${provider_name || 'Local Pro'}`;
+    order.scheduled_slot = slot || 'Tomorrow, 10:00 AM';
+    if (order.matched_quotes) {
+      order.matched_quotes.forEach(q => {
+        if (q.quote_id === quote_id || q.provider_name === provider_name) q.status = 'Accepted';
+        else q.status = 'Declined';
+      });
+    }
+  }
+  res.json({
+    success: true,
+    message: `Inspection scheduled with ${provider_name || 'Local Pro'} for ${slot || 'Tomorrow, 10:00 AM'}`
+  });
 });
 
 // ── Fallback Route ────────────────────────────────────────────────────────────

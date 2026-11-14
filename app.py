@@ -6,7 +6,8 @@ v4.0 Homeowner Repair & Renovation Coordination Platform (Prototype Demo)
 import os
 import json
 import logging
-import requests
+import urllib.request
+import urllib.error
 import hmac
 import base64
 import time
@@ -117,7 +118,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Regional Material Pricing Multipliers (Calibrated to Wholesale Mandi / Depot Indices)
+# Regional Trade & Material Pricing Multipliers (City Benchmark Index)
 REGIONAL_MULTIPLIERS: Dict[str, float] = {
     "Mumbai": 1.00,
     "Delhi-NCR": 0.97,
@@ -134,9 +135,9 @@ REGIONAL_MULTIPLIERS: Dict[str, float] = {
 # ═════════════════════════════════════════════════════════════════════
 
 class ScopeRequest(BaseModel):
-    prompt: Optional[str] = Field(None, description="Project scope or renovation description")
+    prompt: Optional[str] = Field(None, description="Project scope or repair description")
     description: Optional[str] = Field(None, description="Alternative key for project description")
-    city: Optional[str] = Field("Mumbai", description="Target region for depot material pricing")
+    city: Optional[str] = Field("Mumbai", description="Target region for benchmark pricing")
     trades: Optional[List[str]] = Field(default=[], description="Selected primary trade filters")
 
     def get_query(self) -> str:
@@ -146,7 +147,7 @@ class ScopeRequest(BaseModel):
 class ProductCreate(BaseModel):
     id: Optional[str] = None
     name: str
-    meta: Optional[str] = "Standard Grade • Verified Depot"
+    meta: Optional[str] = "Standard Quality Benchmark (Demo Data)"
     price: float
     originalPrice: Optional[float] = None
     discount: Optional[int] = 12
@@ -158,13 +159,14 @@ class ProductCreate(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    customer_name: Optional[str] = "Valued Contractor"
-    customer_email: Optional[str] = "contractor@gharsetu.in"
+    customer_name: Optional[str] = "Homeowner"
+    customer_email: Optional[str] = "homeowner@example.com"
     city: Optional[str] = "Mumbai"
     items: List[Dict[str, Any]]
     subtotal: float
     gst: float
     total: float
+    trades: Optional[List[str]] = []
 
 
 class ContractorRegister(BaseModel):
@@ -181,75 +183,141 @@ class ContractorLogin(BaseModel):
 
 
 # ═════════════════════════════════════════════════════════════════════
-# ESTIMATION ENGINE (CPWD / IS:456 / IS:732 SPECIFICATIONS)
+# ESTIMATION ENGINE (SPATIAL PARSING & CPWD BENCHMARKS)
 # ═════════════════════════════════════════════════════════════════════
+
+def parse_spatial_dimensions(text: str) -> Dict[str, Any]:
+    """
+    Dynamically extract room dimensions or area from homeowner input.
+    E.g. '10 by 12 bedroom' -> 120 sq.ft floor, 440 sq.ft wall.
+    """
+    lower = text.lower()
+
+    # 1. Match '10 by 12', '10x12', '10 x 12', '12 * 10'
+    dim_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:x|by|\*|\s+by\s+)\s*(\d+(?:\.\d+)?)', lower)
+    if dim_match:
+        d1 = float(dim_match.group(1))
+        d2 = float(dim_match.group(2))
+        floor_sqft = max(20, round(d1 * d2))
+        wall_sqft = max(80, round(2 * (d1 + d2) * 10))  # Standard 10ft ceiling height
+        return {
+            "type": "explicit_dimensions",
+            "length": d1,
+            "width": d2,
+            "floor_sqft": floor_sqft,
+            "wall_sqft": wall_sqft,
+            "display": f"{floor_sqft} sq.ft ({int(d1)}' × {int(d2)}' room)",
+            "effective_sqft": floor_sqft
+        }
+
+    # 2. Match explicit area '150 sq ft', '300 sqft', '250 square feet'
+    area_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:sq\s*ft|sqft|square\s*feet|sq\s*meter|sqm)', lower)
+    if area_match:
+        val = float(area_match.group(1))
+        if "meter" in lower or "sqm" in lower:
+            sqft = round(val * 10.764)
+        else:
+            sqft = round(val)
+        return {
+            "type": "explicit_area",
+            "floor_sqft": sqft,
+            "wall_sqft": round(sqft * 3.5),
+            "display": f"{sqft} sq.ft",
+            "effective_sqft": sqft
+        }
+
+    # 3. Contextual defaults based on room type
+    if "balcony" in lower or "terrace" in lower:
+        return {"type": "room_default", "floor_sqft": 50, "wall_sqft": 160, "display": "50 sq.ft (Standard Balcony)", "effective_sqft": 50}
+    elif "bath" in lower or "toilet" in lower or "washroom" in lower:
+        return {"type": "room_default", "floor_sqft": 45, "wall_sqft": 220, "display": "45 sq.ft (Standard Bathroom)", "effective_sqft": 45}
+    elif "kitchen" in lower:
+        return {"type": "room_default", "floor_sqft": 80, "wall_sqft": 360, "display": "80 sq.ft (Standard Kitchen)", "effective_sqft": 80}
+    elif "living" in lower or "hall" in lower:
+        return {"type": "room_default", "floor_sqft": 220, "wall_sqft": 600, "display": "220 sq.ft (Living Area)", "effective_sqft": 220}
+    elif "bedroom" in lower:
+        return {"type": "room_default", "floor_sqft": 120, "wall_sqft": 440, "display": "120 sq.ft (Standard Bedroom)", "effective_sqft": 120}
+
+    return {"type": "standard_default", "floor_sqft": 120, "wall_sqft": 440, "display": "120 sq.ft (Standard Room)", "effective_sqft": 120}
+
 
 def run_parametric_civil_engine(prompt: str, city: str, trades: List[str]) -> Dict[str, Any]:
     """
     Deterministic Indian Civil Estimation Engine aligned with CPWD Schedule of Rates (DSR).
-    Calculates material quantities, wholesale depot rates, and skilled artisan labor.
+    Calculates material quantities, standard benchmarks, and skilled artisan labor.
     """
     city_mult = REGIONAL_MULTIPLIERS.get(city, 1.00)
     lower = prompt.lower()
     items: List[Dict[str, Any]] = []
     trade_list = list(trades) if trades else []
-    duration = "3-5 Days"
-    area_sqft = 220
     notes = []
+
+    # Dynamic spatial dimension extraction
+    spatial = parse_spatial_dimensions(prompt)
+    floor_sqft = spatial["floor_sqft"]
+    wall_sqft = spatial["wall_sqft"]
+    area_display = spatial["display"]
+
+    est_days = 2 if floor_sqft <= 150 else (3 if floor_sqft <= 350 else 4)
+    duration = f"{est_days}-{est_days + 1} Days"
 
     # Domain 1: Painting & Drywall
     if any(k in lower for k in ["paint", "color", "whitewash", "distemper", "wall", "putty", "primer"]):
         if "Painting" not in trade_list:
             trade_list.append("Painting")
+        putty_bags = max(1, round(wall_sqft / 220))
+        primer_cans = max(1, round(wall_sqft / 500))
+        paint_buckets = max(1, round((wall_sqft + floor_sqft) / 500))
         items.extend([
             {
                 "material": "Birla White Polymer Wall Putty",
                 "spec": "IS:15489 Certified • 40kg Bag",
-                "qty": 3,
+                "qty": putty_bags,
                 "unit": "bags",
                 "rate": round(820 * city_mult),
-                "total": round(820 * 3 * city_mult)
+                "total": round(820 * putty_bags * city_mult)
             },
             {
                 "material": "Asian Paints Tractor Emulsion (White)",
                 "spec": "Interior Acrylic Grade • 20L Bucket",
-                "qty": 1,
+                "qty": paint_buckets,
                 "unit": "bucket",
                 "rate": round(2850 * city_mult),
-                "total": round(2850 * city_mult)
+                "total": round(2850 * paint_buckets * city_mult)
             },
             {
                 "material": "Asian Paints Decoprime Water Thinnable Primer",
                 "spec": "Deep Penetrating Alkali Shield • 10L",
-                "qty": 1,
+                "qty": primer_cans,
                 "unit": "can",
                 "rate": round(1420 * city_mult),
-                "total": round(1420 * city_mult)
+                "total": round(1420 * primer_cans * city_mult)
             },
             {
                 "material": "Consumables (Sandpaper, Masking Tape, 9in Roller)",
-                "spec": "GharSetu Depot Painter Kit",
+                "spec": "Standard Painter Finishing Kit",
                 "qty": 1,
                 "unit": "kit",
                 "rate": round(650 * city_mult),
                 "total": round(650 * city_mult)
             }
         ])
-        duration = "3-4 Days"
-        notes.append("Surface moisture test recommended prior to primer coat application (max allowable moisture: 12%).")
+        duration = f"{max(2, est_days)}-{max(3, est_days + 1)} Days"
+        notes.append(f"Surface moisture test recommended prior to primer coat application (calculated surface: ~{wall_sqft} sq.ft walls).")
 
     # Domain 2: Plumbing & Sanitary
     if any(k in lower for k in ["plumb", "leak", "pipe", "tap", "faucet", "drain", "cpvc", "pvc", "sewage"]):
         if "Plumbing" not in trade_list:
             trade_list.append("Plumbing")
+        pipe_qty = max(2, round(floor_sqft / 35))
         items.extend([
             {
                 "material": "Astral CPVC Heavy Duty Pipe (1 inch, SDR 11)",
                 "spec": "IS:15778 Certified up to 93°C • 3m Length",
-                "qty": 4,
+                "qty": pipe_qty,
                 "unit": "pieces",
                 "rate": round(420 * city_mult),
-                "total": round(420 * 4 * city_mult)
+                "total": round(420 * pipe_qty * city_mult)
             },
             {
                 "material": "Jaquar / Hindware Cast Brass Bib Cock Tap",
@@ -268,87 +336,93 @@ def run_parametric_civil_engine(prompt: str, city: str, trades: List[str]) -> Di
                 "total": round(380 * city_mult)
             }
         ])
-        duration = "2-3 Days"
+        duration = "1-2 Days" if floor_sqft <= 100 else "2-3 Days"
         notes.append("CPWD Hydrostatic pressure test at 10 kg/cm² mandatory after joint solvent curing.")
 
     # Domain 3: Electrical & Wiring
     if any(k in lower for k in ["electric", "wire", "switch", "mcb", "light", "fan", "rewir", "short"]):
         if "Electrical" not in trade_list:
             trade_list.append("Electrical")
+        wire_coils = max(1, round(floor_sqft / 100))
+        mcb_qty = max(2, round(floor_sqft / 50))
+        switch_sets = max(1, round(floor_sqft / 60))
         items.extend([
             {
                 "material": "Polycab FR Flame Retardant Wire (1.5 sq mm)",
                 "spec": "IS:694 Certified • 90m Coil (Red/Black)",
-                "qty": 2,
+                "qty": wire_coils,
                 "unit": "coils",
                 "rate": round(1580 * city_mult),
-                "total": round(1580 * 2 * city_mult)
+                "total": round(1580 * wire_coils * city_mult)
             },
             {
                 "material": "Schneider Electric Easy9 Single Pole MCB (16A)",
                 "spec": "IS/IEC 60898-1 Certified • 10kA Breaking Capacity",
-                "qty": 4,
+                "qty": mcb_qty,
                 "unit": "pieces",
                 "rate": round(185 * city_mult),
-                "total": round(185 * 4 * city_mult)
+                "total": round(185 * mcb_qty * city_mult)
             },
             {
                 "material": "Anchor Roma Modular Switchboard & Sockets",
                 "spec": "Polycarbonate Flame Retardant • 8-Module Set",
-                "qty": 2,
+                "qty": switch_sets,
                 "unit": "sets",
                 "rate": round(890 * city_mult),
-                "total": round(890 * 2 * city_mult)
+                "total": round(890 * switch_sets * city_mult)
             }
         ])
-        duration = "2-4 Days"
+        duration = "1-2 Days" if floor_sqft <= 150 else "2-3 Days"
         notes.append("IS:732 Earthing verification required; loop impedance should not exceed 1.0 Ohm.")
 
     # Domain 4: Waterproofing & Dampness
     if any(k in lower for k in ["waterproof", "damp", "seep", "terrace", "roof", "crack", "leakage"]):
         if "Waterproofing" not in trade_list:
             trade_list.append("Waterproofing")
+        admix_cans = max(1, round(floor_sqft / 50))
+        coat_packs = max(1, round(floor_sqft / 80))
         items.extend([
             {
                 "material": "Dr. Fixit 101 LW+ Integral Waterproofing Admixture",
                 "spec": "IS:2645 Compliant • 5L Can",
-                "qty": 2,
+                "qty": admix_cans,
                 "unit": "cans",
                 "rate": round(640 * city_mult),
-                "total": round(640 * 2 * city_mult)
+                "total": round(640 * admix_cans * city_mult)
             },
             {
                 "material": "Dr. Fixit Fastflex Acrylic Polymer Waterproof Coating",
                 "spec": "2-Part Flexible Membrane (12kg Pack)",
-                "qty": 1,
+                "qty": coat_packs,
                 "unit": "pack",
                 "rate": round(2650 * city_mult),
-                "total": round(2650 * city_mult)
+                "total": round(2650 * coat_packs * city_mult)
             },
             {
                 "material": "Glass Fiber Reinforcing Mesh (45 GSM)",
-                "spec": "50m Roll • Alkali Resistant",
+                "spec": "Alkali Resistant Fiberglass Mesh (50m)",
                 "qty": 1,
                 "unit": "roll",
                 "rate": round(1100 * city_mult),
                 "total": round(1100 * city_mult)
             }
         ])
-        duration = "4-6 Days"
-        notes.append("Allow minimum 48 hours ponding water test before laying top protection screed.")
+        duration = "2-3 Days" if floor_sqft <= 100 else "3-5 Days"
+        notes.append(f"Allow minimum 48 hours ponding water test before laying top protection screed for {area_display}.")
 
     # Domain 5: Carpentry & Woodwork
     if any(k in lower for k in ["carpenter", "wood", "cabinet", "door", "hinge", "plywood", "lock", "wardrobe", "shelf", "furniture"]):
         if "Carpentry" not in trade_list:
             trade_list.append("Carpentry")
+        ply_sheets = max(1, round(floor_sqft / 70))
         items.extend([
             {
                 "material": "CenturyPly MR Commercial Plywood (19mm)",
                 "spec": "IS:303 Moisture Resistant • 8ft x 4ft Sheet",
-                "qty": 2,
+                "qty": ply_sheets,
                 "unit": "sheets",
                 "rate": round(2450 * city_mult),
-                "total": round(2450 * 2 * city_mult)
+                "total": round(2450 * ply_sheets * city_mult)
             },
             {
                 "material": "Godrej Nav-Tal Brass Mortise Door Lock",
@@ -375,7 +449,7 @@ def run_parametric_civil_engine(prompt: str, city: str, trades: List[str]) -> Di
                 "total": round(390 * city_mult)
             }
         ])
-        duration = "2-4 Days"
+        duration = "1-2 Days" if floor_sqft <= 120 else "2-4 Days"
         notes.append("Edge sealing verification recommended on all exposed plywood edges before veneer/laminate bonding.")
 
     # Default Fallback if nothing matched
@@ -405,19 +479,20 @@ def run_parametric_civil_engine(prompt: str, city: str, trades: List[str]) -> Di
     mat_subtotal = sum(i["total"] for i in items)
     # Skilled Artisan Labor indexed to CPWD Minimum Wage DSR Schedule
     labor_rate_per_day = round(1650 * city_mult)
-    est_days = 3
     labor_total = labor_rate_per_day * est_days
     grand_total = mat_subtotal + labor_total
 
     return {
         "engine": "GharSetu Parametric Scoping Core (CPWD Reference)",
-        "estimate_type": "Preliminary Estimate (Editable Prototype)",
+        "estimate_type": "Customizable Preliminary Scope (Prototype Demo)",
         "disclaimer": "Indicative benchmark estimate for quotation comparison. Not a guaranteed price. (Demo data)",
         "project": prompt,
         "city": city,
         "region_multiplier": city_mult,
         "estimated_duration": duration,
-        "estimated_area_sqft": area_sqft,
+        "estimated_area_sqft": floor_sqft,
+        "estimated_area_display": area_display,
+        "wall_surface_sqft": wall_sqft,
         "trades": trade_list,
         "materials": items,
         "material_subtotal": mat_subtotal,
@@ -461,12 +536,16 @@ def call_gemini_scoper(prompt: str, city: str, trades: List[str]) -> Optional[Di
             "contents": [{"parts": [{"text": system_prompt + "\n\n" + user_query}]}],
             "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}
         }
-        res = requests.post(url, json=payload, timeout=8)
-        if res.status_code == 200:
-            data = res.json()
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            parsed = json.loads(text)
-            return parsed
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=8) as response:
+            if response.status == 200:
+                data = json.loads(response.read().decode("utf-8"))
+                text = data["candidates"][0]["content"]["parts"][0]["text"]
+                return json.loads(text)
     except Exception as e:
         logger.warning(f"Gemini API call failed, falling back to parametric engine: {e}")
     return None
@@ -569,22 +648,63 @@ async def list_estimates():
 
 @app.get("/api/orders")
 async def list_orders():
-    """Retrieve all active orders and depot dispatches."""
+    """Retrieve all active homeowner quote requests and trade responses."""
     items = database.get_orders()
     return {"success": True, "count": len(items), "orders": items}
 
 
 @app.post("/api/orders", status_code=status.HTTP_201_CREATED)
 async def place_order(payload: OrderCreate):
-    """Place a new wholesale material order / allocate depot dispatch."""
+    """Submit a new homeowner repair quote request and run trade matching."""
     if not payload.items:
-        raise HTTPException(status_code=400, detail="Cart is empty")
+        raise HTTPException(status_code=400, detail="Repair plan is empty")
 
     order = database.create_order(payload.dict())
     return {
         "success": True,
-        "message": f"Order {order['id']} allocated to regional logistics depot",
+        "message": f"Quote request {order['id']} submitted for local trade matching (Demo)",
         "order": order
+    }
+
+
+@app.post("/api/providers/match")
+async def match_providers(payload: Dict[str, Any]):
+    """Match registered local trade professionals and generate live itemized quotes for a scope."""
+    city = payload.get("city", "Mumbai")
+    trades = payload.get("trades", [])
+    labor = float(payload.get("labor_subtotal", payload.get("laborCost", 3000)))
+    materials = float(payload.get("material_subtotal", payload.get("materialCost", 2500)))
+    items = payload.get("items", [])
+
+    quotes = database.match_trade_providers(city, trades, labor, materials, items)
+    return {
+        "success": True,
+        "count": len(quotes),
+        "city": city,
+        "trades": trades,
+        "providers": quotes
+    }
+
+
+@app.post("/api/quotes/accept")
+async def accept_quote(payload: Dict[str, Any]):
+    """Homeowner accepts a trade quote and schedules on-site verification."""
+    request_id = payload.get("request_id")
+    quote_id = payload.get("quote_id")
+    provider_name = payload.get("provider_name", "Local Trade Pro")
+    slot = payload.get("slot", "Tomorrow, 10:00 AM")
+
+    if not request_id:
+        raise HTTPException(status_code=400, detail="request_id is required")
+
+    updated_order = database.accept_provider_quote(request_id, quote_id, provider_name, slot)
+    if not updated_order:
+        raise HTTPException(status_code=404, detail="Quote request not found")
+
+    return {
+        "success": True,
+        "message": f"Quote accepted! On-site inspection scheduled with {provider_name} for {slot}.",
+        "order": updated_order
     }
 
 

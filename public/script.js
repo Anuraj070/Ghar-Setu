@@ -464,7 +464,7 @@ function renderProductsGrid(products) {
         <h3 class="product-title">${escapeHTML(p.name)}</h3>
         <p class="product-meta">${escapeHTML(p.meta || '')}</p>
         <div class="product-badge-row">
-          <span class="badge-depot">✓ Prototype Benchmark</span>
+          <span class="badge-benchmark">✓ Prototype Benchmark</span>
           <span class="badge-stock">Standard Quality</span>
         </div>
       </div>
@@ -473,7 +473,7 @@ function renderProductsGrid(products) {
         <div class="pricing-wrap">
           <span class="price">₹${(p.price || 0).toLocaleString('en-IN')}</span>
           <strike>₹${(originalPrice || 0).toLocaleString('en-IN')}</strike>
-          <span class="depot-tag">Demo Benchmark</span>
+          <span class="benchmark-tag">Demo Benchmark</span>
         </div>
         <div class="product-action-row">
           <div class="qty-control" onclick="event.stopPropagation()">
@@ -690,6 +690,53 @@ async function simulateAI() {
   }
 }
 
+// Spatial Dimension Parser (Extracts room dimensions or explicit sq.ft from natural language)
+function parseSpatialDimensions(text) {
+  if (!text) return { floor_sqft: 120, wall_sqft: 440, display: "120 sq.ft (Standard room)" };
+  const lower = text.toLowerCase();
+
+  // 1. '10 by 12', '10x12', '10 x 12', '12 by 10'
+  const dimMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:x|by|\*|\s+by\s+)\s*(\d+(?:\.\d+)?)/);
+  if (dimMatch) {
+    const d1 = parseFloat(dimMatch[1]);
+    const d2 = parseFloat(dimMatch[2]);
+    const floor = Math.max(20, Math.round(d1 * d2));
+    const wall = Math.max(80, Math.round(2 * (d1 + d2) * 10)); // 10 ft ceiling height
+    return {
+      floor_sqft: floor,
+      wall_sqft: wall,
+      display: `${floor} sq.ft (${Math.round(d1)}' × ${Math.round(d2)}' room)`
+    };
+  }
+
+  // 2. '150 sq ft', '300 sqft', '250 square feet'
+  const areaMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:sq\s*ft|sqft|square\s*feet|sq\s*meter|sqm)/);
+  if (areaMatch) {
+    let val = parseFloat(areaMatch[1]);
+    if (lower.includes('meter') || lower.includes('sqm')) val *= 10.764;
+    const floor = Math.round(val);
+    return {
+      floor_sqft: floor,
+      wall_sqft: Math.round(floor * 3.5),
+      display: `${floor} sq.ft`
+    };
+  }
+
+  if (lower.includes('balcony') || lower.includes('terrace')) {
+    return { floor_sqft: 60, wall_sqft: 160, display: "60 sq.ft (Standard balcony)" };
+  }
+  if (lower.includes('bathroom') || lower.includes('toilet') || lower.includes('washroom')) {
+    return { floor_sqft: 45, wall_sqft: 220, display: "45 sq.ft (Standard bathroom)" };
+  }
+  if (lower.includes('kitchen')) {
+    return { floor_sqft: 90, wall_sqft: 320, display: "90 sq.ft (Standard kitchen)" };
+  }
+  if (lower.includes('living') || lower.includes('hall')) {
+    return { floor_sqft: 220, wall_sqft: 600, display: "220 sq.ft (Standard living room)" };
+  }
+  return { floor_sqft: 120, wall_sqft: 440, display: "120 sq.ft (Standard bedroom)" };
+}
+
 function applyScopeData(s, originalInput, city) {
   const normTrades = Array.isArray(s.trades) ? s.trades.join(', ') : (s.trades || 'Home Maintenance');
   const normDuration = s.duration || s.estimated_duration || '2-3 Days';
@@ -709,11 +756,24 @@ function applyScopeData(s, originalInput, city) {
   const normMatSubtotal = s.materialCost || s.material_subtotal || normBoQ.reduce((sum, i) => sum + i.total, 0);
   const normGrandTotal = s.grandTotal || s.grand_total || (normLabor + normMatSubtotal);
 
+  // Dynamic Spatial Footprint
+  const normAreaSqft = s.estimated_area_sqft || 120;
+  const normAreaDisplay = s.estimated_area_display || `${normAreaSqft} sq.ft`;
+  const areaEl = document.getElementById('resArea');
+  const areaNoteEl = document.getElementById('resAreaNote');
+  if (areaEl) areaEl.innerText = normAreaDisplay;
+  if (areaNoteEl) {
+    areaNoteEl.innerText = s.wall_surface_sqft ? `Wall surface: ~${s.wall_surface_sqft} sq.ft` : 'Calculated spatial footprint';
+  }
+
   lastScopeData = {
     ...s,
     trades: normTrades,
     duration: normDuration,
     laborCost: normLabor,
+    estimated_area_sqft: normAreaSqft,
+    estimated_area_display: normAreaDisplay,
+    wall_surface_sqft: s.wall_surface_sqft,
     boq: normBoQ,
     technicalNotes: normNotes,
     engine: normEngine,
@@ -750,6 +810,10 @@ function applyScopeData(s, originalInput, city) {
   currentBoQ = normBoQ;
   renderBoQ();
   renderTechnicalNotes(normNotes);
+
+  // Trigger Provider Matching and Quote Loading
+  const tradeListForMatching = Array.isArray(s.trades) ? s.trades : [normTrades];
+  loadMatchedProvidersForScope(city || 'Mumbai', tradeListForMatching, normLabor, normMatSubtotal, normBoQ);
 }
 
 function renderTechnicalNotes(notes) {
@@ -766,31 +830,44 @@ function renderTechnicalNotes(notes) {
 
 // Fallback Engine (For static demo deployments like GitHub Pages)
 function setupScopeDataFallback(input, city = 'Mumbai') {
+  const dims = parseSpatialDimensions(input);
   let type = 'Home Repair & Maintenance';
   let trades = '1 General Handyman, 1 Trade Specialist';
   let duration = '1-2 Days';
   let labor = 2800;
-  let notes = ['On-site verification recommended before finalizing contract', 'Ensure licensed trade professional performs structural/concealed work'];
+  let notes = [
+    `Calculated spatial footprint: ${dims.display} (Estimated wall surface: ~${dims.wall_sqft} sq.ft)`,
+    'On-site verification recommended before finalizing contract',
+    'Ensure licensed trade professional performs structural/concealed work'
+  ];
   let boq = [];
 
   if (input.includes('waterproof') || input.includes('seep') || input.includes('damp')) {
     type = 'Waterproofing & Moisture Treatment';
     trades = 'Waterproofing Specialist, Mason';
-    duration = '2-3 Days (Includes Curing)';
-    labor = 3600;
-    notes = ['Moisture test surface (<12% moisture) prior to elastomeric coating application', 'Allow 24-hr ponding water test to verify seal integrity'];
+    duration = dims.floor_sqft > 150 ? '3-4 Days (Includes Curing)' : '2-3 Days (Includes Curing)';
+    labor = Math.round(2200 + dims.floor_sqft * 12);
+    notes = [
+      `Treatment area: ${dims.display} floor footprint`,
+      'Moisture test surface (<12% moisture) prior to elastomeric coating application',
+      'Allow 24-hr ponding water test to verify seal integrity'
+    ];
+    const fastflexQty = Math.max(1, Math.ceil(dims.floor_sqft / 80));
     boq = [
-      { name: 'Dr. Fixit 101 LW+ Integral Waterproofing (5L)', spec: 'IS:2645 compliant mortar admixture', price: 640, qty: 2, unit: 'can', checked: true },
-      { name: 'Dr. Fixit Fastflex Flexible Membrane (12kg)', spec: '2-Part polymer coating for balcony/sunken slab', price: 2650, qty: 1, unit: 'pack', checked: true },
+      { name: 'Dr. Fixit 101 LW+ Integral Waterproofing (5L)', spec: 'IS:2645 compliant mortar admixture', price: 640, qty: Math.max(1, Math.ceil(dims.floor_sqft / 100)), unit: 'can', checked: true },
+      { name: 'Dr. Fixit Fastflex Flexible Membrane (12kg)', spec: '2-Part polymer coating for slab sealing', price: 2650, qty: fastflexQty, unit: 'pack', checked: true },
       { name: 'Glass Fiber Reinforcing Mesh (50m)', spec: 'Alkali-resistant mesh for crack bridging', price: 1100, qty: 1, unit: 'roll', checked: true },
-      { name: 'Polymer Crack Fill & Touch-Up Putty (5kg)', spec: 'Water-resistant interior filler', price: 420, qty: 1, unit: 'tub', checked: true }
+      { name: 'Polymer Crack Fill & Touch-Up Putty (5kg)', spec: 'Water-resistant interior filler', price: 420, qty: Math.max(1, Math.ceil(dims.floor_sqft / 120)), unit: 'tub', checked: true }
     ];
   } else if (input.includes('leak') || input.includes('pipe') || input.includes('tap') || input.includes('plumb') || input.includes('drain')) {
     type = 'Plumbing & Sanitary Repair';
     trades = 'Licensed Plumber, Plumbing Assistant';
     duration = '1 Day (3-5 hrs)';
     labor = 1800;
-    notes = ['Hydrostatic pressure test recommended after solvent joint curing', 'Check water pressure regulator if tap washers wear out repeatedly'];
+    notes = [
+      'Hydrostatic pressure test recommended after solvent joint curing',
+      'Check water pressure regulator if tap washers wear out repeatedly'
+    ];
     boq = [
       { name: 'Astral CPVC Heavy Duty Pipe (1-inch, SDR 11)', spec: 'IS:15778 certified 3m length', price: 420, qty: 2, unit: 'pieces', checked: true },
       { name: 'Jaquar Cast Brass Bib Cock Tap', spec: 'Quarter-turn ceramic cartridge, chrome plated', price: 1150, qty: 1, unit: 'piece', checked: true },
@@ -800,13 +877,18 @@ function setupScopeDataFallback(input, city = 'Mumbai') {
   } else if (input.includes('wire') || input.includes('electr') || input.includes('switch') || input.includes('mcb') || input.includes('short')) {
     type = 'Electrical Wiring & Fixtures';
     trades = 'Certified Electrician, Assistant';
-    duration = '1-2 Days';
-    labor = 2600;
-    notes = ['Ensure IS:732 earthing and loop impedance verification', 'Megger insulation check recommended for older concealed conduits'];
+    duration = dims.floor_sqft > 200 ? '2-3 Days' : '1-2 Days';
+    labor = Math.round(1800 + dims.floor_sqft * 7);
+    notes = [
+      `Wiring layout calibrated to ${dims.display} floor footprint`,
+      'Ensure IS:732 earthing and loop impedance verification',
+      'Megger insulation check recommended for older concealed conduits'
+    ];
+    const wireCoils = Math.max(1, Math.ceil(dims.floor_sqft / 80));
     boq = [
-      { name: 'Polycab FR Flame Retardant Wire 1.5 sq mm', spec: 'IS:694 certified 90m coil', price: 1580, qty: 2, unit: 'coils', checked: true },
+      { name: 'Polycab FR Flame Retardant Wire 1.5 sq mm', spec: 'IS:694 certified 90m coil', price: 1580, qty: wireCoils, unit: 'coils', checked: true },
       { name: 'Schneider Electric Easy9 16A Single Pole MCB', spec: 'C-curve 10kA breaking capacity', price: 185, qty: 4, unit: 'pieces', checked: true },
-      { name: 'Anchor Roma 8-Module Switchboard Set', spec: 'Flame-retardant polycarbonate with modular switches', price: 890, qty: 2, unit: 'sets', checked: true },
+      { name: 'Anchor Roma 8-Module Switchboard Set', spec: 'Flame-retardant polycarbonate with modular switches', price: 890, qty: Math.max(1, Math.ceil(dims.floor_sqft / 100)), unit: 'sets', checked: true },
       { name: 'PVC Conduits & Junction Accessories Kit', spec: 'Heavy-duty insulated conduit fittings', price: 540, qty: 1, unit: 'kit', checked: true }
     ];
   } else if (input.includes('carpenter') || input.includes('wood') || input.includes('cabinet') || input.includes('hinge') || input.includes('door') || input.includes('lock') || input.includes('plywood')) {
@@ -814,7 +896,10 @@ function setupScopeDataFallback(input, city = 'Mumbai') {
     trades = 'Artisan Carpenter';
     duration = '1-2 Days';
     labor = 2500;
-    notes = ['Seal all exposed plywood edges before laminate bonding to resist humidity', 'Inspect door frame plumb before mortise lock chiseling'];
+    notes = [
+      'Seal all exposed plywood edges before laminate bonding to resist humidity',
+      'Inspect door frame plumb before mortise lock chiseling'
+    ];
     boq = [
       { name: 'CenturyPly MR Grade Commercial Plywood (19mm)', spec: 'IS:303 moisture resistant 8x4 sheet', price: 2450, qty: 1, unit: 'sheet', checked: true },
       { name: 'Godrej Nav-Tal Brass Mortise Door Lock', spec: 'Double cylinder 6-lever mechanism with brass keys', price: 1450, qty: 1, unit: 'set', checked: true },
@@ -824,13 +909,20 @@ function setupScopeDataFallback(input, city = 'Mumbai') {
   } else {
     type = 'Interior Wall Painting & Surface Prep';
     trades = 'Painter, Wall Finishing Artisan';
-    duration = '2-3 Days';
-    labor = 3200;
-    notes = ['Surface moisture test recommended prior to primer application (max allowable moisture: 12%)', 'Light-sand with 220-grit paper between putty and emulsion coats'];
+    duration = dims.wall_sqft > 800 ? '3-4 Days' : (dims.wall_sqft > 400 ? '2-3 Days' : '1-2 Days');
+    labor = Math.round(1800 + dims.wall_sqft * 3.2);
+    notes = [
+      `Surface area scaled to ${dims.display} (~${dims.wall_sqft} sq.ft gross wall area)`,
+      'Surface moisture test recommended prior to primer application (max allowable moisture: 12%)',
+      'Light-sand with 220-grit paper between putty and emulsion coats'
+    ];
+    const puttyBags = Math.max(1, Math.ceil(dims.wall_sqft / 250));
+    const primerCans = Math.max(1, Math.ceil(dims.wall_sqft / 700));
+    const paintBuckets = Math.max(1, Math.ceil(dims.wall_sqft / 900));
     boq = [
-      { name: 'Asian Paints Tractor Emulsion (Matte White)', spec: '20L bucket, superior 260 sq.ft/L coverage', price: 2850, qty: 1, unit: 'bucket', checked: true },
-      { name: 'Birla White Polymer Wall Putty (40kg)', spec: 'IS:15489 certified white polymer plaster', price: 820, qty: 2, unit: 'bags', checked: true },
-      { name: 'Asian Paints Decoprime Alkali Primer (10L)', spec: 'Deep penetrating water-thinnable alkali shield', price: 1420, qty: 1, unit: 'can', checked: true },
+      { name: 'Asian Paints Tractor Emulsion (Matte White)', spec: '20L bucket, superior 260 sq.ft/L coverage', price: 2850, qty: paintBuckets, unit: 'bucket', checked: true },
+      { name: 'Birla White Polymer Wall Putty (40kg)', spec: 'IS:15489 certified white polymer plaster', price: 820, qty: puttyBags, unit: 'bags', checked: true },
+      { name: 'Asian Paints Decoprime Alkali Primer (10L)', spec: 'Deep penetrating water-thinnable alkali shield', price: 1420, qty: primerCans, unit: 'can', checked: true },
       { name: 'Painter Consumables Kit (Rollers, Masking Tape, Drop Sheet)', spec: 'Standard finishing consumables pack', price: 650, qty: 1, unit: 'kit', checked: true }
     ];
   }
@@ -839,15 +931,242 @@ function setupScopeDataFallback(input, city = 'Mumbai') {
     type,
     trades,
     duration,
+    estimated_area_sqft: dims.floor_sqft,
+    estimated_area_display: dims.display,
+    wall_surface_sqft: dims.wall_sqft,
     laborCost: labor,
     technicalNotes: notes,
     boq,
-    estimate_type: 'Preliminary Estimate (Editable Prototype)',
+    estimate_type: 'Customizable Preliminary Scope (Prototype Demo)',
     disclaimer: 'Indicative benchmark estimate for quotation comparison. Not a guaranteed price. (Demo data)',
     engine: 'GharSetu Parametric Scoping Core (CPWD Reference)'
   };
 
   applyScopeData(fallbackScope, input, city);
+}
+
+// ═════════════════════════════════════════════════════════════════════
+// PROVIDER MATCHING & LIVE QUOTING (PROTOTYPE DEMO)
+// ═════════════════════════════════════════════════════════════════════
+
+async function loadMatchedProvidersForScope(city, trades, laborSubtotal, materialSubtotal, items) {
+  const card = document.getElementById('resProvidersCard');
+  const list = document.getElementById('resProvidersList');
+  const countEl = document.getElementById('providersMatchCount');
+  if (!card || !list) return;
+
+  card.style.display = 'block';
+  list.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-muted);">
+      <div style="display:inline-block;width:24px;height:24px;border:3px solid var(--warm-200);border-top-color:var(--terracotta);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:.5rem;"></div>
+      <div>Matching verified trade professionals in ${escapeHTML(city || 'Mumbai')}...</div>
+    </div>
+  `;
+
+  const tradeArr = Array.isArray(trades) ? trades : [trades];
+  let providers = [];
+
+  try {
+    const res = await fetch('/api/providers/match', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        city: city || 'Mumbai',
+        trades: tradeArr,
+        labor_subtotal: laborSubtotal,
+        material_subtotal: materialSubtotal,
+        items: items
+      })
+    });
+    const data = await res.json();
+    if (data.success && data.providers && data.providers.length > 0) {
+      providers = data.providers;
+    }
+  } catch (e) {
+    console.warn('Provider match endpoint offline; using local matched providers (demo)', e);
+  }
+
+  // Fallback demo providers if server offline
+  if (!providers.length) {
+    const baseTotal = (laborSubtotal || 3000) + (materialSubtotal || 2500);
+    providers = [
+      {
+        quote_id: 'Q-' + Math.floor(1000 + Math.random() * 9000),
+        provider_id: 'pro-001',
+        provider_name: 'Apex Trade Specialists',
+        trade: tradeArr[0] || 'Plumbing',
+        city: city || 'Mumbai',
+        rating: 4.9,
+        review_count: 58,
+        experience_years: 11,
+        badge: 'Top Rated Pro',
+        avatar_color: 'linear-gradient(135deg,#0284C7,#0369A1)',
+        labor_quote: Math.round((laborSubtotal || 3000) * 0.98),
+        material_quote: Math.round(materialSubtotal || 2500),
+        total_quote: Math.round(baseTotal * 0.98),
+        variance: '-2% (Competitive)',
+        earliest_inspection: 'Tomorrow, 10:00 AM - 12:00 PM',
+        specialties: ['Standardized BoQ verification', 'Rapid mobilization', '1-year warranty']
+      },
+      {
+        quote_id: 'Q-' + Math.floor(1000 + Math.random() * 9000),
+        provider_id: 'pro-002',
+        provider_name: 'Metro Craftsmen Hub',
+        trade: tradeArr[0] || 'Electrical',
+        city: city || 'Mumbai',
+        rating: 4.8,
+        review_count: 42,
+        experience_years: 9,
+        badge: 'Fastest Availability',
+        avatar_color: 'linear-gradient(135deg,#F59E0B,#D97706)',
+        labor_quote: Math.round((laborSubtotal || 3000) * 1.04),
+        material_quote: Math.round(materialSubtotal || 2500),
+        total_quote: Math.round(baseTotal * 1.04),
+        variance: '+4% (Premium Service)',
+        earliest_inspection: 'Today, 4:00 PM - 6:00 PM',
+        specialties: ['Licensed team', 'Material pickup assistance', 'Site cleanup included']
+      }
+    ];
+  }
+
+  if (countEl) countEl.innerText = `${providers.length} Trade Pros Matched (Demo)`;
+
+  list.innerHTML = providers.map(p => {
+    const initials = (p.provider_name || 'Trade Pro').split(' ').map(w => w[0]).slice(0, 2).join('');
+    const specialtiesBadges = (p.specialties || []).slice(0, 2).map(s => `
+      <span style="font-size:.7rem;background:rgba(0,0,0,0.04);color:var(--text-muted);padding:.15rem .45rem;border-radius:4px;">${escapeHTML(s)}</span>
+    `).join('');
+
+    return `
+      <div style="background:var(--surface-white,#fff);border:1.5px solid var(--border-subtle);border-radius:14px;padding:1.2rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 12px rgba(0,0,0,.03);position:relative;">
+        <div>
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.8rem;">
+            <div style="width:44px;height:44px;border-radius:12px;background:${p.avatar_color || 'var(--terracotta)'};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0;">
+              ${initials}
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:800;font-size:.98rem;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(p.provider_name)}</div>
+              <div style="font-size:.78rem;color:var(--text-muted);display:flex;align-items:center;gap:.35rem;margin-top:.1rem;">
+                <span style="color:#F59E0B;font-weight:700;">★ ${p.rating}</span>
+                <span>(${p.review_count} reviews)</span>
+                <span>•</span>
+                <span>${p.experience_years}y exp</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:.8rem;display:flex;gap:.4rem;flex-wrap:wrap;">
+            <span style="font-size:.7rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.1);padding:.2rem .5rem;border-radius:4px;">${escapeHTML(p.badge || 'Verified Pro')}</span>
+            ${specialtiesBadges}
+          </div>
+
+          <!-- Quote Breakdown -->
+          <div style="background:var(--warm-50,#FFFBF7);border:1px dashed var(--warm-200,#FFE4CC);border-radius:10px;padding:.75rem .9rem;margin-bottom:.9rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;font-size:.78rem;color:var(--text-muted);">
+              <span>Labor Proposal:</span>
+              <span style="font-weight:600;color:var(--text-main);">₹${(p.labor_quote || 0).toLocaleString('en-IN')}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;font-size:.78rem;color:var(--text-muted);">
+              <span>Materials (BoQ benchmark):</span>
+              <span style="font-weight:600;color:var(--text-main);">₹${(p.material_quote || 0).toLocaleString('en-IN')}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--warm-200,#FFE4CC);padding-top:.4rem;">
+              <span style="font-weight:800;font-size:.84rem;color:var(--text-main);">Preliminary Quote:</span>
+              <span style="font-size:1.15rem;font-weight:800;color:var(--terracotta);">₹${(p.total_quote || 0).toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+
+          <div style="font-size:.76rem;color:var(--text-muted);display:flex;align-items:center;gap:.4rem;margin-bottom:1rem;">
+            <span>⏱️ Earliest Inspection:</span>
+            <strong style="color:var(--text-main);">${escapeHTML(p.earliest_inspection || 'Tomorrow')}</strong>
+          </div>
+        </div>
+
+        <div>
+          <button 
+            type="button" 
+            class="btn-primary" 
+            style="width:100%;padding:.65rem .8rem;font-size:.85rem;font-weight:700;border-radius:10px;justify-content:center;"
+            onclick="handleScheduleProvider('${escapeHTML(p.provider_id)}', '${escapeHTML(p.provider_name).replace(/'/g, "\\'")}', '${escapeHTML(p.quote_id)}', ${p.total_quote}, '${escapeHTML(p.earliest_inspection || 'Tomorrow, 10:00 AM')}')"
+          >
+            Select &amp; Schedule Inspection (Demo) 📅
+          </button>
+          <div style="text-align:center;font-size:.7rem;color:var(--text-muted);margin-top:.4rem;">
+            Demo quote comparison • No payment required
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function handleScheduleProvider(providerId, providerName, quoteId, totalQuote, slot) {
+  let lastScope = lastScopeData || {};
+  let reqId = 'REQ-' + Math.floor(100000 + Math.random() * 900000);
+
+  const orderPayload = {
+    customer_name: 'Homeowner',
+    customer_email: authUser ? authUser.email : 'homeowner@example.com',
+    city: lastScope.city || 'Mumbai',
+    trades: Array.isArray(lastScope.trades) ? lastScope.trades : [lastScope.trades || 'Home Maintenance'],
+    items: (lastScope.boq || []).length > 0 ? lastScope.boq : [{ name: lastScope.input || 'Home Repair Scope', qty: 1, price: totalQuote }],
+    subtotal: totalQuote,
+    gst: 0,
+    total: totalQuote
+  };
+
+  try {
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
+    });
+    const data = await res.json();
+    if (data.success && data.order) {
+      reqId = data.order.id;
+    }
+  } catch (err) {
+    console.warn('API error creating order; proceeding with local record', err);
+  }
+
+  // Accept quote on backend
+  try {
+    await fetch('/api/quotes/accept', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        request_id: reqId,
+        quote_id: quoteId,
+        provider_name: providerName,
+        slot: slot
+      })
+    });
+  } catch (err) {
+    console.warn('API error accepting quote; proceeding with local record', err);
+  }
+
+  // Update local orders
+  const existingOrders = JSON.parse(localStorage.getItem('gharsetu_orders') || '[]');
+  const newOrder = {
+    id: reqId,
+    status: `Inspection Scheduled with ${providerName}`,
+    items: orderPayload.items,
+    total: totalQuote,
+    customer_name: orderPayload.customer_name,
+    city: orderPayload.city,
+    created_at: new Date().toISOString(),
+    scheduled_slot: slot,
+    provider_name: providerName
+  };
+  existingOrders.unshift(newOrder);
+  localStorage.setItem('gharsetu_orders', JSON.stringify(existingOrders));
+
+  showToast(`Inspection scheduled with ${providerName} for ${slot}! (Demo)`, '🎉');
+
+  // Open the project tracker modal so user sees the result immediately
+  setTimeout(() => {
+    openDashboardModal();
+  }, 600);
 }
 
 function renderBoQ() {
@@ -1055,20 +1374,67 @@ async function loadDepotOrders() {
   const ordersHTML = orders.map(ord => {
     const itemsText = (ord.items || []).map(i => `${parseInt(i.qty || 1, 10)}x ${escapeHTML(i.name)}`).join(', ');
     const dateStr = new Date(ord.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    
+    // Parse matched quotes if available from API/database
+    let matchedQuotes = [];
+    if (ord.matched_quotes) {
+      matchedQuotes = typeof ord.matched_quotes === 'string' ? JSON.parse(ord.matched_quotes) : ord.matched_quotes;
+    }
+
+    let quotesSection = '';
+    if (matchedQuotes && matchedQuotes.length > 0) {
+      quotesSection = `
+        <div style="margin-top:.9rem;padding-top:.8rem;border-top:1px dashed var(--border-subtle);">
+          <div style="font-size:.76rem;font-weight:800;color:var(--terracotta);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:0.5px;">
+            Matched Competitive Quotes (${matchedQuotes.length}) • Prototype Demo
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.55rem;">
+            ${matchedQuotes.map(q => `
+              <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:.65rem .85rem;border-radius:10px;border:1px solid var(--border-subtle);font-size:.82rem;flex-wrap:wrap;gap:.4rem;">
+                <div>
+                  <div style="font-weight:700;color:var(--text-main);">${escapeHTML(q.provider_name)} <span style="color:#F59E0B;font-size:.74rem;">★ ${q.rating}</span></div>
+                  <div style="font-size:.74rem;color:var(--text-muted);">Earliest inspection: ${escapeHTML(q.earliest_inspection || 'Tomorrow, 10:00 AM')}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.6rem;">
+                  <div style="text-align:right;">
+                    <div style="font-weight:800;color:var(--terracotta);font-size:.92rem;">₹${(q.total_quote || 0).toLocaleString('en-IN')}</div>
+                    <span style="font-size:.7rem;padding:.15rem .45rem;border-radius:4px;font-weight:700;${q.status === 'Accepted' ? 'background:#ECFDF5;color:#10B981;' : 'background:#EFF6FF;color:#2563EB;'}">
+                      ${q.status || 'Quote Received'}
+                    </span>
+                  </div>
+                  ${q.status !== 'Accepted' ? `
+                    <button 
+                      type="button" 
+                      class="btn-primary" 
+                      style="padding:.35rem .65rem;font-size:.75rem;font-weight:700;border-radius:6px;"
+                      onclick="handleScheduleProvider('${escapeHTML(q.provider_id || '')}', '${escapeHTML(q.provider_name || '').replace(/'/g, "\\'")}', '${escapeHTML(q.quote_id || '')}', ${q.total_quote || 0}, '${escapeHTML(q.earliest_inspection || 'Tomorrow, 10:00 AM')}')"
+                    >
+                      Schedule Visit
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     return `
-      <div style="background:var(--surface-elevated,#fafafa);border:1px solid var(--border-subtle);border-radius:14px;padding:1.2rem;transition:.2s;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
+      <div style="background:var(--surface-elevated,#fafafa);border:1px solid var(--border-subtle);border-radius:14px;padding:1.2rem;transition:.2s;margin-bottom:1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem;">
           <div style="display:flex;align-items:center;gap:.6rem;">
             <span style="font-weight:800;color:var(--terracotta);font-size:.95rem;">${escapeHTML(ord.id)}</span>
-            <span style="font-size:.75rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.2rem .6rem;border-radius:12px;">● ${escapeHTML(ord.status || '3 Quotes Received (Demo)')}</span>
+            <span style="font-size:.75rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.2rem .6rem;border-radius:12px;">● ${escapeHTML(ord.status || 'Quotes Received (Demo)')}</span>
           </div>
-          <div style="font-weight:800;font-size:1.05rem;color:var(--text-main);">₹${(ord.total || 0).toLocaleString('en-IN')} <span style="font-size:.75rem;font-weight:500;color:var(--text-muted);">(Est.)</span></div>
+          <div style="font-weight:800;font-size:1.05rem;color:var(--text-main);">₹${(ord.total || 0).toLocaleString('en-IN')} <span style="font-size:.75rem;font-weight:500;color:var(--text-muted);">(Preliminary Est.)</span></div>
         </div>
         <p style="font-size:.85rem;color:var(--text-main);font-weight:600;margin-bottom:.4rem;">${itemsText || 'Standard repair scope items'}</p>
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text-muted);border-top:1px dashed var(--border-subtle);padding-top:.6rem;">
           <span>📅 Submitted: ${dateStr}</span>
-          <span>📍 Region: ${escapeHTML(ord.city || 'Mumbai')} (Demo Trade Responses: 3)</span>
+          <span>📍 Region: ${escapeHTML(ord.city || 'Mumbai')}</span>
         </div>
+        ${quotesSection}
       </div>
     `;
   }).join('');
@@ -1104,8 +1470,10 @@ async function loadDepotOrders() {
     </div>
   `;
 
-  list.innerHTML = ordersHTML + demoQuotesHTML;
+  list.innerHTML = ordersHTML + (orders.some(o => o.matched_quotes && o.matched_quotes.length > 0) ? '' : demoQuotesHTML);
 }
+
+const loadHomeownerOrders = loadDepotOrders;
 
 function switchDashTab(tab) {
   const isOrders = tab === 'orders';

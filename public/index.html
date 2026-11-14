@@ -366,14 +366,14 @@ nav.scrolled{padding:.7rem 6%;box-shadow:0 4px 30px rgba(0,0,0,.04);}
 .product-title{color:var(--text-main);font-size:1.1rem;font-weight:700;line-height:1.35;margin-bottom:.35rem;}
 .product-meta{color:var(--text-muted);font-size:.83rem;line-height:1.45;margin-bottom:.8rem;}
 .product-badge-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:auto;}
-.badge-depot{font-size:.72rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);padding:.2rem .55rem;border-radius:6px;}
+.badge-benchmark{font-size:.72rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);padding:.2rem .55rem;border-radius:6px;}
 .badge-stock{font-size:.72rem;color:var(--text-muted);font-weight:600;}
 
 .product-footer{padding:.8rem 1.3rem 1.3rem 1.3rem;border-top:1px dashed var(--border-subtle);margin-top:.8rem;}
 .product-footer .pricing-wrap{display:flex;align-items:baseline;gap:.55rem;margin-bottom:.85rem;}
 .product-footer .price{font-size:1.4rem;font-weight:800;color:var(--terracotta);font-family:'JetBrains Mono',monospace;}
 .product-footer strike{color:#94A3B8;font-size:.88rem;}
-.depot-tag{margin-left:auto;font-size:.72rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.08);padding:.2rem .5rem;border-radius:4px;}
+.benchmark-tag{margin-left:auto;font-size:.72rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.08);padding:.2rem .5rem;border-radius:4px;}
 
 .product-action-row{display:flex;align-items:center;gap:.5rem;}
 .product-action-row .qty-control{display:flex;align-items:center;background:var(--warm-50);border:1.5px solid var(--border-subtle);border-radius:10px;padding:.2rem .3rem;margin-bottom:0;}
@@ -824,6 +824,12 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <div class="value" id="resDuration">--</div>
         <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">Standard estimated window</div>
       </div>
+      <div class="metric-card" style="border-left-color:#3B82F6;">
+        <div style="font-size:1.4rem;margin-bottom:.4rem;">📐</div>
+        <h4>Estimated Area</h4>
+        <div class="value" id="resArea" style="color:#2563EB;">120 sq.ft</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;" id="resAreaNote">Calculated spatial footprint</div>
+      </div>
       <div class="metric-card" style="border-left-color:#10B981;">
         <div style="font-size:1.4rem;margin-bottom:.4rem;">💰</div>
         <h4>Preliminary Cost Benchmark</h4>
@@ -855,6 +861,24 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
           <button class="btn-copy" onclick="copyProjectSummary()">📋 Copy Summary</button>
           <button class="btn-primary" style="padding:.75rem 1.5rem;font-size:.9rem;" onclick="addBoQToCart(event)">Request Quotes for this Scope 🚀</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Live Matched Providers & Quotes -->
+    <div id="resProvidersCard" style="display:none;margin-top:1.6rem;padding:1.4rem 1.6rem;background:var(--warm-50,#FFFBF7);border:1.5px solid var(--warm-200,#FFE4CC);border-radius:var(--radius-lg,16px);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem;flex-wrap:wrap;gap:.8rem;">
+        <div>
+          <span style="font-size:.74rem;font-weight:800;color:var(--terracotta);background:var(--terracotta-light);padding:.25rem .65rem;border-radius:4px;letter-spacing:0.5px;">PROTOTYPE PROVIDER MATCHING</span>
+          <h3 style="font-size:1.15rem;font-weight:800;color:var(--text-main);margin-top:.3rem;" id="providersTitle">Matched Local Trade Professionals</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-top:.1rem;">Demonstrates how standardized preliminary scopes receive competitive, comparable quotes from registered trade pros</p>
+        </div>
+        <div style="font-size:.78rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.35rem .8rem;border-radius:20px;display:flex;align-items:center;gap:.3rem;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#10B981;display:inline-block;"></span>
+          <span id="providersMatchCount">Matched Pros</span>
+        </div>
+      </div>
+      <div id="resProvidersList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+        <!-- Injected dynamically via JS from /api/providers/match -->
       </div>
     </div>
   </div>
