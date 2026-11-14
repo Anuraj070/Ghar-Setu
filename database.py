@@ -6,6 +6,8 @@ Persistent storage for Products, Orders, BoQ Estimates, and Contractors.
 import sqlite3
 import json
 import hashlib
+import hmac
+import secrets
 import os
 from datetime import datetime
 from typing import List, Dict, Any, Optional
@@ -101,8 +103,29 @@ def init_db():
 
 
 def hash_password(password: str) -> str:
-    """Hash password using SHA-256 for simple portable auth."""
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+    """Hash password using PBKDF2-HMAC-SHA256 with 100,000 iterations and a random salt."""
+    salt = secrets.token_hex(16)
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 100000)
+    return f"pbkdf2:sha256:100000${salt}${key.hex()}"
+
+
+def verify_password(password: str, stored_hash: str) -> bool:
+    """Verify password against stored hash, supporting PBKDF2 and legacy SHA-256."""
+    if not stored_hash:
+        return False
+    if stored_hash.startswith("pbkdf2:sha256:"):
+        try:
+            parts = stored_hash.split("$")
+            if len(parts) == 3:
+                header, salt, key_hex = parts
+                iterations = int(header.split(":")[-1])
+                calc_key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), iterations)
+                return hmac.compare_digest(calc_key.hex(), key_hex)
+        except Exception:
+            return False
+    # Backward compatibility fallback for legacy unsalted SHA-256
+    legacy_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+    return hmac.compare_digest(legacy_hash, stored_hash)
 
 
 def seed_data(cursor):
@@ -560,7 +583,7 @@ def register_contractor(contractor_data: Dict[str, Any]) -> Optional[Dict[str, A
 
 
 def authenticate_contractor(email: str, password: str) -> Optional[Dict[str, Any]]:
-    """Verify contractor email and password against stored hash."""
+    """Verify contractor email and password against stored PBKDF2 hash."""
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM contractors WHERE email = ?", (email.lower().strip(),))
@@ -570,7 +593,7 @@ def authenticate_contractor(email: str, password: str) -> Optional[Dict[str, Any
     if not row:
         return None
 
-    if row["password_hash"] == hash_password(password):
+    if verify_password(password, row["password_hash"]):
         return {
             "id": row["id"],
             "name": row["name"],

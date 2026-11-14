@@ -15,8 +15,18 @@
  */
 
 // ═════════════════════════════════════════════════════════════════════
-// 1. PERSISTENT STATE & DEFAULT DATA
+// 1. SECURITY & INPUT SANITIZATION
 // ═════════════════════════════════════════════════════════════════════
+
+function escapeHTML(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 const DEFAULT_PRODUCTS = [
   { id: 'prod-001', name: 'Ambuja Portland Cement', meta: '50kg Bag • Grade 53 • Verified Depot', price: 380, originalPrice: 450, discount: 15, category: 'cement', stock: 240, unit: 'bag', specs: 'IS:12269 certified. High early strength formulation engineered for RCC slabs, structural beams, columns, and high-durability plastering.', tags: ['cement', 'grade53', 'portland', 'ambuja'] },
@@ -394,16 +404,16 @@ function renderProductsGrid(products) {
   const grid = document.getElementById('storeGrid');
   if (!grid) return;
   grid.innerHTML = products.map((p, idx) => `
-    <div class="product reveal stagger-${(idx % 3) + 1} cursor-pointer" data-name="${p.name.toLowerCase()} ${(p.tags || []).join(' ')}" data-cat="${p.category}" onclick="handleProductCardClick(event, '${p.id}')">
-      <div class="discount-pill">${p.discount}% OFF</div>
+    <div class="product reveal stagger-${(idx % 3) + 1} cursor-pointer" data-name="${escapeHTML(p.name.toLowerCase())} ${(p.tags || []).map(t => escapeHTML(t)).join(' ')}" data-cat="${escapeHTML(p.category)}" onclick="handleProductCardClick(event, '${escapeHTML(p.id)}')">
+      <div class="discount-pill">${parseInt(p.discount || 10, 10)}% OFF</div>
       <div>
-        <h3>${p.name}</h3>
-        <p class="product-meta">${p.meta}</p>
+        <h3>${escapeHTML(p.name)}</h3>
+        <p class="product-meta">${escapeHTML(p.meta)}</p>
       </div>
       <div>
         <div class="pricing-wrap">
-          <span class="price">Rs.${p.price.toLocaleString('en-IN')}</span>
-          <strike>Rs.${p.originalPrice.toLocaleString('en-IN')}</strike>
+          <span class="price">Rs.${(p.price || 0).toLocaleString('en-IN')}</span>
+          <strike>Rs.${(p.originalPrice || 0).toLocaleString('en-IN')}</strike>
         </div>
         <div class="qty-control" onclick="event.stopPropagation()">
           <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
@@ -411,8 +421,8 @@ function renderProductsGrid(products) {
           <button class="qty-btn" onclick="changeQty(this,1)">+</button>
         </div>
         <div style="display:flex;gap:.5rem;margin-top:.6rem;">
-          <button class="btn-outline" style="flex:1;" onclick="event.stopPropagation();addToCartQty(this,'${p.name} (${p.unit})',${p.price})">Add to Job Cart</button>
-          <button class="btn-outline" style="padding:.5rem .75rem;font-size:.85rem;" onclick="event.stopPropagation();openProductDetailModal('${p.id}')" title="Technical Specs">ℹ️</button>
+          <button class="btn-outline" style="flex:1;" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit)})',${p.price})">Add to Job Cart</button>
+          <button class="btn-outline" style="padding:.5rem .75rem;font-size:.85rem;" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">ℹ️</button>
         </div>
       </div>
     </div>
@@ -616,7 +626,7 @@ function renderTechnicalNotes(notes) {
   const list = document.getElementById('resTechnicalNotesList');
   if (!card || !list) return;
   if (notes && notes.length > 0) {
-    list.innerHTML = notes.map(n => `<li>${n}</li>`).join('');
+    list.innerHTML = notes.map(n => `<li>${escapeHTML(n)}</li>`).join('');
     card.style.display = 'block';
   } else {
     card.style.display = 'none';
@@ -890,21 +900,21 @@ async function loadDepotOrders() {
   }
 
   list.innerHTML = orders.map(ord => {
-    const itemsText = (ord.items || []).map(i => `${i.qty || 1}x ${i.name}`).join(', ');
+    const itemsText = (ord.items || []).map(i => `${parseInt(i.qty || 1, 10)}x ${escapeHTML(i.name)}`).join(', ');
     const dateStr = new Date(ord.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
     return `
       <div style="background:var(--surface-elevated,#fafafa);border:1px solid var(--border-subtle);border-radius:14px;padding:1.2rem;transition:.2s;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
           <div style="display:flex;align-items:center;gap:.6rem;">
-            <span style="font-weight:800;color:var(--terracotta);font-size:.95rem;">${ord.id}</span>
-            <span style="font-size:.75rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.2rem .6rem;border-radius:12px;">● Depot Allocated</span>
+            <span style="font-weight:800;color:var(--terracotta);font-size:.95rem;">${escapeHTML(ord.id)}</span>
+            <span style="font-size:.75rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.2rem .6rem;border-radius:12px;">● ${escapeHTML(ord.status || 'Depot Allocated')}</span>
           </div>
           <div style="font-weight:800;font-size:1.05rem;color:var(--text-main);">Rs.${(ord.total || 0).toLocaleString('en-IN')}</div>
         </div>
         <p style="font-size:.85rem;color:var(--text-main);font-weight:600;margin-bottom:.4rem;">${itemsText || 'General construction supplies'}</p>
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text-muted);border-top:1px dashed var(--border-subtle);padding-top:.6rem;">
           <span>📅 Placed: ${dateStr}</span>
-          <span>📍 Hub: ${ord.city || 'Mumbai'} (Dispatch: 48h)</span>
+          <span>📍 Hub: ${escapeHTML(ord.city || 'Mumbai')} (Dispatch: 48h)</span>
         </div>
       </div>
     `;
@@ -1235,9 +1245,9 @@ function showContractorMenu() {
   menu.id = 'contractorMenu';
   menu.style.cssText = 'position:fixed;top:70px;right:2rem;background:var(--card-bg,#fff);border-radius:14px;padding:1rem;box-shadow:0 12px 40px rgba(0,0,0,.15);z-index:9998;min-width:220px;animation:slideUp .2s ease;';
   menu.innerHTML = `
-    <div style="font-weight:700;margin-bottom:.4rem;padding-bottom:.4rem;border-bottom:1px solid var(--border,#eee);">👷 ${authUser.name}</div>
-    <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.3rem;">📧 ${authUser.email}</div>
-    <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.8rem;">🏙️ ${authUser.city || 'Not set'}</div>
+    <div style="font-weight:700;margin-bottom:.4rem;padding-bottom:.4rem;border-bottom:1px solid var(--border,#eee);">👷 ${escapeHTML(authUser.name)}</div>
+    <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.3rem;">📧 ${escapeHTML(authUser.email)}</div>
+    <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.8rem;">🏙️ ${escapeHTML(authUser.city || 'Not set')}</div>
     <button onclick="document.getElementById('contractorMenu').remove();openDashboardModal();" style="width:100%;padding:.6rem;background:#E25822;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.85rem;margin-bottom:.5rem;">📋 View Hub Dispatches</button>
     <button onclick="logoutContractor()" style="width:100%;padding:.5rem;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:.85rem;">Logout</button>
   `;

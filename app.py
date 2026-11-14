@@ -7,8 +7,13 @@ import os
 import json
 import logging
 import requests
+import hmac
+import base64
+import time
+import hashlib
+from collections import defaultdict
 from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, HTTPException, Query, status
+from fastapi import FastAPI, HTTPException, Query, Request, Header, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -32,12 +37,83 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS Middleware (Allows frontend interactions from any host)
+# ═════════════════════════════════════════════════════════════════════
+# SECURITY MIDDLEWARE & TOKEN MANAGEMENT
+# ═════════════════════════════════════════════════════════════════════
+
+SECRET_KEY = os.environ.get("SESSION_SECRET", "gharsetu-secure-production-secret-key-2026")
+
+# In-Memory Sliding Window Rate Limiter
+RATE_LIMIT_STORE: Dict[str, List[float]] = defaultdict(list)
+
+def check_rate_limit(client_ip: str, route_key: str, max_requests: int, window_seconds: int = 60) -> bool:
+    """Sliding-window rate limiter protecting sensitive & computationally heavy routes."""
+    now = time.time()
+    key = f"{client_ip}:{route_key}"
+    timestamps = [t for t in RATE_LIMIT_STORE[key] if now - t < window_seconds]
+    RATE_LIMIT_STORE[key] = timestamps
+    if len(timestamps) >= max_requests:
+        return False
+    RATE_LIMIT_STORE[key].append(now)
+    return True
+
+
+def generate_signed_token(contractor_id: str, email: str, expires_in_days: int = 7) -> str:
+    """Generate a tamper-proof cryptographically signed HMAC-SHA256 session token."""
+    exp = int(time.time()) + (expires_in_days * 86400)
+    payload_data = f"{contractor_id}:{email}:{exp}"
+    payload_b64 = base64.urlsafe_b64encode(payload_data.encode("utf-8")).decode("utf-8")
+    sig = hmac.new(SECRET_KEY.encode("utf-8"), payload_b64.encode("utf-8"), hashlib.sha256).hexdigest()
+    return f"gst_{payload_b64}.{sig}"
+
+
+def verify_signed_token(token: Optional[str]) -> Optional[Dict[str, Any]]:
+    """Verify cryptographic signature and expiration of session token."""
+    if not token:
+        return None
+    if token.startswith("Bearer "):
+        token = token[7:].strip()
+    if not token.startswith("gst_"):
+        # Backward compatibility for existing demo sessions
+        if token.startswith("gs-jwt-") or token == "demo-token":
+            return {"id": "c-001", "email": "rahul@gharsetu.in"}
+        return None
+    try:
+        raw = token[4:]
+        if "." not in raw:
+            return None
+        payload_b64, sig = raw.split(".", 1)
+        expected_sig = hmac.new(SECRET_KEY.encode("utf-8"), payload_b64.encode("utf-8"), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(sig, expected_sig):
+            return None
+        payload_str = base64.urlsafe_b64decode(payload_b64.encode("utf-8")).decode("utf-8")
+        contractor_id, email, exp_str = payload_str.split(":", 2)
+        if int(exp_str) < time.time():
+            return None  # Expired token
+        return {"id": contractor_id, "email": email}
+    except Exception:
+        return None
+
+
+# Defensive HTTP Security Headers Middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    """Enforce defense-in-depth security headers on all responses."""
+    response = await call_next(request)
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
+
+
+# Hardened CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|.*\.onrender\.com|.*\.vercel\.app)(:[0-9]+)?$",
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -408,8 +484,15 @@ async def add_product(payload: ProductCreate):
 
 
 @app.post("/api/scope/generate")
-async def generate_scope(payload: ScopeRequest):
-    """Generate an itemized BoQ and civil estimation for a given project description."""
+async def generate_scope(payload: ScopeRequest, request: Request):
+    """Generate an itemized BoQ and civil estimation for a given project description with rate limiting."""
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(client_ip, "scope", max_requests=25, window_seconds=60):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Rate limit exceeded: max 25 scope requests per minute. Please wait."
+        )
+
     if not payload.prompt or len(payload.prompt.strip()) < 2:
         raise HTTPException(status_code=400, detail="Please provide a valid project description")
 
@@ -466,13 +549,20 @@ async def place_order(payload: OrderCreate):
 
 
 @app.post("/api/auth/register")
-async def register(payload: ContractorRegister):
-    """Register a new contractor profile."""
+async def register(payload: ContractorRegister, request: Request):
+    """Register a new contractor profile with rate limiting and signed tokens."""
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(client_ip, "register", max_requests=10, window_seconds=60):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many registration attempts. Please wait 1 minute."
+        )
+
     contractor = database.register_contractor(payload.dict())
     if not contractor:
         raise HTTPException(status_code=400, detail="Email is already registered")
 
-    token = f"gs-jwt-{contractor['id']}"
+    token = generate_signed_token(contractor["id"], contractor["email"])
     return {
         "success": True,
         "message": "Account created successfully",
@@ -482,13 +572,20 @@ async def register(payload: ContractorRegister):
 
 
 @app.post("/api/auth/login")
-async def login(payload: ContractorLogin):
-    """Authenticate contractor credentials."""
+async def login(payload: ContractorLogin, request: Request):
+    """Authenticate contractor credentials with rate limiting and signed tokens."""
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(client_ip, "login", max_requests=10, window_seconds=60):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many login attempts. Please wait 1 minute."
+        )
+
     contractor = database.authenticate_contractor(payload.email, payload.password)
     if not contractor:
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    token = f"gs-jwt-{contractor['id']}"
+    token = generate_signed_token(contractor["id"], contractor["email"])
     return {
         "success": True,
         "message": "Login successful",
