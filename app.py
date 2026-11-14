@@ -134,9 +134,13 @@ REGIONAL_MULTIPLIERS: Dict[str, float] = {
 # ═════════════════════════════════════════════════════════════════════
 
 class ScopeRequest(BaseModel):
-    prompt: str = Field(..., min_length=2, description="Project scope or renovation description")
+    prompt: Optional[str] = Field(None, description="Project scope or renovation description")
+    description: Optional[str] = Field(None, description="Alternative key for project description")
     city: Optional[str] = Field("Mumbai", description="Target region for depot material pricing")
     trades: Optional[List[str]] = Field(default=[], description="Selected primary trade filters")
+
+    def get_query(self) -> str:
+        return (self.prompt or self.description or "").strip()
 
 
 class ProductCreate(BaseModel):
@@ -493,22 +497,23 @@ async def generate_scope(payload: ScopeRequest, request: Request):
             detail="Rate limit exceeded: max 25 scope requests per minute. Please wait."
         )
 
-    if not payload.prompt or len(payload.prompt.strip()) < 2:
+    query = payload.get_query()
+    if not query or len(query) < 2:
         raise HTTPException(status_code=400, detail="Please provide a valid project description")
 
     city = payload.city or "Mumbai"
     trades = payload.trades or []
 
     # 1. Try Gemini AI Scoper if key is set
-    scope_data = call_gemini_scoper(payload.prompt, city, trades)
+    scope_data = call_gemini_scoper(query, city, trades)
 
     # 2. Resilient fallback to deterministic CPWD parametric engine
     if not scope_data:
-        scope_data = run_parametric_civil_engine(payload.prompt, city, trades)
+        scope_data = run_parametric_civil_engine(query, city, trades)
 
     # 3. Persist estimate to SQLite
     database.save_estimate({
-        "project_desc": scope_data.get("project", payload.prompt),
+        "project_desc": scope_data.get("project", query),
         "city": city,
         "trades": scope_data.get("trades", []),
         "duration": scope_data.get("estimated_duration", "3-5 Days"),

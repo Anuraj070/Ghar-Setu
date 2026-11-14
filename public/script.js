@@ -81,13 +81,15 @@ function showToast(text, icon = '✓') {
 // 3. VISUAL EFFECTS, CANVAS & ANIMATIONS
 // ═════════════════════════════════════════════════════════════════════
 
-// Page Loader Dismiss
-window.addEventListener('load', () => {
+// Page Loader Dismiss - Instant and Smooth
+function dismissPageLoader() {
   const loader = document.getElementById('page-loader');
-  if (loader) {
-    setTimeout(() => loader.classList.add('hidden'), 500);
+  if (loader && !loader.classList.contains('hidden')) {
+    loader.classList.add('hidden');
   }
-});
+}
+document.addEventListener('DOMContentLoaded', () => setTimeout(dismissPageLoader, 200));
+window.addEventListener('load', dismissPageLoader);
 
 // Scroll Progress Tracker
 window.addEventListener('scroll', () => {
@@ -368,7 +370,7 @@ function closeMobileMenu() {
   if (ham) ham.classList.remove('open');
 }
 
-function animateCounter(el, target, prefix = 'Rs.', duration = 1000) {
+function animateCounter(el, target, prefix = '₹', duration = 800) {
   if (!el) return;
   const start = performance.now();
   function update(now) {
@@ -403,30 +405,50 @@ async function loadMarketplaceProducts() {
 function renderProductsGrid(products) {
   const grid = document.getElementById('storeGrid');
   if (!grid) return;
-  grid.innerHTML = products.map((p, idx) => `
+  const categoryIcons = {
+    cement: '🧱',
+    plumbing: '🚰',
+    paint: '🎨',
+    electrical: '⚡',
+    hardware: '🔩',
+    steel: '🏗️',
+    tiles: '📐',
+    waterproofing: '💧'
+  };
+  grid.innerHTML = products.map((p, idx) => {
+    const icon = categoryIcons[p.category] || '📦';
+    return `
     <div class="product reveal stagger-${(idx % 3) + 1} cursor-pointer" data-name="${escapeHTML(p.name.toLowerCase())} ${(p.tags || []).map(t => escapeHTML(t)).join(' ')}" data-cat="${escapeHTML(p.category)}" onclick="handleProductCardClick(event, '${escapeHTML(p.id)}')">
-      <div class="discount-pill">${parseInt(p.discount || 10, 10)}% OFF</div>
-      <div>
-        <h3>${escapeHTML(p.name)}</h3>
-        <p class="product-meta">${escapeHTML(p.meta)}</p>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;">
+        <span style="font-size:.75rem;font-weight:700;color:var(--text-muted);background:var(--surface-elevated);border:1px solid var(--border-subtle);padding:.25rem .7rem;border-radius:20px;text-transform:uppercase;">
+          ${icon} ${escapeHTML(p.category)}
+        </span>
+        <div class="discount-pill" style="position:static;">${parseInt(p.discount || 10, 10)}% OFF</div>
       </div>
       <div>
-        <div class="pricing-wrap">
-          <span class="price">Rs.${(p.price || 0).toLocaleString('en-IN')}</span>
-          <strike>Rs.${(p.originalPrice || 0).toLocaleString('en-IN')}</strike>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:.3rem;color:var(--text-main);">${escapeHTML(p.name)}</h3>
+        <p class="product-meta" style="font-size:.84rem;color:var(--text-muted);margin-bottom:1.2rem;">${escapeHTML(p.meta)}</p>
+      </div>
+      <div style="margin-top:auto;">
+        <div class="pricing-wrap" style="display:flex;align-items:baseline;gap:.6rem;margin-bottom:.8rem;">
+          <span class="price" style="font-size:1.35rem;font-weight:800;color:var(--terracotta);">₹${(p.price || 0).toLocaleString('en-IN')}</span>
+          <strike style="color:#94A3B8;font-size:.88rem;">₹${(p.originalPrice || 0).toLocaleString('en-IN')}</strike>
+          <span style="font-size:.75rem;color:var(--accent-green);font-weight:700;">Depot Direct</span>
         </div>
         <div class="qty-control" onclick="event.stopPropagation()">
           <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
           <span class="qty-val">1</span>
           <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+          <span style="font-size:.78rem;color:var(--text-muted);margin-left:auto;">${p.stock ? p.stock + ' in stock' : 'Verified Hub'}</span>
         </div>
         <div style="display:flex;gap:.5rem;margin-top:.6rem;">
-          <button class="btn-outline" style="flex:1;" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit)})',${p.price})">Add to Job Cart</button>
-          <button class="btn-outline" style="padding:.5rem .75rem;font-size:.85rem;" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">ℹ️</button>
+          <button class="btn-primary" style="flex:1;padding:.75rem;font-size:.88rem;border-radius:10px;" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit)})',${p.price})">Add to Job Cart</button>
+          <button class="btn-copy" style="padding:.75rem .9rem;font-size:.85rem;border-radius:10px;" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">Specs ℹ️</button>
         </div>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function handleProductCardClick(event, id) {
@@ -561,7 +583,7 @@ async function simulateAI() {
     const res = await fetch('/api/scope/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ description: input, city })
+      body: JSON.stringify({ prompt: input, description: input, city })
     });
     const data = await res.json();
     clearInterval(pipelineInterval);
@@ -589,7 +611,38 @@ async function simulateAI() {
 }
 
 function applyScopeData(s, originalInput, city) {
-  lastScopeData = { ...s, input: originalInput, city: city || 'Mumbai' };
+  const normTrades = Array.isArray(s.trades) ? s.trades.join(', ') : (s.trades || 'Civil & Finishing');
+  const normDuration = s.duration || s.estimated_duration || '3-5 Days';
+  const normLabor = Number(s.laborCost || s.labor_subtotal) || 3000;
+  const rawBoQ = s.boq || s.materials || [];
+  const normBoQ = rawBoQ.map(item => ({
+    name: item.name || item.material || 'Material',
+    spec: item.spec || 'Depot Standard',
+    qty: item.qty || 1,
+    unit: item.unit || 'unit',
+    price: item.price || item.rate || 0,
+    total: item.total || ((item.price || item.rate || 0) * (item.qty || 1)),
+    checked: true
+  }));
+  const normNotes = s.technicalNotes || s.technical_notes || [];
+  const normConfidence = s.confidence || 97;
+  const normEngine = s.engine || 'GharSetu Civil Core v4.0';
+  const normMatSubtotal = s.materialCost || s.material_subtotal || normBoQ.reduce((sum, i) => sum + i.total, 0);
+  const normGrandTotal = s.grandTotal || s.grand_total || (normLabor + normMatSubtotal);
+
+  lastScopeData = {
+    ...s,
+    trades: normTrades,
+    duration: normDuration,
+    laborCost: normLabor,
+    boq: normBoQ,
+    technicalNotes: normNotes,
+    confidence: normConfidence,
+    engine: normEngine,
+    grandTotal: normGrandTotal,
+    input: originalInput,
+    city: city || 'Mumbai'
+  };
   localStorage.setItem('gharsetu_last_scope', JSON.stringify(lastScopeData));
 
   // Save to persistent estimates history
@@ -598,9 +651,9 @@ function applyScopeData(s, originalInput, city) {
     id: 'EST-' + Math.floor(100000 + Math.random() * 900000),
     title: originalInput,
     city,
-    trades: s.trades,
-    duration: s.duration,
-    total: s.grandTotal || (s.laborCost + (s.materialCost || 0)),
+    trades: normTrades,
+    duration: normDuration,
+    total: normGrandTotal,
     date: new Date().toISOString()
   });
   localStorage.setItem('gharsetu_estimates', JSON.stringify(savedEstimates.slice(0, 10)));
@@ -609,16 +662,16 @@ function applyScopeData(s, originalInput, city) {
   const durEl = document.getElementById('resDuration');
   const badgeEl = document.getElementById('resConfidenceBadge');
 
-  if (tradesEl) tradesEl.innerText = s.trades;
-  if (durEl) durEl.innerText = s.duration;
+  if (tradesEl) tradesEl.innerText = normTrades;
+  if (durEl) durEl.innerText = normDuration;
   if (badgeEl) {
-    badgeEl.innerHTML = `✓ Scope Synthesized (${s.confidence}%) • <small style="font-weight:700;color:var(--terracotta);">${s.engine || 'GharSetu Core'}</small>`;
+    badgeEl.innerHTML = `✓ Scope Synthesized (${normConfidence}%) • <small style="font-weight:700;color:var(--terracotta);">${normEngine}</small>`;
   }
 
-  laborBaseCost = Number(s.laborCost) || 3000;
-  currentBoQ = (s.boq || []).map(item => ({ ...item, checked: true }));
+  laborBaseCost = normLabor;
+  currentBoQ = normBoQ;
   renderBoQ();
-  renderTechnicalNotes(s.technicalNotes);
+  renderTechnicalNotes(normNotes);
 }
 
 function renderTechnicalNotes(notes) {
@@ -711,15 +764,23 @@ function renderBoQ() {
   if (!list) return;
   let html = '', materialTotal = 0;
   currentBoQ.forEach((item, i) => {
-    const itemTotal = item.price * (item.qty || 1);
+    const itemRate = item.price || item.rate || 0;
+    const itemTotal = itemRate * (item.qty || 1);
     if (item.checked) materialTotal += itemTotal;
+    const specSnippet = item.spec ? `<div style="font-size:.78rem;color:var(--text-muted);margin-top:.15rem;font-weight:400;">${escapeHTML(item.spec)}</div>` : '';
     html += `
-      <li>
-        <label class="boq-item-label">
-          <input type="checkbox" class="boq-checkbox" ${item.checked ? 'checked' : ''} onchange="toggleBoQItem(${i})">
-          <span>${item.name} ${item.qty ? '(' + item.qty + ' ' + (item.unit || '') + ')' : ''}</span>
+      <li style="display:flex;justify-content:space-between;align-items:center;padding:.9rem .5rem;border-bottom:1px solid var(--border-subtle);">
+        <label class="boq-item-label" style="display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;flex:1;">
+          <input type="checkbox" class="boq-checkbox" style="margin-top:.3rem;" ${item.checked ? 'checked' : ''} onchange="toggleBoQItem(${i})">
+          <div>
+            <div style="font-weight:700;color:var(--text-main);font-size:.93rem;">${escapeHTML(item.name || item.material)} <span style="font-size:.82rem;font-weight:500;color:var(--text-muted);">(${item.qty || 1} ${escapeHTML(item.unit || 'unit')})</span></div>
+            ${specSnippet}
+          </div>
         </label>
-        <span class="item-price">Rs.${itemTotal.toLocaleString('en-IN')}</span>
+        <div style="text-align:right;min-width:110px;">
+          <div class="item-price" style="font-size:.95rem;">₹${itemTotal.toLocaleString('en-IN')}</div>
+          <div style="font-size:.75rem;color:var(--text-muted);">₹${itemRate.toLocaleString('en-IN')}/${escapeHTML(item.unit || 'unit')}</div>
+        </div>
       </li>
     `;
   });
