@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>GharSetu | AI Renovation Scoping &amp; B2B Construction Platform India</title>
+<title>GharSetu — Homeowner Repair &amp; Renovation Coordination Platform (Prototype)</title>
 <!-- SEO -->
-<meta name="description" content="GharSetu uses AI to generate instant Bills of Quantities (BoQ), verify regional depot material prices, and connect homeowners with verified B2B construction suppliers across India.">
-<meta name="keywords" content="GharSetu, AI renovation, construction materials, BoQ generator, B2B construction India, home renovation, building materials, contractor platform">
+<meta name="description" content="Plan and coordinate home repairs in one place. Describe the issue once, get an editable preliminary scope, and request quotes from trusted local trade professionals.">
+<meta name="keywords" content="GharSetu, home repair, renovation coordination, plumbing, electrical, painting, waterproofing, carpentry, preliminary scope, contractor quotes">
 <meta name="author" content="GharSetu">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#E25822">
-<link rel="canonical" href="https://gharsetu.vercel.app/">
+<link rel="canonical" href="https://gharsetu-5vze.onrender.com/">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://gharsetu.vercel.app/">
-<meta property="og:title" content="GharSetu | AI Renovation Scoping &amp; B2B Construction Platform">
-<meta property="og:description" content="Generate your renovation BoQ in seconds. Verify material prices. Connect with local contractors. Powered by AI.">
+<meta property="og:url" content="https://gharsetu-5vze.onrender.com/">
+<meta property="og:title" content="GharSetu — Homeowner Repair &amp; Renovation Coordination Platform">
+<meta property="og:description" content="Describe the issue once. Get an editable preliminary scope and request quotes from local trade pros.">
 <meta property="og:site_name" content="GharSetu">
 <meta property="og:locale" content="en_IN">
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="GharSetu | AI Renovation Scoping &amp; B2B Construction Platform">
-<meta name="twitter:description" content="Generate your renovation BoQ in seconds. Verify material prices. Connect with local contractors.">
+<meta name="twitter:title" content="GharSetu — Homeowner Repair &amp; Renovation Coordination Platform">
+<meta name="twitter:description" content="Describe once, get an editable preliminary scope, request quotes from local trade pros.">
 <!-- Structured Data -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"GharSetu","description":"AI-powered renovation scoping and B2B construction materials platform for India","url":"https://gharsetu.vercel.app/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"1240"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"GharSetu","description":"Homeowner repair and renovation coordination platform with preliminary scoping and local trade quote matching","url":"https://gharsetu-5vze.onrender.com/","applicationCategory":"HomeApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}</script>
 <!-- Tailwind CSS CDN & Configuration -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -518,19 +518,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <nav id="mainNav">
   <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     Ghar<span>Setu</span>
+    <span style="font-size:.65rem;background:var(--terracotta-light);color:var(--terracotta);padding:.2rem .55rem;border-radius:12px;font-weight:800;letter-spacing:0.5px;margin-left:.4rem;vertical-align:middle;display:inline-block;">PROTOTYPE</span>
   </div>
   <div class="nav-links">
-    <a href="#demo">AI Scoper</a>
-    <a href="#marketplace">B2B Store</a>
+    <a href="#demo">Scope Planner</a>
+    <a href="#marketplace">Rate Guide (Demo)</a>
     <a href="#hiw">How it Works</a>
-    <a href="#" onclick="openDashboardModal();return false;" id="ordersNavBtn">Hub Orders</a>
+    <a href="#" onclick="openDashboardModal();return false;" id="ordersNavBtn">My Requests</a>
     <div style="width:1px;height:22px;background:var(--border-subtle);margin:0 .2rem;"></div>
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Theme"></button>
     <div class="cart-trigger" onclick="toggleCart(true)">
-      <span>Job Cart</span>
+      <span>Repair Plan</span>
       <span class="cart-badge" id="cartCount">0</span>
     </div>
-    <a href="#" class="btn-nav" id="authNavBtn" onclick="openAuthModal();return false;">Contractor Login</a>
+    <a href="#" class="btn-nav" id="authNavBtn" onclick="openAuthModal();return false;">Pro Partner (Demo)</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
     <span></span><span></span><span></span>
@@ -539,11 +540,11 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#demo" onclick="closeMobileMenu()">AI Scoper</a>
-  <a href="#marketplace" onclick="closeMobileMenu()">B2B Store</a>
+  <a href="#demo" onclick="closeMobileMenu()">Scope Planner</a>
+  <a href="#marketplace" onclick="closeMobileMenu()">Rate Guide (Demo Data)</a>
   <a href="#hiw" onclick="closeMobileMenu()">How it Works</a>
-  <a href="#" onclick="closeMobileMenu();openDashboardModal();">Hub Orders &amp; Dispatches</a>
-  <a href="#" onclick="closeMobileMenu();openAuthModal();" id="mobileAuthLink">Contractor Login</a>
+  <a href="#" onclick="closeMobileMenu();openDashboardModal();">My Requests &amp; Quotes</a>
+  <a href="#" onclick="closeMobileMenu();openAuthModal();" id="mobileAuthLink">Pro Partner (Demo)</a>
 </div>
 
 <!-- HERO -->
@@ -553,24 +554,24 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <canvas id="webgl-bg"></canvas>
   <canvas id="hero-canvas"></canvas>
   <div class="floating-elements">
-    <div class="float-el">🧱</div>
-    <div class="float-el">🔧</div>
-    <div class="float-el">🏗️</div>
+    <div class="float-el">🚰</div>
     <div class="float-el">⚡</div>
     <div class="float-el">🎨</div>
-    <div class="float-el">🔩</div>
+    <div class="float-el">💧</div>
+    <div class="float-el">🪵</div>
+    <div class="float-el">🔧</div>
     <div class="float-el">📐</div>
   </div>
   <div class="hero-content">
     <div class="hero-pill">
       <div class="dot"></div>
-      Powered by Gemini AI &amp; CPWD Benchmark Index
+      Prototype Demo • Homeowner Repair &amp; Renovation Coordination
     </div>
-    <h1>Turn Renovation Chaos Into<br><span class="gradient-text" id="typewriterTarget"></span><span class="typewriter-cursor"></span></h1>
-    <p class="reveal">Type what needs work in plain language. GharSetu generates the BoQ bill, verifies regional wholesaler rates, and provisions local trades automatically.</p>
+    <h1>Turn Home Repair Stress Into<br><span class="gradient-text" id="typewriterTarget"></span><span class="typewriter-cursor"></span></h1>
+    <p class="reveal">Describe the issue once in plain language. GharSetu generates an editable preliminary work scope with standard cost benchmarks so you can request and compare competitive quotes from local trade professionals.</p>
     <div class="hero-cta-group reveal stagger-1">
-      <button class="btn-hero-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Generate My Scope ⚡</button>
-      <button class="btn-hero-outline" onclick="document.getElementById('marketplace').scrollIntoView({behavior:'smooth'})">Browse B2B Store →</button>
+      <button class="btn-hero-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Plan My Scope ⚡</button>
+      <button class="btn-hero-outline" onclick="document.getElementById('marketplace').scrollIntoView({behavior:'smooth'})">Explore Benchmark Rates →</button>
     </div>
   </div>
   <div class="scroll-indicator">
@@ -652,28 +653,35 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stat-item reveal">
-    <div class="stat-number" data-target="12400" data-prefix="">0</div>
-    <div class="stat-label">Projects Scoped</div>
+    <div class="stat-number" data-target="5" data-prefix="">5</div>
+    <div class="stat-label">Core Home Services</div>
+    <div style="font-size:.72rem;color:var(--text-muted);margin-top:.2rem;">Plumbing, Electrical, Paint, Waterproofing, Woodwork</div>
   </div>
   <div class="stat-item reveal stagger-1">
-    <div class="stat-number" data-target="97" data-prefix="">0</div>
-    <div class="stat-label">Accuracy Rate (%)</div>
+    <div class="stat-number" data-target="1" data-prefix="">1</div>
+    <div class="stat-label">Unified Scope Document</div>
+    <div style="font-size:.72rem;color:var(--text-muted);margin-top:.2rem;">Eliminates repeated contractor site explanations</div>
   </div>
   <div class="stat-item reveal stagger-2">
-    <div class="stat-number" data-target="840" data-prefix="">0</div>
-    <div class="stat-label">Verified Contractors</div>
+    <div class="stat-number" data-target="100" data-prefix="" data-suffix="%">100%</div>
+    <div class="stat-label">Editable Preliminary Scope</div>
+    <div style="font-size:.72rem;color:var(--text-muted);margin-top:.2rem;">Homeowners customize tasks &amp; materials</div>
   </div>
   <div class="stat-item reveal stagger-3">
-    <div class="stat-number" data-target="32" data-prefix="">0</div>
-    <div class="stat-label">Cities Live</div>
+    <div class="stat-number" style="font-size:1.8rem;letter-spacing:-0.5px;">PROTOTYPE</div>
+    <div class="stat-label">Startup Pitch Demo</div>
+    <div style="font-size:.72rem;color:var(--text-muted);margin-top:.2rem;">Simulated local quotes &amp; benchmark guide</div>
   </div>
+</div>
+<div style="text-align:center;padding:.3rem 1rem .8rem;font-size:.76rem;color:var(--text-muted);">
+  *Prototype preview for startup pitch demonstration. Rates, quotes, and pros shown are indicative demo data.
 </div>
 
 <!-- HOW IT WORKS -->
 <section id="hiw" class="hiw-section">
   <span class="section-badge reveal">Simple 4-Step Process</span>
-  <h2 class="section-title reveal stagger-1">From Description to Dispatch</h2>
-  <p class="section-sub reveal stagger-2">No expertise needed. Plain language in, structured protocol out.</p>
+  <h2 class="section-title reveal stagger-1">From Issue Description to Local Quotes</h2>
+  <p class="section-sub reveal stagger-2">No technical jargon needed. Describe the issue once, get an editable preliminary scope, and coordinate with trusted local trade professionals.</p>
   <div class="steps-grid">
     <!-- Step 1: Pencil/Write Icon -->
     <div class="step-card reveal stagger-1">
@@ -685,8 +693,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         </svg>
         <div class="step-num-badge">1</div>
       </div>
-      <h4>Describe the Work</h4>
-      <p>Type what needs renovation in plain conversational language — no technical jargon required.</p>
+      <h4>1. Describe the Issue</h4>
+      <p>Type what needs repair or renovation in conversational language — leaking pipes, room repainting, switchboard fixes, or damp walls.</p>
     </div>
     <!-- Step 2: AI/Brain Icon -->
     <div class="step-card reveal stagger-2">
@@ -700,8 +708,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         </svg>
         <div class="step-num-badge">2</div>
       </div>
-      <h4>AI Parses &amp; Scopes</h4>
-      <p>Our LLM engine extracts entities, spatial estimates, and trade requirements in seconds.</p>
+      <h4>2. Get Editable Preliminary Scope</h4>
+      <p>Our scoping engine identifies required trade skills, standard material specs, and typical execution duration.</p>
     </div>
     <!-- Step 3: Checklist Icon -->
     <div class="step-card reveal stagger-3">
@@ -718,8 +726,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         </svg>
         <div class="step-num-badge">3</div>
       </div>
-      <h4>Review BoQ &amp; Prices</h4>
-      <p>Get a live Bill of Quantities with regional wholesale rates. Tick items to customize your scope.</p>
+      <h4>3. Request Local Quotes</h4>
+      <p>Share your standardized work scope with relevant local plumbers, electricians, or painters with one click.</p>
     </div>
     <!-- Step 4: Truck/Dispatch Icon -->
     <div class="step-card reveal stagger-4">
@@ -734,8 +742,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         </svg>
         <div class="step-num-badge">4</div>
       </div>
-      <h4>Dispatch to Depot</h4>
-      <p>Push your cart to the nearest regional depot at zero-margin B2B pass-through pricing.</p>
+      <h4>4. Coordinate &amp; Track</h4>
+      <p>Compare competitive quotes, schedule visits, and track repair milestones in one simple homeowner project tracker.</p>
     </div>
   </div>
 </section>
@@ -744,19 +752,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <section id="demo" class="demo-container gradient-border">
   <div class="demo-header reveal">
     <div style="display:inline-flex;align-items:center;gap:.5rem;background:var(--terracotta-light);color:var(--terracotta);padding:.35rem .9rem;border-radius:20px;font-size:.78rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:.8rem;">
-      ⚡ Automated Civil Scoping Engine
+      ⚡ Homeowner Scoping Workbench (Prototype)
     </div>
-    <h2>AI Renovation Scoper &amp; BoQ Generator</h2>
-    <p style="color:var(--text-muted);font-size:.95rem;margin-top:.4rem;max-width:580px;margin-left:auto;margin-right:auto;">
-      Describe project scope in conversational language. Our engine cross-references CPWD Schedule of Rates (DSR), IS standards, and live regional wholesaler prices.
+    <h2>AI Repair Scoper &amp; Preliminary Cost Guide</h2>
+    <p style="color:var(--text-muted);font-size:.95rem;margin-top:.4rem;max-width:620px;margin-left:auto;margin-right:auto;">
+      Describe your repair or renovation issue once in plain words. GharSetu generates an editable preliminary work scope with benchmark costs so you can request quotes from relevant local professionals.
     </p>
   </div>
 
   <div class="prompt-pills reveal stagger-1">
-    <span class="prompt-pill" onclick="setPrompt('Repaint 10x12 bedroom with primer and fix broken kitchen cabinet')">🎨 Bedroom Paint &amp; Cabinet Fix</span>
-    <span class="prompt-pill" onclick="setPrompt('Fix leaking bathroom CPVC pipe and replace mixer tap')">🚰 Leaking CPVC &amp; Tap Replacement</span>
-    <span class="prompt-pill" onclick="setPrompt('Complete rewiring of 2BHK and install 6 modular switchboards')">⚡ 2BHK Electrical Rewiring</span>
-    <span class="prompt-pill" onclick="setPrompt('Water seepage near bedroom balcony wall causing paint dampness, need polymer waterproofing')">💧 Balcony Damp Seepage &amp; Waterproofing</span>
+    <span class="prompt-pill" onclick="setPrompt('Fix leaking bathroom CPVC pipe and replace mixer tap')">🚰 Plumbing: Leaking Pipe &amp; Tap</span>
+    <span class="prompt-pill" onclick="setPrompt('Install 4 modular switchboards and fix tripping bedroom MCB circuit')">⚡ Electrical: Modular Switches &amp; MCB</span>
+    <span class="prompt-pill" onclick="setPrompt('Repaint 10x12 bedroom walls with primer and putty touch-up')">🎨 Painting: Bedroom Walls &amp; Primer</span>
+    <span class="prompt-pill" onclick="setPrompt('Water seepage near bedroom balcony wall causing paint dampness, need polymer waterproofing')">💧 Waterproofing: Balcony Seepage</span>
+    <span class="prompt-pill" onclick="setPrompt('Repair sagging kitchen cabinet hinges and replace wooden door lock')">🪵 Carpentry: Cabinet Hinges &amp; Lock</span>
   </div>
 
   <div class="scoper-workbench reveal stagger-2">
@@ -764,22 +773,22 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <div class="city-selector-wrap">
         <span class="city-pin">📍</span>
         <select id="userCity" class="city-select">
-          <option value="Mumbai">Mumbai (West Depot)</option>
-          <option value="Bengaluru">Bengaluru (SST Campus)</option>
-          <option value="Delhi NCR">Delhi NCR</option>
-          <option value="Pune">Pune (Industrial Hub)</option>
-          <option value="Hyderabad">Hyderabad</option>
-          <option value="Chennai">Chennai</option>
-          <option value="Kolkata">Kolkata</option>
+          <option value="Mumbai">Mumbai (Pilot Zone)</option>
+          <option value="Bengaluru">Bengaluru (Pilot Zone)</option>
+          <option value="Delhi NCR">Delhi NCR (Pilot Zone)</option>
+          <option value="Pune">Pune (Pilot Zone)</option>
+          <option value="Hyderabad">Hyderabad (Pilot Zone)</option>
+          <option value="Chennai">Chennai (Pilot Zone)</option>
+          <option value="Kolkata">Kolkata (Pilot Zone)</option>
         </select>
       </div>
       <div class="scoper-standard-badge">
-        <span>✓ CPWD DSR-2024 &amp; IS Standards</span>
+        <span>✓ Indicative Cost Benchmarks (Demo Data)</span>
       </div>
     </div>
     
     <div class="scoper-input-box">
-      <input type="text" id="userInput" placeholder="e.g. Repaint 10x12 bedroom with primer, fix CPVC leaking pipe, modular switches..." value="Repaint 10x12 bedroom with primer and fix broken kitchen cabinet">
+      <input type="text" id="userInput" placeholder="e.g. Fix leaking bathroom CPVC pipe, repaint bedroom, repair cabinet hinges..." value="Fix leaking bathroom CPVC pipe and replace mixer tap">
       <button class="btn-primary" id="generateScopeBtn" onclick="simulateAI(event)">
         <span>Generate Scope ⚡</span>
       </button>
@@ -796,37 +805,37 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
   <div class="results-dashboard" id="results">
     <div class="results-header-actions">
-      <div class="results-badge" id="resConfidenceBadge">✓ Scope &amp; BoQ Synthesized (Confidence: 97.2%)</div>
+      <div class="results-badge" id="resConfidenceBadge">✓ Preliminary Scope Generated • 100% Editable</div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
         <button class="btn-copy" onclick="copyProjectSummary()">📋 Copy Summary</button>
-        <button class="btn-copy" style="background:var(--terracotta);color:#fff;border-color:var(--terracotta);font-weight:700;" onclick="openPrintEstimate()">📄 Export Official BoQ (PDF)</button>
+        <button class="btn-copy" style="background:var(--terracotta);color:#fff;border-color:var(--terracotta);font-weight:700;" onclick="openPrintEstimate()">📄 Export Scope (PDF)</button>
       </div>
     </div>
     <div class="dashboard-grid">
       <div class="metric-card">
         <div style="font-size:1.4rem;margin-bottom:.4rem;">👷</div>
-        <h4>Required Trades</h4>
+        <h4>Recommended Trades</h4>
         <div class="value" id="resTrades">--</div>
-        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">Certified artisan crews</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">Relevant local trade pros</div>
       </div>
       <div class="metric-card">
         <div style="font-size:1.4rem;margin-bottom:.4rem;">⏱️</div>
-        <h4>Estimated Duration</h4>
+        <h4>Typical Duration</h4>
         <div class="value" id="resDuration">--</div>
-        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">Standard execution window</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">Standard estimated window</div>
       </div>
       <div class="metric-card" style="border-left-color:#10B981;">
         <div style="font-size:1.4rem;margin-bottom:.4rem;">💰</div>
-        <h4>Total Baseline Estimate</h4>
+        <h4>Preliminary Cost Benchmark</h4>
         <div class="value" id="resCost" style="color:#10B981;">Rs.0</div>
-        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">CPWD material + labor indexed</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">Standard material + labor benchmark (Demo)</div>
       </div>
     </div>
 
     <!-- Technical Notes / Risk Advisory -->
     <div id="resTechnicalNotesCard" style="display:none;margin-top:1.5rem;padding:1.2rem 1.5rem;background:var(--warm-50);border:1.5px solid var(--warm-200);border-radius:var(--radius-md);">
       <h5 style="color:var(--terracotta);font-size:.9rem;font-weight:800;display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;">
-        ⚠️ Site Compliance &amp; CPWD Technical Advisory
+        ⚠️ Homeowner Inspection &amp; Scope Advisory
       </h5>
       <ul id="resTechnicalNotesList" style="list-style:disc;padding-left:1.3rem;font-size:.85rem;color:var(--text-muted);line-height:1.6;"></ul>
     </div>
@@ -834,17 +843,17 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <div class="materials-list">
       <div class="materials-list-header">
         <div>
-          <h4 style="font-size:1.05rem;font-weight:800;color:var(--text-main);">📋 Itemized Bill of Quantities (BoQ)</h4>
-          <p style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;">Uncheck items to exclude from procurement; total updates automatically</p>
+          <h4 style="font-size:1.05rem;font-weight:800;color:var(--text-main);">📋 Editable Work &amp; Material Scope</h4>
+          <p style="font-size:.8rem;color:var(--text-muted);margin-top:.1rem;">Toggle or remove items to customize your preliminary scope before requesting quotes</p>
         </div>
         <button class="btn-copy" onclick="openPrintEstimate()">🖨️ Print / PDF</button>
       </div>
       <ul id="resMaterialsList"></ul>
       <div class="tag-row">
-        <span style="font-size:.85rem;color:var(--text-muted);font-weight:600;">💡 Material prices verified against regional distributor mandi rates</span>
+        <span style="font-size:.85rem;color:var(--text-muted);font-weight:600;">💡 Benchmark rates provide an indicative reference for fair contractor quotes (Demo data)</span>
         <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
           <button class="btn-copy" onclick="copyProjectSummary()">📋 Copy Summary</button>
-          <button class="btn-primary" style="padding:.75rem 1.5rem;font-size:.9rem;" onclick="addBoQToCart(event)">Push to Job Cart 📦</button>
+          <button class="btn-primary" style="padding:.75rem 1.5rem;font-size:.9rem;" onclick="addBoQToCart(event)">Request Quotes for this Scope 🚀</button>
         </div>
       </div>
     </div>
@@ -853,191 +862,56 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
 <!-- MARKETPLACE -->
 <section id="marketplace" class="marketplace">
-  <span class="section-badge reveal">Regional Depot Benchmark &amp; Pass-Through</span>
-  <h2 class="section-title reveal stagger-1">Verified B2B Material Price Index</h2>
-  <p style="color:var(--text-muted);margin-top:.4rem;" class="reveal stagger-2">Workers and contractors order directly at wholesale regional discounts.</p>
+  <span class="section-badge reveal">Market Benchmark Guide (Prototype Demo Data)</span>
+  <h2 class="section-title reveal stagger-1">Standard Service &amp; Material Cost Benchmarks</h2>
+  <p style="color:var(--text-muted);margin-top:.4rem;" class="reveal stagger-2">Indicative reference rates to evaluate quotes fairly across our 5 core repair &amp; renovation services.</p>
   <div class="market-search-bar reveal stagger-3">
     <span class="search-icon-fixed">🔍</span>
-    <input type="text" id="marketSearch" placeholder="Search cement, pipes, emulsion..." oninput="filterMarketplace()">
+    <input type="text" id="marketSearch" placeholder="Search plumbing, electrical, painting, waterproofing, carpentry..." oninput="filterMarketplace()">
   </div>
   <div class="category-tabs-wrap reveal stagger-4">
     <div class="category-tabs" id="categoryTabs">
-      <button class="cat-tab active" data-cat="all" onclick="filterByCategory(this,'all')">All Products</button>
-      <button class="cat-tab" data-cat="cement" onclick="filterByCategory(this,'cement')">🧱 Cement</button>
+      <button class="cat-tab active" data-cat="all" onclick="filterByCategory(this,'all')">All Services</button>
       <button class="cat-tab" data-cat="plumbing" onclick="filterByCategory(this,'plumbing')">🚰 Plumbing</button>
-      <button class="cat-tab" data-cat="paint" onclick="filterByCategory(this,'paint')">🎨 Paint</button>
       <button class="cat-tab" data-cat="electrical" onclick="filterByCategory(this,'electrical')">⚡ Electrical</button>
-      <button class="cat-tab" data-cat="hardware" onclick="filterByCategory(this,'hardware')">🔩 Hardware</button>
-      <button class="cat-tab" data-cat="steel" onclick="filterByCategory(this,'steel')">🏗️ Steel</button>
-      <button class="cat-tab" data-cat="tiles" onclick="filterByCategory(this,'tiles')">📐 Tiles</button>
+      <button class="cat-tab" data-cat="painting" onclick="filterByCategory(this,'painting')">🎨 Painting</button>
       <button class="cat-tab" data-cat="waterproofing" onclick="filterByCategory(this,'waterproofing')">💧 Waterproofing</button>
+      <button class="cat-tab" data-cat="carpentry" onclick="filterByCategory(this,'carpentry')">🪵 Carpentry</button>
     </div>
   </div>
   <div class="store-grid" id="storeGrid">
-    <div class="product visible cursor-pointer" data-name="ambuja portland cement 50kg bag cement grade53 portland ambuja" data-cat="cement" onclick="handleProductCardClick(event, 'prod-001')">
-      <div class="product-media">
-        <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80" alt="Ambuja Portland Cement" class="product-img" loading="lazy">
-        <span class="product-cat-pill">🧱 CEMENT</span>
-        <span class="product-discount-badge">15% OFF</span>
-      </div>
-      <div class="product-body">
-        <h3 class="product-title">Ambuja Portland Cement</h3>
-        <p class="product-meta">50kg Bag • Grade 53 • Verified Depot</p>
-        <div class="product-badge-row">
-          <span class="badge-depot">✓ BIS Certified Depot</span>
-          <span class="badge-stock">240 bags ready</span>
-        </div>
-      </div>
-      <div class="product-footer">
-        <div class="pricing-wrap">
-          <span class="price">₹380</span>
-          <strike>₹450</strike>
-          <span class="depot-tag">Wholesale Index</span>
-        </div>
-        <div class="product-action-row">
-          <div class="qty-control" onclick="event.stopPropagation()">
-            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
-            <span class="qty-val">1</span>
-            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
-          </div>
-          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Ambuja Portland Cement (50kg)',380)">Add to Cart</button>
-          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-001')" title="Technical Specs">ℹ️</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product visible cursor-pointer" data-name="astral cpvc pipes heavy duty 3m plumbing cpvc pipe plumbing astral" data-cat="plumbing" onclick="handleProductCardClick(event, 'prod-002')">
-      <div class="product-media">
-        <img src="https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80" alt="Astral CPVC Pipes (Heavy Duty)" class="product-img" loading="lazy">
-        <span class="product-cat-pill">🚰 PLUMBING</span>
-        <span class="product-discount-badge">18% OFF</span>
-      </div>
-      <div class="product-body">
-        <h3 class="product-title">Astral CPVC Pipes (Heavy Duty)</h3>
-        <p class="product-meta">3m Length • 1-inch • Plumbing Grade</p>
-        <div class="product-badge-row">
-          <span class="badge-depot">✓ BIS Certified Depot</span>
-          <span class="badge-stock">180 pieces ready</span>
-        </div>
-      </div>
-      <div class="product-footer">
-        <div class="pricing-wrap">
-          <span class="price">₹420</span>
-          <strike>₹510</strike>
-          <span class="depot-tag">Wholesale Index</span>
-        </div>
-        <div class="product-action-row">
-          <div class="qty-control" onclick="event.stopPropagation()">
-            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
-            <span class="qty-val">1</span>
-            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
-          </div>
-          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Astral CPVC Pipe (3m)',420)">Add to Cart</button>
-          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-002')" title="Technical Specs">ℹ️</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product visible cursor-pointer" data-name="asian paints tractor emulsion 20l bucket matte paint paint emulsion asian paints" data-cat="paint" onclick="handleProductCardClick(event, 'prod-003')">
-      <div class="product-media">
-        <img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80" alt="Asian Paints Tractor Emulsion" class="product-img" loading="lazy">
-        <span class="product-cat-pill">🎨 PAINT</span>
-        <span class="product-discount-badge">12% OFF</span>
-      </div>
-      <div class="product-body">
-        <h3 class="product-title">Asian Paints Tractor Emulsion</h3>
-        <p class="product-meta">20L Bucket • Matte White Finish</p>
-        <div class="product-badge-row">
-          <span class="badge-depot">✓ BIS Certified Depot</span>
-          <span class="badge-stock">90 buckets ready</span>
-        </div>
-      </div>
-      <div class="product-footer">
-        <div class="pricing-wrap">
-          <span class="price">₹2,850</span>
-          <strike>₹3,240</strike>
-          <span class="depot-tag">Wholesale Index</span>
-        </div>
-        <div class="product-action-row">
-          <div class="qty-control" onclick="event.stopPropagation()">
-            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
-            <span class="qty-val">1</span>
-            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
-          </div>
-          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Asian Paints Tractor Emulsion (20L)',2850)">Add to Cart</button>
-          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-003')" title="Technical Specs">ℹ️</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product visible cursor-pointer" data-name="polycab fr wire 1.5 sqmm electrical wiring coil wire electrical fr polycab" data-cat="electrical" onclick="handleProductCardClick(event, 'prod-004')">
-      <div class="product-media">
-        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80" alt="Polycab FR Wire 1.5 sq mm" class="product-img" loading="lazy">
-        <span class="product-cat-pill">⚡ ELECTRICAL</span>
-        <span class="product-discount-badge">10% OFF</span>
-      </div>
-      <div class="product-body">
-        <h3 class="product-title">Polycab FR Wire 1.5 sq mm</h3>
-        <p class="product-meta">90m Coil • Fire Retardant • ISI Marked</p>
-        <div class="product-badge-row">
-          <span class="badge-depot">✓ BIS Certified Depot</span>
-          <span class="badge-stock">120 coils ready</span>
-        </div>
-      </div>
-      <div class="product-footer">
-        <div class="pricing-wrap">
-          <span class="price">₹1,580</span>
-          <strike>₹1,750</strike>
-          <span class="depot-tag">Wholesale Index</span>
-        </div>
-        <div class="product-action-row">
-          <div class="qty-control" onclick="event.stopPropagation()">
-            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
-            <span class="qty-val">1</span>
-            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
-          </div>
-          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Polycab FR Wire 1.5sqmm (90m)',1580)">Add to Cart</button>
-          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-004')" title="Technical Specs">ℹ️</button>
-        </div>
-      </div>
-    </div>
-    <div id="storeNoResults" class="hidden" style="grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; color: var(--text-muted);">
-      <div style="font-size: 2.5rem; margin-bottom: .6rem;">🔍</div>
-      <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: .4rem;">No products match your filter</div>
-      <p style="font-size: .88rem; margin-bottom: 1rem;">Try searching for other materials or select a different category.</p>
-      <button class="btn-outline" style="display:inline-block;width:auto;padding:.6rem 1.4rem;" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'all\']'), 'all')">Show All Materials</button>
-    </div>
+    <!-- Populated dynamically via JS from SQLite API / local catalog -->
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section class="testimonials-section">
   <div style="max-width:1100px;margin:0 auto;">
-    <span class="section-badge reveal">Trusted by Contractors</span>
-    <h2 class="section-title reveal stagger-1">What Our Partners Say</h2>
+    <span class="section-badge reveal">Pilot Feedback (Prototype Demo)</span>
+    <h2 class="section-title reveal stagger-1">What Early Homeowners &amp; Trade Partners Say</h2>
     <div class="testimonials-grid">
       <div class="testimonial-card reveal stagger-1">
         <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"GharSetu cut my estimation time from 2 days to under 10 minutes. The BoQ accuracy is incredible — I barely need to revise anything before sending to clients."</p>
+        <p class="testimonial-text">"Instead of explaining my bathroom leak to 4 different plumbers, I shared one clear GharSetu scope. Got transparent quotes without haggling."</p>
         <div class="testimonial-author">
-          <div class="author-avatar" style="background:linear-gradient(135deg,#E25822,#FF8C60)">R</div>
-          <div><div class="author-name">Rahul Mehta</div><div class="author-role">General Contractor, Pune</div></div>
+          <div class="author-avatar" style="background:linear-gradient(135deg,#E25822,#FF8C60)">A</div>
+          <div><div class="author-name">Ananya Deshmukh</div><div class="author-role">Homeowner, Mumbai (Pilot User)</div></div>
         </div>
       </div>
       <div class="testimonial-card reveal stagger-2">
         <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"The B2B depot pricing is genuinely wholesale. Saved almost 18% on materials last quarter. The cart-to-dispatch flow is seamless and fast."</p>
+        <p class="testimonial-text">"The editable scope helped me understand exactly which materials and labor were needed before repainting my flat. Saved so much guesswork."</p>
         <div class="testimonial-author">
-          <div class="author-avatar" style="background:linear-gradient(135deg,#1A1D26,#3A4055)">P</div>
-          <div><div class="author-name">Priya Sharma</div><div class="author-role">Interior Designer, Mumbai</div></div>
+          <div class="author-avatar" style="background:linear-gradient(135deg,#1A1D26,#3A4055)">R</div>
+          <div><div class="author-name">Rohan Iyer</div><div class="author-role">Homeowner, Bengaluru (Pilot User)</div></div>
         </div>
       </div>
       <div class="testimonial-card reveal stagger-3">
         <div class="stars">★★★★☆</div>
-        <p class="testimonial-text">"Finally, a tool built for Indian construction realities. Regional pricing, local trade provisioning, and CPVC-specific scoping. My crew uses it daily."</p>
+        <p class="testimonial-text">"Clients usually have vague requests. Having an itemized preliminary scope saves me an hour on initial site visits and makes quoting straightforward."</p>
         <div class="testimonial-author">
           <div class="author-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">A</div>
-          <div><div class="author-name">Arjun Nair</div><div class="author-role">Master Plumber, Bengaluru</div></div>
+          <div><div class="author-name">Arjun Nair</div><div class="author-role">Master Plumber, Pune (Trade Partner)</div></div>
         </div>
       </div>
     </div>
@@ -1048,18 +922,18 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)">
   <div class="cart-drawer" onclick="event.stopPropagation()">
     <div class="cart-header">
-      <h3>📦 Job Procurement Cart</h3>
+      <h3>📋 My Repair Plan &amp; Quote Request</h3>
       <button class="close-cart" onclick="toggleCart(false)">✕</button>
     </div>
     <div class="cart-body" id="cartItemList">
-      <p style="color:var(--text-muted);text-align:center;margin-top:3rem;font-size:.92rem;">Your Job Cart is empty.<br><span style="font-size:2rem">🧱</span></p>
+      <p style="color:var(--text-muted);text-align:center;margin-top:3rem;font-size:.92rem;">Your Repair Plan is empty.<br><span style="font-size:2rem">🛠️</span></p>
     </div>
     <div class="cart-footer">
       <div class="cart-total-row">
-        <span>Estimated Total</span>
+        <span>Preliminary Cost Benchmark</span>
         <span id="cartTotalDisplay" style="font-family:'JetBrains Mono',monospace;color:var(--terracotta);">Rs.0</span>
       </div>
-      <button class="btn-primary" style="width:100%;justify-content:center;padding:1rem;" onclick="checkoutCart(event)">Proceed to B2B Dispatch 🚚</button>
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:1rem;" onclick="checkoutCart(event)">Request Quotes from Local Pros 🚀</button>
     </div>
   </div>
 </div>
@@ -1078,23 +952,27 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <div class="footer-grid">
     <div class="footer-brand">
       <div class="footer-logo">Ghar<span>Setu</span></div>
-      <p>Standardized Construction Protocol and AI Scoping Engine. Connecting contractors with zero-margin wholesale depots across India.</p>
+      <p>A homeowner-focused repair and renovation coordination platform. Plan scopes, benchmark standard costs, and request competitive quotes from trusted local trade professionals.</p>
     </div>
     <div class="footer-col">
       <h5>Platform</h5>
-      <a href="#">AI Scoper</a><a href="#">B2B Store</a><a href="#">Contractor Portal</a><a href="#">Regional Pricing</a>
+      <a href="#demo">Scope Planner</a><a href="#marketplace">Benchmark Guide</a><a href="#" onclick="openAuthModal();return false;">Pro Partner Portal</a><a href="#hiw">How It Works</a>
     </div>
     <div class="footer-col">
-      <h5>Trades</h5>
-      <a href="#">Painting</a><a href="#">Plumbing</a><a href="#">Electrical</a><a href="#">Carpentry</a>
+      <h5>Focus Services</h5>
+      <a href="#marketplace" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'plumbing\']'),'plumbing')">Plumbing</a>
+      <a href="#marketplace" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'electrical\']'),'electrical')">Electrical Work</a>
+      <a href="#marketplace" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'painting\']'),'painting')">Painting</a>
+      <a href="#marketplace" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'waterproofing\']'),'waterproofing')">Waterproofing</a>
+      <a href="#marketplace" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'carpentry\']'),'carpentry')">Carpentry &amp; Woodwork</a>
     </div>
     <div class="footer-col">
-      <h5>Company</h5>
-      <a href="#">About Us</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a>
+      <h5>About</h5>
+      <a href="#">Startup Concept</a><a href="#">Pilot Program</a><a href="#">Security &amp; Privacy</a><a href="#">Contact Team</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 <strong>GharSetu</strong>. All rights reserved. Built for Indian construction professionals.</p>
+    <p>© 2026 <strong>GharSetu</strong>. All rights reserved. <em>Prototype Demonstration for Startup Pitch Evaluation</em>. All seeded quotes, rates, and trade partners are illustrative demo data.</p>
   </div>
 </footer>
 
@@ -1103,66 +981,66 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <div style="background:var(--card-bg,#fff);border-radius:20px;max-width:540px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.25);padding:2rem;position:relative;animation:slideUp .2s ease;">
     <button onclick="closeProductDetailModal()" style="position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted,#888);z-index:2;">✕</button>
     <img id="detailProdImg" src="" alt="Product preview" style="width:100%;height:180px;object-fit:cover;border-radius:14px;margin-bottom:1.2rem;border:1px solid var(--border-subtle);background:var(--warm-50);display:block;">
-    <div style="font-size:.78rem;font-weight:800;color:var(--terracotta);letter-spacing:0.5px;margin-bottom:.4rem;" id="detailProdCategory">MATERIAL • REGIONAL DEPOT CERTIFIED</div>
+    <div style="font-size:.78rem;font-weight:800;color:var(--terracotta);letter-spacing:0.5px;margin-bottom:.4rem;" id="detailProdCategory">SERVICE &amp; MATERIAL BENCHMARK (DEMO DATA)</div>
     <h2 style="font-size:1.4rem;font-weight:800;color:var(--text-main);margin-bottom:.3rem;" id="detailProdTitle">Product Name</h2>
-    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.2rem;" id="detailProdMeta">50kg Bag • Grade 53 • Verified Depot</p>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.2rem;" id="detailProdMeta">Standard Specification • Benchmark Guide (Demo Data)</p>
     
     <div style="background:var(--surface-elevated,#fafafa);border:1px solid var(--border-subtle);border-radius:12px;padding:1rem;margin-bottom:1.2rem;">
-      <h4 style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:.4rem;">Technical Specifications &amp; IS Standards</h4>
-      <p style="font-size:.86rem;color:var(--text-main);line-height:1.5;" id="detailProdSpecs">BIS Certified</p>
+      <h4 style="font-size:.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:.4rem;">Specification &amp; Quality Standards</h4>
+      <p style="font-size:.86rem;color:var(--text-main);line-height:1.5;" id="detailProdSpecs">Indicative benchmark details</p>
     </div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-subtle);">
       <div>
-        <div style="font-size:1.3rem;font-weight:800;color:var(--text-main);" id="detailProdPrice">Rs.380</div>
-        <div style="font-size:.82rem;color:var(--text-muted);"><strike id="detailProdOriginal">Rs.450</strike> <span style="color:#10B981;font-weight:700;" id="detailProdDiscount">15% Wholesale Discount</span></div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--text-main);" id="detailProdPrice">Rs.420</div>
+        <div style="font-size:.82rem;color:var(--text-muted);"><strike id="detailProdOriginal">Rs.510</strike> <span style="color:#10B981;font-weight:700;" id="detailProdDiscount">Demo Benchmark</span></div>
       </div>
       <div style="text-align:right;">
-        <span style="display:inline-block;background:#ECFDF5;color:#10B981;font-size:.78rem;font-weight:700;padding:.3rem .7rem;border-radius:12px;">✓ In Stock</span>
-        <div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;" id="detailProdStock">240 units available at hub</div>
+        <span style="display:inline-block;background:#ECFDF5;color:#10B981;font-size:.78rem;font-weight:700;padding:.3rem .7rem;border-radius:12px;">✓ Demo Data</span>
+        <div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;" id="detailProdStock">Reference standard</div>
       </div>
     </div>
 
     <div style="display:flex;gap:.8rem;">
-      <button class="btn-primary" style="flex:1;padding:.85rem;font-size:.92rem;" id="detailAddToCartBtn">Add to Job Cart 📦</button>
+      <button class="btn-primary" style="flex:1;padding:.85rem;font-size:.92rem;" id="detailAddToCartBtn">Add to Repair Plan 📋</button>
       <button class="btn-outline" style="padding:.85rem 1.2rem;font-size:.92rem;" onclick="closeProductDetailModal()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ CONTRACTOR WORKSPACE & ORDER TRACKER MODAL ═══ -->
+<!-- ═══ HOMEOWNER PROJECT & QUOTE TRACKER MODAL ═══ -->
 <div id="dashboardModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem;">
   <div style="background:var(--card-bg,#fff);border-radius:22px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.25);padding:2.2rem;animation:slideUp .25s ease;">
     <button onclick="closeDashboardModal()" style="position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-muted,#888);">✕</button>
     
     <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;">
-      <div style="width:48px;height:48px;background:var(--terracotta-light,#FFF4EE);color:var(--terracotta);display:flex;align-items:center;justify-content:center;border-radius:14px;font-size:1.6rem;">👷</div>
+      <div style="width:48px;height:48px;background:var(--terracotta-light,#FFF4EE);color:var(--terracotta);display:flex;align-items:center;justify-content:center;border-radius:14px;font-size:1.6rem;">🏠</div>
       <div>
-        <h2 style="font-size:1.4rem;font-weight:800;color:var(--text-main);margin:0;">Contractor Hub &amp; Depot Allocations</h2>
-        <p style="font-size:.85rem;color:var(--text-muted);margin-top:.1rem;" id="dashSubtitle">Live tracking for regional construction supplies</p>
+        <h2 style="font-size:1.4rem;font-weight:800;color:var(--text-main);margin:0;">Homeowner Project &amp; Quote Tracker</h2>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-top:.1rem;" id="dashSubtitle">Track active repair scopes and incoming local trade quotes (Prototype Demo Data)</p>
       </div>
     </div>
 
-    <!-- Contractor Info Banner -->
+    <!-- Homeowner/Contractor Info Banner -->
     <div id="dashContractorCard" style="display:none;background:var(--warm-50,#FFFBF7);border:1px solid var(--warm-200,#FFE4CC);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1.5rem;justify-content:space-between;align-items:center;">
       <div>
         <div style="font-weight:700;color:var(--text-main);font-size:1rem;" id="dashName">Rahul Mehta</div>
         <div style="font-size:.82rem;color:var(--text-muted);" id="dashEmailCity">rahul@example.com • Mumbai</div>
       </div>
-      <div style="background:var(--accent-green-bg,#ECFDF5);color:var(--accent-green,#10B981);padding:.35rem .8rem;border-radius:20px;font-size:.78rem;font-weight:700;">✓ Verified Contractor</div>
+      <div style="background:var(--accent-green-bg,#ECFDF5);color:var(--accent-green,#10B981);padding:.35rem .8rem;border-radius:20px;font-size:.78rem;font-weight:700;">✓ Pro Partner (Demo)</div>
     </div>
 
     <!-- Tabs -->
     <div style="display:flex;gap:.5rem;margin-bottom:1.2rem;border-bottom:1.5px solid var(--border-subtle);padding-bottom:.6rem;">
       <button id="dashTabOrders" onclick="switchDashTab('orders')" style="background:none;border:none;padding:.5rem 1rem;font-weight:700;color:var(--terracotta);border-bottom:2px solid var(--terracotta);cursor:pointer;font-size:.92rem;">
-        📦 Depot Dispatches (<span id="dashOrderCount">0</span>)
+        📋 Active Quote Requests (<span id="dashOrderCount">0</span>)
       </button>
       <button id="dashTabQuotes" onclick="switchDashTab('quotes')" style="background:none;border:none;padding:.5rem 1rem;font-weight:600;color:var(--text-muted);cursor:pointer;font-size:.92rem;">
-        📋 Active BoQ Estimates
+        📑 Latest Generated Scope
       </button>
     </div>
 
-    <!-- Orders View -->
+    <!-- Orders / Requests View -->
     <div id="dashOrdersView">
       <div id="dashOrdersList" style="display:flex;flex-direction:column;gap:1rem;">
         <!-- Injected via JS -->
@@ -1174,18 +1052,18 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <div style="border:1px solid var(--border-subtle);border-radius:14px;padding:1.4rem;background:var(--surface-elevated,#fafafa);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;">
           <div>
-            <span style="font-size:.75rem;font-weight:700;color:var(--terracotta);background:var(--terracotta-light);padding:.2rem .6rem;border-radius:4px;">LATEST ESTIMATE</span>
+            <span style="font-size:.75rem;font-weight:700;color:var(--terracotta);background:var(--terracotta-light);padding:.2rem .6rem;border-radius:4px;">LATEST SCOPE</span>
             <h4 style="font-size:1.05rem;font-weight:700;margin-top:.4rem;" id="dashQuoteDesc">No estimate generated yet</h4>
           </div>
           <button class="btn-copy" style="background:var(--terracotta);color:#fff;border-color:var(--terracotta);font-weight:700;padding:.4rem .9rem;font-size:.82rem;" onclick="closeDashboardModal();openPrintEstimate();">📄 View / Print PDF</button>
         </div>
-        <p style="font-size:.85rem;color:var(--text-muted);" id="dashQuoteMeta">Type a project description in the AI Scoper above to create your first certified estimate.</p>
+        <p style="font-size:.85rem;color:var(--text-muted);" id="dashQuoteMeta">Describe your repair in the Scope Planner above to generate your first preliminary scope.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ CONTRACTOR AUTH MODAL ═══ -->
+<!-- ═══ PROFESSIONAL PARTNER AUTH MODAL ═══ -->
 <div id="authModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
   <div style="background:var(--card-bg,#fff);border-radius:20px;padding:2.5rem;width:90%;max-width:420px;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.25);animation:slideUp .3s ease;">
     <button onclick="closeAuthModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted,#888);">✕</button>
@@ -1195,28 +1073,28 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <button id="tabRegister" onclick="switchTab('register')" style="flex:1;padding:.7rem;border:none;border-radius:10px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-muted,#666);transition:.2s;">Register</button>
     </div>
     <div style="text-align:center;margin-bottom:1.5rem;">
-      <div style="font-size:2rem;">🏗️</div>
-      <h2 id="authTitle" style="margin:.4rem 0 .2rem;font-size:1.4rem;">Contractor Login</h2>
-      <p style="color:var(--text-muted,#888);font-size:.88rem;" id="authSubtitle">Access your GharSetu contractor dashboard</p>
+      <div style="font-size:2rem;">👷</div>
+      <h2 id="authTitle" style="margin:.4rem 0 .2rem;font-size:1.4rem;">Pro Partner Portal</h2>
+      <p style="color:var(--text-muted,#888);font-size:.84rem;" id="authSubtitle">For local plumbers, electricians, painters, waterproofers, and carpenters. <em>(Prototype Demo)</em></p>
     </div>
     <!-- Login Form -->
     <form id="loginForm" onsubmit="handleLogin(event)">
       <div style="margin-bottom:1rem;">
         <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">EMAIL</label>
-        <input type="email" id="loginEmail" placeholder="you@example.com" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.95rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;transition:.2s;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+        <input type="email" id="loginEmail" placeholder="pro@example.com" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.95rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;transition:.2s;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
       </div>
       <div style="margin-bottom:1.4rem;">
         <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PASSWORD</label>
         <input type="password" id="loginPassword" placeholder="••••••••" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.95rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;transition:.2s;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
       </div>
-      <button type="submit" id="loginBtn" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;">Login →</button>
+      <button type="submit" id="loginBtn" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;">Sign In as Pro →</button>
     </form>
     <!-- Register Form -->
     <form id="registerForm" onsubmit="handleRegister(event)" style="display:none;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
         <div>
-          <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">NAME</label>
-          <input type="text" id="regName" placeholder="Your name" required style="width:100%;padding:.8rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+          <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">NAME / BUSINESS</label>
+          <input type="text" id="regName" placeholder="Ramesh Electricals" required style="width:100%;padding:.8rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
         </div>
         <div>
           <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">CITY</label>
@@ -1224,8 +1102,18 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         </div>
       </div>
       <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PRIMARY TRADE</label>
+        <select id="regTrade" style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;">
+          <option value="Plumbing">Plumbing</option>
+          <option value="Electrical">Electrical Work</option>
+          <option value="Painting">Painting</option>
+          <option value="Waterproofing">Waterproofing</option>
+          <option value="Carpentry">Carpentry &amp; Woodwork</option>
+        </select>
+      </div>
+      <div style="margin-bottom:.8rem;">
         <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">EMAIL</label>
-        <input type="email" id="regEmail" placeholder="you@example.com" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
+        <input type="email" id="regEmail" placeholder="pro@example.com" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
       </div>
       <div style="margin-bottom:.8rem;">
         <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PHONE</label>
@@ -1235,7 +1123,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--text-muted,#666);">PASSWORD</label>
         <input type="password" id="regPassword" placeholder="Min 6 characters" required style="width:100%;padding:.8rem 1rem;border:1.5px solid var(--border,#e0e0e0);border-radius:10px;font-size:.9rem;background:var(--input-bg,#fafafa);box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='#E25822'" onblur="this.style.borderColor='var(--border,#e0e0e0)'">
       </div>
-      <button type="submit" id="registerBtn" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;">Create Account →</button>
+      <button type="submit" id="registerBtn" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#E25822,#ff7043);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;">Join as Trade Partner (Demo) →</button>
     </form>
     <p id="authMsg" style="text-align:center;margin-top:1rem;font-size:.88rem;min-height:1.2rem;color:#E25822;font-weight:600;"></p>
   </div>
@@ -1248,7 +1136,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <!-- Action Bar (hidden during print) -->
     <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1.5px solid #EEF1F6;">
       <div style="font-weight:700;color:#E25822;font-size:1.1rem;display:flex;align-items:center;gap:.5rem;">
-        <span>🏗️ GharSetu Verified Estimate Preview</span>
+        <span>📋 GharSetu Homeowner Scope Preview</span>
       </div>
       <div style="display:flex;gap:.8rem;">
         <button onclick="window.print()" style="background:#E25822;color:#fff;border:none;padding:.65rem 1.4rem;border-radius:10px;font-weight:700;font-size:.92rem;cursor:pointer;display:flex;align-items:center;gap:.4rem;">
@@ -1264,13 +1152,13 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #E25822;padding-bottom:1.5rem;margin-bottom:1.5rem;">
       <div>
         <h1 style="font-size:1.8rem;font-weight:800;color:#1A1D26;letter-spacing:-0.5px;margin:0;">Ghar<span style="color:#E25822;">Setu</span></h1>
-        <p style="font-size:.82rem;color:#6B7A90;margin-top:.2rem;">AI Civil Estimation &amp; Regional Depot Benchmark Network</p>
-        <p style="font-size:.78rem;color:#9CA3AF;margin-top:.1rem;">CPWD Schedule of Rates (DSR) &amp; IS Standards Compliant</p>
+        <p style="font-size:.82rem;color:#6B7A90;margin-top:.2rem;">Homeowner Repair &amp; Renovation Coordination Platform (Prototype Demo)</p>
+        <p style="font-size:.78rem;color:#9CA3AF;margin-top:.1rem;">CPWD Schedule of Rates (DSR) &amp; Market Reference Benchmarks</p>
       </div>
       <div style="text-align:right;">
-        <div style="font-size:.85rem;font-weight:700;color:#E25822;background:#FFF4EE;padding:.3rem .8rem;border-radius:6px;display:inline-block;" id="printRefId">EST-GS-2026-9041</div>
+        <div style="font-size:.85rem;font-weight:700;color:#E25822;background:#FFF4EE;padding:.3rem .8rem;border-radius:6px;display:inline-block;" id="printRefId">SCOPE-GS-2026-9041</div>
         <p style="font-size:.8rem;color:#6B7A90;margin-top:.4rem;" id="printDate">Date: 14 Nov 2026</p>
-        <p style="font-size:.8rem;color:#6B7A90;" id="printCity">Region: Mumbai (West)</p>
+        <p style="font-size:.8rem;color:#6B7A90;" id="printCity">Region: Mumbai (Pilot)</p>
       </div>
     </div>
 
@@ -1279,38 +1167,38 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <h3 style="font-size:.82rem;color:#6B7A90;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:.4rem;font-weight:700;">Project Scope Description</h3>
       <p style="font-size:1rem;font-weight:600;color:#1A1D26;" id="printProjectDesc">--</p>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px dashed #DDE3EC;font-size:.88rem;">
-        <div><strong style="color:#6B7A90;display:block;font-size:.75rem;">PRIMARY TRADES</strong><span id="printTrades" style="font-weight:700;">--</span></div>
-        <div><strong style="color:#6B7A90;display:block;font-size:.75rem;">ESTIMATED DURATION</strong><span id="printDuration" style="font-weight:700;">--</span></div>
-        <div><strong style="color:#6B7A90;display:block;font-size:.75rem;">ESTIMATION ENGINE</strong><span id="printEngine" style="font-weight:700;color:#E25822;">GharSetu Neural v4.0</span></div>
+        <div><strong style="color:#6B7A90;display:block;font-size:.75rem;">RECOMMENDED TRADES</strong><span id="printTrades" style="font-weight:700;">--</span></div>
+        <div><strong style="color:#6B7A90;display:block;font-size:.75rem;">TYPICAL DURATION</strong><span id="printDuration" style="font-weight:700;">--</span></div>
+        <div><strong style="color:#6B7A90;display:block;font-size:.75rem;">ESTIMATION ENGINE</strong><span id="printEngine" style="font-weight:700;color:#E25822;">GharSetu Scoping Core v4.0</span></div>
       </div>
     </div>
 
     <!-- Bill of Quantities (BoQ) Table -->
-    <h3 style="font-size:1.05rem;font-weight:700;color:#1A1D26;margin-bottom:.8rem;">Itemized Bill of Quantities (Materials)</h3>
+    <h3 style="font-size:1.05rem;font-weight:700;color:#1A1D26;margin-bottom:.8rem;">Itemized Preliminary Work &amp; Material Scope</h3>
     <table style="width:100%;border-collapse:collapse;margin-bottom:1.5rem;font-size:.88rem;">
       <thead>
         <tr style="background:#F6F8FB;border-bottom:1.5px solid #DDE3EC;text-align:left;">
           <th style="padding:.7rem;color:#4B5563;">#</th>
-          <th style="padding:.7rem;color:#4B5563;">Material Specification &amp; Brand</th>
+          <th style="padding:.7rem;color:#4B5563;">Item &amp; Specification (Demo Benchmark)</th>
           <th style="padding:.7rem;color:#4B5563;text-align:center;">Qty</th>
           <th style="padding:.7rem;color:#4B5563;text-align:center;">Unit</th>
-          <th style="padding:.7rem;color:#4B5563;text-align:right;">Depot Rate (₹)</th>
-          <th style="padding:.7rem;color:#4B5563;text-align:right;">Total (₹)</th>
+          <th style="padding:.7rem;color:#4B5563;text-align:right;">Benchmark Rate (₹)</th>
+          <th style="padding:.7rem;color:#4B5563;text-align:right;">Subtotal (₹)</th>
         </tr>
       </thead>
       <tbody id="printBoQTableBody">
       </tbody>
       <tfoot>
         <tr style="border-top:1.5px solid #DDE3EC;font-weight:700;">
-          <td colspan="5" style="padding:.7rem;text-align:right;">Material Subtotal:</td>
+          <td colspan="5" style="padding:.7rem;text-align:right;">Material Benchmark Subtotal:</td>
           <td style="padding:.7rem;text-align:right;" id="printMatTotal">₹0</td>
         </tr>
         <tr style="font-weight:700;">
-          <td colspan="5" style="padding:.7rem;text-align:right;">Estimated Skilled Artisan Labor:</td>
+          <td colspan="5" style="padding:.7rem;text-align:right;">Artisan Labor Benchmark:</td>
           <td style="padding:.7rem;text-align:right;" id="printLaborTotal">₹0</td>
         </tr>
         <tr style="background:#FFF4EE;color:#E25822;font-size:1.05rem;font-weight:800;border-top:2px solid #E25822;">
-          <td colspan="5" style="padding:.85rem;text-align:right;">Project Grand Total Estimate:</td>
+          <td colspan="5" style="padding:.85rem;text-align:right;">Preliminary Project Benchmark Total:</td>
           <td style="padding:.85rem;text-align:right;" id="printGrandTotal">₹0</td>
         </tr>
       </tfoot>
@@ -1318,20 +1206,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
     <!-- Technical Advisory -->
     <div style="background:#FFF9F5;border-left:3px solid #E25822;padding:1rem;border-radius:4px;margin-bottom:2rem;font-size:.82rem;color:#6B7A90;">
-      <strong style="color:#C24513;display:block;margin-bottom:.3rem;">CPWD Compliance &amp; Regional Price Index Notice:</strong>
-      <p style="margin:0;">Material rates are indexed against primary distributor depot prices in the designated region. Quantities are calculated based on standard consumption coefficients. Final quotation subject to site moisture and structural verification.</p>
+      <strong style="color:#C24513;display:block;margin-bottom:.3rem;">CPWD Reference &amp; Market Benchmark Notice (Prototype Demo):</strong>
+      <p style="margin:0;">Rates and scopes shown are indicative preliminary benchmarks for quote comparison purposes only. Final contractor quotes will depend on on-site inspection, exact material brands, and structural conditions.</p>
     </div>
 
     <!-- Sign-off Block -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid #EEF1F6;font-size:.84rem;color:#6B7A90;">
       <div>
         <div style="height:45px;border-bottom:1px dashed #9CA3AF;margin-bottom:.4rem;"></div>
-        <p style="font-weight:700;color:#1A1D26;margin:0;">Assigned Contractor / Engineer</p>
-        <p style="margin:0;font-size:.78rem;">Stamp &amp; Signature</p>
+        <p style="font-weight:700;color:#1A1D26;margin:0;">Local Trade Specialist / Contractor</p>
+        <p style="margin:0;font-size:.78rem;">Stamp &amp; Quote Signature</p>
       </div>
       <div>
         <div style="height:45px;border-bottom:1px dashed #9CA3AF;margin-bottom:.4rem;"></div>
-        <p style="font-weight:700;color:#1A1D26;margin:0;">Homeowner / Client Acceptance</p>
+        <p style="font-weight:700;color:#1A1D26;margin:0;">Homeowner Acceptance</p>
         <p style="margin:0;font-size:.78rem;">Signature &amp; Date</p>
       </div>
     </div>

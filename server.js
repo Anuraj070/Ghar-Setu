@@ -65,7 +65,7 @@ const EXPANDED_RULES = {
     trades: '1 Waterproofing Specialist, 1 Mason',
     duration: '2-3 Days (Curing Required)',
     laborCost: 3600,
-    confidence: 97.4,
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
     technicalNotes: ['Surface must be wire-brushed and moisture-tested (<12%) before polymer coating', 'Allow 24-hr curing between coats'],
     boq: [
       { name: 'Dr. Fixit Damp Shield Elasto (4kg)', price: 1450, unit: 'bucket', qty: 2 },
@@ -79,7 +79,7 @@ const EXPANDED_RULES = {
     trades: '1 Master Plumber, 1 Assistant',
     duration: '1 Day (4-6 hrs)',
     laborCost: 1600,
-    confidence: 96.8,
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
     technicalNotes: ['Pressure test joint connections at 10 bar before sealing chases', 'Ensure Teflon wrapping on all male threads'],
     boq: [
       { name: 'Astral CPVC Heavy Duty Pipe (1-inch, 2x3m)', price: 840, unit: 'set', qty: 1 },
@@ -93,7 +93,7 @@ const EXPANDED_RULES = {
     trades: '2 Certified Electricians',
     duration: '2 Days (14 hrs)',
     laborCost: 3500,
-    confidence: 97.5,
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
     technicalNotes: ['Isolate main breaker before conduit tracing', 'Conform to IS:732 Indian wiring standards'],
     boq: [
       { name: 'Polycab 1.5 sq mm FR Wire (2 Coils, 90m each)', price: 3160, unit: 'coil', qty: 2 },
@@ -107,7 +107,7 @@ const EXPANDED_RULES = {
     trades: '2 Professional Painters',
     duration: '2-3 Days',
     laborCost: 3800,
-    confidence: 98.2,
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
     technicalNotes: ['Apply 2 coats of Birla White Putty followed by 1 coat primer & 2 coats emulsion', 'Light sand between coats using 220-grit paper'],
     boq: [
       { name: 'Asian Paints Royale Luxury Emulsion (10L)', price: 3850, unit: 'bucket', qty: 1 },
@@ -121,7 +121,7 @@ const EXPANDED_RULES = {
     trades: '1 Master Carpenter, 1 Assistant',
     duration: '2 Days',
     laborCost: 2800,
-    confidence: 95.8,
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
     technicalNotes: ['Ensure calibrated marine plywood (IS:710) for kitchen/bathroom proximity', 'Use soft-close concealed hinges with 35mm bore'],
     boq: [
       { name: 'Greenply / Century Marine Grade Ply (19mm, 8x4 sheet)', price: 2150, unit: 'sheet', qty: 1 },
@@ -135,7 +135,7 @@ const EXPANDED_RULES = {
     trades: '1 General Contractor, 2 Multi-Skilled Artisans',
     duration: '3-4 Days',
     laborCost: 5200,
-    confidence: 93.5,
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
     technicalNotes: ['Multi-disciplinary civil & interior scope', 'Daily milestone sign-off recommended'],
     boq: [
       { name: 'Asian Paints Tractor Emulsion (10L)', price: 1650, unit: 'bucket', qty: 1 },

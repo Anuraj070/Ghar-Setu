@@ -1,6 +1,6 @@
 /**
  * GharSetu (घर सेतु) - Client Application Controller
- * v4.0 AI Renovation Scoping & B2B Construction Procurement Platform
+ * Homeowner Repair & Renovation Coordination Platform (Prototype Demo)
  * 
  * Modules:
  * 1. Persistent Storage (LocalStorage + API sync for products, orders, estimates, cart, auth)
@@ -9,9 +9,9 @@
  * 4. Dynamic Marketplace (Live search, category filter, dynamic catalog, product detail modal)
  * 5. AI Scoper & BoQ Generator (Gemini AI API + CPWD parametric estimation engine fallback)
  * 6. Printable Official BoQ Estimate (Print/PDF formatted document with signatures)
- * 7. Contractor Hub & Depot Order Tracker (Order tracking, status timeline, saved estimates)
- * 8. Procurement Cart & Checkout (Local cart persistence & 3PL depot dispatch allocation)
- * 9. Contractor Authentication & Session Management (Login, Register, Logout, Form validation)
+ * 7. Project & Quote Tracker (Request tracking, status timeline, saved scopes)
+ * 8. Repair Plan & Quote Submission (Local plan persistence & quote request routing)
+ * 9. Pro Partner Authentication & Session Management (Login, Register, Logout, Form validation)
  */
 
 // ═════════════════════════════════════════════════════════════════════
@@ -29,24 +29,26 @@ function escapeHTML(str) {
 }
 
 const DEFAULT_PRODUCTS = [
-  { id: 'prod-001', name: 'Ambuja Portland Cement', meta: '50kg Bag • Grade 53 • Verified Depot', price: 380, originalPrice: 450, discount: 15, category: 'cement', stock: 240, unit: 'bag', specs: 'IS:12269 certified. High early strength formulation engineered for RCC slabs, structural beams, columns, and high-durability plastering.', tags: ['cement', 'grade53', 'portland', 'ambuja'] },
-  { id: 'prod-002', name: 'Astral CPVC Pipes (Heavy Duty)', meta: '3m Length • 1-inch • Plumbing Grade', price: 420, originalPrice: 510, discount: 18, category: 'plumbing', stock: 180, unit: 'piece', specs: 'SDR 11 certified up to 93°C hot/cold potable water distribution. 100% lead-free formulation with NSF international approval.', tags: ['cpvc', 'pipe', 'plumbing', 'astral'] },
-  { id: 'prod-003', name: 'Asian Paints Tractor Emulsion', meta: '20L Bucket • Matte White Finish', price: 2850, originalPrice: 3240, discount: 12, category: 'paint', stock: 90, unit: 'bucket', specs: 'Smooth plastic emulsion finish offering superior coverage (260-300 sq.ft/L for 1 coat) with anti-fungal shield and washability.', tags: ['paint', 'emulsion', 'asian paints'] },
-  { id: 'prod-004', name: 'Polycab FR Wire 1.5 sq mm', meta: '90m Coil • Fire Retardant • ISI Marked', price: 1580, originalPrice: 1750, discount: 10, category: 'electrical', stock: 120, unit: 'coil', specs: 'IS:694 certified copper conductor. 100% electrolytic grade with oxygen-index >29% flame-retardant virgin PVC sheath.', tags: ['wire', 'electrical', 'fr', 'polycab'] },
-  { id: 'prod-005', name: 'Tata Tiscon 550D TMT Rebar (12mm)', meta: '12m Bar • Fe-550D Super Ductile Grade', price: 690, originalPrice: 780, discount: 12, category: 'steel', stock: 310, unit: 'piece', specs: 'IS:1786 Fe-550D compliant. High earthquake-resistant ductility with superior corrosion resistance and rib design.', tags: ['tmt', 'steel', 'rebar', 'tata'] },
-  { id: 'prod-006', name: 'Kajaria Vitrified Floor Tiles (60x60 cm)', meta: 'Box of 4 Tiles (15.5 sq.ft) • Polished Glaze', price: 920, originalPrice: 1080, discount: 15, category: 'tiles', stock: 85, unit: 'box', specs: 'Nano-polished double charge vitrified porcelain body with water absorption <0.05% and scratch resistance Mohs 7.', tags: ['tiles', 'vitrified', 'flooring', 'kajaria'] },
-  { id: 'prod-007', name: 'Dr. Fixit 101 LW+ Waterproofing Admixture', meta: '5L Can • Integral Concrete Waterproofer', price: 640, originalPrice: 720, discount: 11, category: 'waterproofing', stock: 140, unit: 'can', specs: 'IS:2645 compliant integral liquid waterproofing compound for concrete and mortar. Prevents dampness and salt efflorescence.', tags: ['waterproofing', 'dr fixit', 'admixture'] },
-  { id: 'prod-008', name: 'Schneider Electric Easy9 MCB (16A Single Pole)', meta: 'C-Curve • 10kA Breaking Capacity', price: 185, originalPrice: 220, discount: 16, category: 'electrical', stock: 250, unit: 'piece', specs: 'IS/IEC 60898-1 certified. Complete bi-connect terminal protection with rapid arc quenching chamber.', tags: ['mcb', 'schneider', 'electrical', 'breaker'] },
-  { id: 'prod-009', name: 'Birla White Wall Seal Putty', meta: '40kg Bag • White Polymer Plaster', price: 820, originalPrice: 940, discount: 13, category: 'paint', stock: 110, unit: 'bag', specs: 'White Portland cement-based putty with re-dispersible polymer additives for water-resistant silky smooth drywall surfaces.', tags: ['putty', 'birla white', 'wall putty'] },
-  { id: 'prod-010', name: 'Godrej Brass Mortise Door Lock', meta: 'Double Cylinder • 6 Lever Heavy Duty', price: 1450, originalPrice: 1720, discount: 16, category: 'hardware', stock: 75, unit: 'set', specs: 'Solid brass forged bolt with manganese-hardened drill-resistant striker plate and 3 computer-cut brass keys.', tags: ['lock', 'door lock', 'godrej', 'hardware'] },
-  { id: 'prod-011', name: 'UltraTech Super Cement', meta: '50kg Bag • Grade 53 PPC/OPC', price: 395, originalPrice: 455, discount: 13, category: 'cement', stock: 320, unit: 'bag', specs: 'Engineered micro-fine slag particles creating an impermeable concrete barrier resisting sulfate and chloride attack.', tags: ['cement', 'ultratech', 'ppc'] },
-  { id: 'prod-012', name: 'Finolex CPVC Ball Valve', meta: '1-inch • Heavy Duty Brass Core', price: 280, originalPrice: 340, discount: 18, category: 'plumbing', stock: 200, unit: 'piece', specs: 'Full-port design for zero friction pressure drop. Leak-proof PTFE seats with ergonomic high-torque quarter-turn lever.', tags: ['valve', 'cpvc', 'finolex'] },
-  { id: 'prod-013', name: 'Ebco Soft-Close Cabinet Hinges', meta: 'Pack of 4 Pairs • Concealed Mount', price: 960, originalPrice: 1200, discount: 20, category: 'hardware', stock: 300, unit: 'pack', specs: 'Nickel-plated cold-rolled steel with integrated hydraulic soft-close damper. 105° opening angle tested for 50,000 motion cycles.', tags: ['hinge', 'cabinet', 'hardware', 'ebco'] }
+  { id: 'prod-001', name: 'Astral CPVC Heavy Duty Pipes (1-inch)', meta: '3m Length • SDR 11 • Plumbing Benchmark (Demo Data)', price: 420, originalPrice: 490, discount: 14, category: 'plumbing', stock: 120, unit: 'piece', specs: 'SDR 11 certified up to 93°C hot/cold potable water. Indicative demo material benchmark for home plumbing repairs.', tags: ['cpvc', 'pipe', 'plumbing', 'astral', 'leak'] },
+  { id: 'prod-002', name: 'Jaquar Cast Brass Bib Cock Tap', meta: 'Quarter Turn Ceramic Cartridge • Chrome Plated (Demo Data)', price: 1150, originalPrice: 1350, discount: 15, category: 'plumbing', stock: 60, unit: 'piece', specs: 'Standard chrome-finished brass bib tap. Reference benchmark for bathroom & kitchen sanitary fittings. (Demo Data)', tags: ['tap', 'faucet', 'plumbing', 'jaquar', 'bathroom'] },
+  { id: 'prod-003', name: 'Polycab FR Wire 1.5 sq mm', meta: '90m Coil • Fire Retardant Copper (Demo Data)', price: 1580, originalPrice: 1750, discount: 10, category: 'electrical', stock: 80, unit: 'coil', specs: 'IS:694 certified flame retardant copper wiring coil. Indicative reference rate for apartment rewiring. (Demo Data)', tags: ['wire', 'electrical', 'fr', 'polycab', 'wiring'] },
+  { id: 'prod-004', name: 'Schneider Electric Easy9 MCB (16A Single Pole)', meta: 'C-Curve • 10kA Breaking Capacity (Demo Data)', price: 185, originalPrice: 220, discount: 16, category: 'electrical', stock: 150, unit: 'piece', specs: 'Miniature circuit breaker for household distribution boards. Standard benchmark component for electrical safety. (Demo Data)', tags: ['mcb', 'schneider', 'electrical', 'breaker', 'switch'] },
+  { id: 'prod-005', name: 'Asian Paints Tractor Emulsion (Matte White)', meta: '20L Bucket • Interior Acrylic Grade (Demo Data)', price: 2850, originalPrice: 3240, discount: 12, category: 'painting', stock: 50, unit: 'bucket', specs: 'Smooth interior acrylic emulsion offering 260-300 sq.ft/L coverage. Benchmark rate for residential wall painting. (Demo Data)', tags: ['paint', 'emulsion', 'asian paints', 'painting', 'wall'] },
+  { id: 'prod-006', name: 'Birla White Polymer Wall Putty', meta: '40kg Bag • Drywall Surface Prep (Demo Data)', price: 820, originalPrice: 940, discount: 13, category: 'painting', stock: 75, unit: 'bag', specs: 'White polymer plaster for smoothing interior walls prior to primer and paint application. (Demo Data)', tags: ['putty', 'birla white', 'wall putty', 'painting'] },
+  { id: 'prod-007', name: 'Dr. Fixit 101 LW+ Integral Waterproofing', meta: '5L Can • Plaster & Concrete Admixture (Demo Data)', price: 640, originalPrice: 720, discount: 11, category: 'waterproofing', stock: 90, unit: 'can', specs: 'IS:2645 compliant liquid waterproofing admixture for damp wall and mortar repairs. (Demo Data)', tags: ['waterproofing', 'dr fixit', 'admixture', 'damp', 'leakage'] },
+  { id: 'prod-008', name: 'Dr. Fixit Fastflex Acrylic Polymer Membrane', meta: '12kg Pack • 2-Part Flexible Coating (Demo Data)', price: 2650, originalPrice: 2950, discount: 10, category: 'waterproofing', stock: 40, unit: 'pack', specs: 'Elastomeric waterproofing coating for balconies, sunken slabs, and bathroom wet areas. (Demo Data)', tags: ['waterproofing', 'fastflex', 'coating', 'balcony', 'seepage'] },
+  { id: 'prod-009', name: 'CenturyPly MR Commercial Plywood (19mm)', meta: '8ft x 4ft Sheet • Moisture Resistant (Demo Data)', price: 2450, originalPrice: 2800, discount: 12, category: 'carpentry', stock: 65, unit: 'sheet', specs: 'IS:303 moisture-resistant plywood for wardrobes, kitchen cabinetry, and shelving repairs. (Demo Data)', tags: ['plywood', 'centuryply', 'carpentry', 'wood', 'cabinet'] },
+  { id: 'prod-010', name: 'Godrej Nav-Tal Brass Mortise Door Lock', meta: 'Double Cylinder • 6-Lever Mechanism (Demo Data)', price: 1450, originalPrice: 1720, discount: 16, category: 'carpentry', stock: 45, unit: 'set', specs: 'Heavy-duty solid brass door lock with computer-cut keys. Standard rate benchmark for wooden door hardware. (Demo Data)', tags: ['lock', 'door lock', 'godrej', 'carpentry', 'hardware'] },
+  { id: 'prod-011', name: 'Ebco Soft-Close Concealed Cabinet Hinges', meta: 'Pack of 4 Pairs • Hydraulic Damper (Demo Data)', price: 960, originalPrice: 1200, discount: 20, category: 'carpentry', stock: 110, unit: 'pack', specs: 'Nickel-plated steel hinges with zero-creak hydraulic dampers. Benchmark repair hardware for kitchen cabinets. (Demo Data)', tags: ['hinge', 'cabinet', 'carpentry', 'hardware', 'ebco'] },
+  { id: 'prod-012', name: 'Finolex CPVC Ball Valve', meta: '1-inch • Heavy Duty Brass Core (Demo Data)', price: 280, originalPrice: 340, discount: 18, category: 'plumbing', stock: 200, unit: 'piece', specs: 'Full-port leak-proof ball valve for domestic plumbing lines. (Demo Data)', tags: ['valve', 'cpvc', 'finolex', 'plumbing'] }
 ];
 
-// Seed persistent storage if not present
-if (!localStorage.getItem('gharsetu_products')) {
+// Seed persistent storage if not present or upgrade to v4 (Homeowner 5 Services)
+if (!localStorage.getItem('gharsetu_products_v4')) {
   localStorage.setItem('gharsetu_products', JSON.stringify(DEFAULT_PRODUCTS));
+  localStorage.setItem('gharsetu_products_v4', 'true');
+  // Reset any cached cart from old contractor prototype
+  localStorage.removeItem('gharsetu_cart');
 }
 if (!localStorage.getItem('gharsetu_orders')) {
   localStorage.setItem('gharsetu_orders', JSON.stringify([]));
@@ -310,7 +312,7 @@ document.querySelectorAll('[data-target]').forEach(el => statsObserver.observe(e
 (function initTypewriter() {
   const tw = document.getElementById('typewriterTarget');
   if (!tw) return;
-  const phrases = ['Structured Code', 'Clear BoQ Plans', 'Verified Contracts', 'On-Budget Jobs'];
+  const phrases = ['Clear Preliminary Scopes', 'Fair Price Benchmarks', 'Trusted Local Quotes', 'Stress-Free Repairs'];
   let pi = 0, ci = 0, del = false;
   function typewrite() {
     const cur = phrases[pi];
@@ -391,30 +393,27 @@ function animateCounter(el, target, prefix = '₹', duration = 800) {
 // ═════════════════════════════════════════════════════════════════════
 
 const PRODUCT_IMAGES = {
-  'prod-001': 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80', // Ambuja Cement
-  'prod-011': 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=600&q=80', // UltraTech Cement
-  'prod-002': 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80', // Astral CPVC Pipes
-  'prod-012': 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=600&q=80', // Finolex Ball Valve
-  'prod-003': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80', // Asian Paints Emulsion
-  'prod-009': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80', // Birla White Putty
-  'prod-004': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80', // Polycab FR Wire
-  'prod-008': 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', // Schneider MCB
-  'prod-005': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80', // Tata Tiscon Rebar
-  'prod-006': 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=600&q=80', // Kajaria Floor Tiles
+  'prod-001': 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80', // CPVC Pipes
+  'prod-002': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80', // Brass Tap
+  'prod-003': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80', // FR Wire
+  'prod-004': 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', // MCB Breaker
+  'prod-005': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80', // Tractor Emulsion
+  'prod-006': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80', // Wall Putty
   'prod-007': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80', // Dr. Fixit Waterproofing
-  'prod-010': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80', // Godrej Brass Lock
-  'prod-013': 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80', // Ebco Soft-Close Hinges
+  'prod-008': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80', // Fastflex Membrane
+  'prod-009': 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=600&q=80', // CenturyPly Wood
+  'prod-010': 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80', // Godrej Brass Lock
+  'prod-011': 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=600&q=80', // Ebco Hinges
 };
 
 const CATEGORY_DEFAULT_IMAGES = {
-  cement: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80',
   plumbing: 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80',
-  paint: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80',
   electrical: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80',
-  steel: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80',
-  tiles: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=600&q=80',
+  painting: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80',
+  paint: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80',
   waterproofing: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80',
-  hardware: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80'
+  carpentry: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=600&q=80',
+  hardware: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80'
 };
 
 async function loadMarketplaceProducts() {
@@ -436,21 +435,20 @@ function renderProductsGrid(products) {
   const grid = document.getElementById('storeGrid');
   if (!grid) return;
   const categoryIcons = {
-    cement: '🧱',
     plumbing: '🚰',
-    paint: '🎨',
     electrical: '⚡',
-    hardware: '🔩',
-    steel: '🏗️',
-    tiles: '📐',
-    waterproofing: '💧'
+    painting: '🎨',
+    paint: '🎨',
+    waterproofing: '💧',
+    carpentry: '🪵',
+    hardware: '🔩'
   };
   grid.innerHTML = products.map((p, idx) => {
-    const cat = (p.category || 'material').toLowerCase().trim();
-    const icon = categoryIcons[cat] || '📦';
+    const cat = (p.category || 'repair').toLowerCase().trim();
+    const icon = categoryIcons[cat] || '🛠️';
     const originalPrice = p.originalPrice || Math.round((p.price || 0) * 1.2);
     const discount = p.discount || Math.round(((originalPrice - p.price) / originalPrice) * 100);
-    const imgUrl = p.image_url || PRODUCT_IMAGES[p.id] || CATEGORY_DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80';
+    const imgUrl = p.image_url || PRODUCT_IMAGES[p.id] || CATEGORY_DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80';
     return `
     <div class="product visible cursor-pointer" data-name="${escapeHTML((p.name || '').toLowerCase())} ${(p.tags || []).map(t => escapeHTML(t)).join(' ')}" data-cat="${escapeHTML(cat)}" onclick="handleProductCardClick(event, '${escapeHTML(p.id)}')">
       <div class="product-media">
@@ -458,16 +456,16 @@ function renderProductsGrid(products) {
         <div class="product-img-fallback">
           <span>${icon}</span>
         </div>
-        <span class="product-cat-pill">${icon} ${escapeHTML(cat)}</span>
-        <span class="product-discount-badge">${parseInt(discount, 10)}% OFF</span>
+        <span class="product-cat-pill">${icon} ${escapeHTML(cat.toUpperCase())}</span>
+        <span class="product-discount-badge">DEMO BENCHMARK</span>
       </div>
 
       <div class="product-body">
         <h3 class="product-title">${escapeHTML(p.name)}</h3>
         <p class="product-meta">${escapeHTML(p.meta || '')}</p>
         <div class="product-badge-row">
-          <span class="badge-depot">✓ BIS Certified Depot</span>
-          <span class="badge-stock">${p.stock ? p.stock + ' ' + (p.unit || 'units') + ' ready' : 'In Stock'}</span>
+          <span class="badge-depot">✓ Prototype Benchmark</span>
+          <span class="badge-stock">Standard Quality</span>
         </div>
       </div>
 
@@ -475,7 +473,7 @@ function renderProductsGrid(products) {
         <div class="pricing-wrap">
           <span class="price">₹${(p.price || 0).toLocaleString('en-IN')}</span>
           <strike>₹${(originalPrice || 0).toLocaleString('en-IN')}</strike>
-          <span class="depot-tag">Wholesale Index</span>
+          <span class="depot-tag">Demo Benchmark</span>
         </div>
         <div class="product-action-row">
           <div class="qty-control" onclick="event.stopPropagation()">
@@ -483,7 +481,7 @@ function renderProductsGrid(products) {
             <span class="qty-val">1</span>
             <button class="qty-btn" onclick="changeQty(this,1)" aria-label="Increase quantity">+</button>
           </div>
-          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit || 'unit')})',${p.price})">Add to Cart</button>
+          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit || 'unit')})',${p.price})">Add to Plan</button>
           <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">ℹ️</button>
         </div>
       </div>
@@ -498,9 +496,9 @@ function renderProductsGrid(products) {
   noRes.style = 'grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; color: var(--text-muted);';
   noRes.innerHTML = `
     <div style="font-size: 2.5rem; margin-bottom: .6rem;">🔍</div>
-    <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: .4rem;">No products match your filter</div>
-    <p style="font-size: .88rem; margin-bottom: 1rem;">Try searching for other materials or select a different category.</p>
-    <button class="btn-outline" style="display:inline-block;width:auto;padding:.6rem 1.4rem;" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\\'all\\']'), 'all')">Show All Materials</button>
+    <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: .4rem;">No services or materials match your filter</div>
+    <p style="font-size:.88rem; margin-bottom: 1rem;">Try searching for other repair tasks or select a different category.</p>
+    <button class="btn-outline" style="display:inline-block;width:auto;padding:.6rem 1.4rem;" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\\'all\\']'), 'all')">Show All Services</button>
   `;
   grid.appendChild(noRes);
 
@@ -568,7 +566,7 @@ function addToCartQty(btn, name, price) {
   }
   localStorage.setItem('gharsetu_cart', JSON.stringify(cartItems));
   updateCartCounter();
-  showToast(`Added ${qtyVal}x ${name} to Job Cart`, '📦');
+  showToast(`Added ${qtyVal}x ${name} to Repair Plan 📋`, '✓');
 }
 
 // Product Technical Detail Modal
@@ -578,8 +576,8 @@ function openProductDetailModal(id) {
   const modal = document.getElementById('productDetailModal');
   if (!modal) return;
 
-  const cat = (product.category || 'material').toLowerCase().trim();
-  const imgUrl = product.image_url || PRODUCT_IMAGES[product.id] || CATEGORY_DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80';
+  const cat = (product.category || 'repair').toLowerCase().trim();
+  const imgUrl = product.image_url || PRODUCT_IMAGES[product.id] || CATEGORY_DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80';
   const imgEl = document.getElementById('detailProdImg');
   if (imgEl) {
     imgEl.src = imgUrl;
@@ -587,18 +585,19 @@ function openProductDetailModal(id) {
   }
 
   document.getElementById('detailProdTitle').innerText = product.name;
-  document.getElementById('detailProdCategory').innerText = (product.category || 'MATERIAL').toUpperCase() + ' • REGIONAL DEPOT CERTIFIED';
+  document.getElementById('detailProdCategory').innerText = (product.category || 'SERVICE').toUpperCase() + ' • BENCHMARK GUIDE (DEMO DATA)';
   document.getElementById('detailProdMeta').innerText = product.meta;
   document.getElementById('detailProdPrice').innerText = '₹' + product.price.toLocaleString('en-IN');
-  document.getElementById('detailProdOriginal').innerText = '₹' + product.originalPrice.toLocaleString('en-IN');
-  document.getElementById('detailProdDiscount').innerText = product.discount + '% Wholesale Discount';
-  document.getElementById('detailProdSpecs').innerText = product.specs || 'Certified according to Bureau of Indian Standards (BIS) and regional building regulations.';
-  document.getElementById('detailProdStock').innerText = (product.stock || 150) + ' ' + (product.unit || 'units') + ' available at nearest regional depot hub.';
+  document.getElementById('detailProdOriginal').innerText = '₹' + (product.originalPrice || Math.round(product.price * 1.2)).toLocaleString('en-IN');
+  document.getElementById('detailProdDiscount').innerText = 'Demo Benchmark Rate';
+  document.getElementById('detailProdSpecs').innerText = product.specs || 'Indicative specification benchmark according to standard trade requirements.';
+  document.getElementById('detailProdStock').innerText = 'Reference quality standard (Demo)';
 
   const addBtn = document.getElementById('detailAddToCartBtn');
   if (addBtn) {
+    addBtn.innerText = 'Add to Repair Plan 📋';
     addBtn.onclick = () => {
-      addToCartQty(addBtn, `${product.name} (${product.unit})`, product.price);
+      addToCartQty(addBtn, `${product.name} (${product.unit || 'unit'})`, product.price);
       closeProductDetailModal();
     };
   }
@@ -646,11 +645,11 @@ async function simulateAI() {
   if (fill) fill.style.width = '0%';
 
   const steps = [
-    [0, 'Tokenizing spatial and renovation requirements...'],
-    [25, 'Analyzing Indian Standard (IS) codes & trades...'],
-    [55, 'Cross-referencing regional distributor depot catalog...'],
-    [80, 'Compiling labor schedule & BoQ quantities...'],
-    [100, 'Finalizing scope document...']
+    [0, 'Analyzing repair & spatial requirements...'],
+    [25, 'Identifying relevant trade skills (Plumbing, Electrical, etc.)...'],
+    [55, 'Cross-referencing standard material specs & CPWD benchmarks...'],
+    [80, 'Synthesizing labor schedules & scope checklist...'],
+    [100, 'Finalizing editable preliminary scope...']
   ];
   let stepIdx = 0;
   const pipelineInterval = setInterval(() => {
@@ -673,12 +672,12 @@ async function simulateAI() {
     if (data.success && data.scope) {
       applyScopeData(data.scope, data.input || input, data.city || city);
     } else {
-      showToast('Could not synthesize scope. Running local engine.', '⚠️');
+      showToast('Synthesizing preliminary scope via local engine.', 'ℹ️');
       setupScopeDataFallback(input.toLowerCase(), city);
     }
   } catch (err) {
     clearInterval(pipelineInterval);
-    console.warn('API call failed; using local CPWD parametric engine', err);
+    console.warn('API call failed; using local parametric engine', err);
     setupScopeDataFallback(input.toLowerCase(), city);
   } finally {
     setTimeout(() => {
@@ -692,13 +691,13 @@ async function simulateAI() {
 }
 
 function applyScopeData(s, originalInput, city) {
-  const normTrades = Array.isArray(s.trades) ? s.trades.join(', ') : (s.trades || 'Civil & Finishing');
-  const normDuration = s.duration || s.estimated_duration || '3-5 Days';
+  const normTrades = Array.isArray(s.trades) ? s.trades.join(', ') : (s.trades || 'Home Maintenance');
+  const normDuration = s.duration || s.estimated_duration || '2-3 Days';
   const normLabor = Number(s.laborCost || s.labor_subtotal) || 3000;
   const rawBoQ = s.boq || s.materials || [];
   const normBoQ = rawBoQ.map(item => ({
-    name: item.name || item.material || 'Material',
-    spec: item.spec || 'Depot Standard',
+    name: item.name || item.material || 'Service / Material Item',
+    spec: item.spec || 'Standard Specification (Demo Data)',
     qty: item.qty || 1,
     unit: item.unit || 'unit',
     price: item.price || item.rate || 0,
@@ -706,8 +705,7 @@ function applyScopeData(s, originalInput, city) {
     checked: true
   }));
   const normNotes = s.technicalNotes || s.technical_notes || [];
-  const normConfidence = s.confidence || 97;
-  const normEngine = s.engine || 'GharSetu Civil Core v4.0';
+  const normEngine = s.engine || 'GharSetu Scoping Core v4.0';
   const normMatSubtotal = s.materialCost || s.material_subtotal || normBoQ.reduce((sum, i) => sum + i.total, 0);
   const normGrandTotal = s.grandTotal || s.grand_total || (normLabor + normMatSubtotal);
 
@@ -718,7 +716,6 @@ function applyScopeData(s, originalInput, city) {
     laborCost: normLabor,
     boq: normBoQ,
     technicalNotes: normNotes,
-    confidence: normConfidence,
     engine: normEngine,
     grandTotal: normGrandTotal,
     input: originalInput,
@@ -729,7 +726,7 @@ function applyScopeData(s, originalInput, city) {
   // Save to persistent estimates history
   const savedEstimates = JSON.parse(localStorage.getItem('gharsetu_estimates') || '[]');
   savedEstimates.unshift({
-    id: 'EST-' + Math.floor(100000 + Math.random() * 900000),
+    id: 'SCOPE-' + Math.floor(100000 + Math.random() * 900000),
     title: originalInput,
     city,
     trades: normTrades,
@@ -746,7 +743,7 @@ function applyScopeData(s, originalInput, city) {
   if (tradesEl) tradesEl.innerText = normTrades;
   if (durEl) durEl.innerText = normDuration;
   if (badgeEl) {
-    badgeEl.innerHTML = `✓ Scope Synthesized (${normConfidence}%) • <small style="font-weight:700;color:var(--terracotta);">${normEngine}</small>`;
+    badgeEl.innerHTML = `✓ Preliminary Scope Generated • 100% Editable <small style="font-weight:700;color:var(--terracotta);margin-left:.4rem;">(Prototype Demo)</small>`;
   }
 
   laborBaseCost = normLabor;
@@ -769,60 +766,72 @@ function renderTechnicalNotes(notes) {
 
 // Fallback Engine (For static demo deployments like GitHub Pages)
 function setupScopeDataFallback(input, city = 'Mumbai') {
-  let type = 'General Renovation';
-  let trades = '1 General Contractor, 1 Artisan';
-  let duration = '2-3 Days';
-  let labor = 4200;
-  let notes = ['Adhere strictly to CPWD schedule of rates', 'Verify site moisture before coating'];
+  let type = 'Home Repair & Maintenance';
+  let trades = '1 General Handyman, 1 Trade Specialist';
+  let duration = '1-2 Days';
+  let labor = 2800;
+  let notes = ['On-site verification recommended before finalizing contract', 'Ensure licensed trade professional performs structural/concealed work'];
   let boq = [];
 
   if (input.includes('waterproof') || input.includes('seep') || input.includes('damp')) {
-    type = 'Waterproofing & Damp Repair';
-    trades = '1 Waterproofing Specialist, 1 Mason';
-    duration = '2-3 Days (Curing Required)';
+    type = 'Waterproofing & Moisture Treatment';
+    trades = 'Waterproofing Specialist, Mason';
+    duration = '2-3 Days (Includes Curing)';
     labor = 3600;
-    notes = ['Moisture test surface (<12%) before polymer elastomeric application', 'Allow 24-hr curing between coats'];
+    notes = ['Moisture test surface (<12% moisture) prior to elastomeric coating application', 'Allow 24-hr ponding water test to verify seal integrity'];
     boq = [
-      { name: 'Dr. Fixit Damp Shield Elasto (4kg)', price: 1450, qty: 2, unit: 'bucket', checked: true },
-      { name: 'Dr. Fixit Super Latex SBR Bonding (5L)', price: 1650, qty: 1, unit: 'can', checked: true },
-      { name: 'Birla White Wall Putty Waterproof (30kg)', price: 920, qty: 1, unit: 'bag', checked: true },
-      { name: 'Glass Fiber Mesh Tape (50m)', price: 340, qty: 1, unit: 'roll', checked: true }
+      { name: 'Dr. Fixit 101 LW+ Integral Waterproofing (5L)', spec: 'IS:2645 compliant mortar admixture', price: 640, qty: 2, unit: 'can', checked: true },
+      { name: 'Dr. Fixit Fastflex Flexible Membrane (12kg)', spec: '2-Part polymer coating for balcony/sunken slab', price: 2650, qty: 1, unit: 'pack', checked: true },
+      { name: 'Glass Fiber Reinforcing Mesh (50m)', spec: 'Alkali-resistant mesh for crack bridging', price: 1100, qty: 1, unit: 'roll', checked: true },
+      { name: 'Polymer Crack Fill & Touch-Up Putty (5kg)', spec: 'Water-resistant interior filler', price: 420, qty: 1, unit: 'tub', checked: true }
     ];
-  } else if (input.includes('leak') || input.includes('pipe') || input.includes('tap') || input.includes('plumb')) {
-    type = 'Plumbing & Drainage';
-    trades = '1 Master Plumber, 1 Assistant';
-    duration = '1 Day (4-6 hrs)';
-    labor = 1600;
-    notes = ['Pressure test all concealed joints at 10 bar before closing tiles', 'Ensure heavy-duty CPVC solvent cement is applied'];
+  } else if (input.includes('leak') || input.includes('pipe') || input.includes('tap') || input.includes('plumb') || input.includes('drain')) {
+    type = 'Plumbing & Sanitary Repair';
+    trades = 'Licensed Plumber, Plumbing Assistant';
+    duration = '1 Day (3-5 hrs)';
+    labor = 1800;
+    notes = ['Hydrostatic pressure test recommended after solvent joint curing', 'Check water pressure regulator if tap washers wear out repeatedly'];
     boq = [
-      { name: 'Astral CPVC Pipe (1-inch, 2x3m Heavy Duty)', price: 840, qty: 1, unit: 'set', checked: true },
-      { name: 'Finolex Brass Stop Cock Valve (Concealed)', price: 650, qty: 1, unit: 'piece', checked: true },
-      { name: 'Teflon Tape + Heavy Duty CPVC Solvent', price: 180, qty: 1, unit: 'kit', checked: true },
-      { name: 'Chrome Basin Mixer Tap (ISI Marked)', price: 1250, qty: 1, unit: 'piece', checked: true }
+      { name: 'Astral CPVC Heavy Duty Pipe (1-inch, SDR 11)', spec: 'IS:15778 certified 3m length', price: 420, qty: 2, unit: 'pieces', checked: true },
+      { name: 'Jaquar Cast Brass Bib Cock Tap', spec: 'Quarter-turn ceramic cartridge, chrome plated', price: 1150, qty: 1, unit: 'piece', checked: true },
+      { name: 'Astral CPVC Solvent Weld & Teflon Tape Kit', spec: 'Fast-curing high-pressure sealant', price: 380, qty: 1, unit: 'kit', checked: true },
+      { name: 'Brass Angle Stop Valve (Concealed)', spec: 'Quarter-turn shutoff for sanitary line', price: 460, qty: 1, unit: 'piece', checked: true }
     ];
-  } else if (input.includes('wire') || input.includes('electr') || input.includes('switch')) {
-    type = 'Electrical Overhaul';
-    trades = '2 Certified Electricians';
-    duration = '2 Days (14 hrs)';
-    labor = 3500;
-    notes = ['Conform strictly to IS:732 Indian wiring safety standards', 'Megger insulation test recommended after pull-through'];
+  } else if (input.includes('wire') || input.includes('electr') || input.includes('switch') || input.includes('mcb') || input.includes('short')) {
+    type = 'Electrical Wiring & Fixtures';
+    trades = 'Certified Electrician, Assistant';
+    duration = '1-2 Days';
+    labor = 2600;
+    notes = ['Ensure IS:732 earthing and loop impedance verification', 'Megger insulation check recommended for older concealed conduits'];
     boq = [
-      { name: 'Polycab 1.5 sq mm FR Wire (2 Coils, 90m)', price: 3160, qty: 2, unit: 'coil', checked: true },
-      { name: 'Modular Switch Plates & 6A/16A Switches', price: 1850, qty: 1, unit: 'set', checked: true },
-      { name: 'Schneider 16A C-Curve Single Pole MCB', price: 660, qty: 1, unit: 'set', checked: true },
-      { name: 'PVC Conduit Pipes & Junction Boxes Kit', price: 950, qty: 1, unit: 'set', checked: true }
+      { name: 'Polycab FR Flame Retardant Wire 1.5 sq mm', spec: 'IS:694 certified 90m coil', price: 1580, qty: 2, unit: 'coils', checked: true },
+      { name: 'Schneider Electric Easy9 16A Single Pole MCB', spec: 'C-curve 10kA breaking capacity', price: 185, qty: 4, unit: 'pieces', checked: true },
+      { name: 'Anchor Roma 8-Module Switchboard Set', spec: 'Flame-retardant polycarbonate with modular switches', price: 890, qty: 2, unit: 'sets', checked: true },
+      { name: 'PVC Conduits & Junction Accessories Kit', spec: 'Heavy-duty insulated conduit fittings', price: 540, qty: 1, unit: 'kit', checked: true }
+    ];
+  } else if (input.includes('carpenter') || input.includes('wood') || input.includes('cabinet') || input.includes('hinge') || input.includes('door') || input.includes('lock') || input.includes('plywood')) {
+    type = 'Carpentry & Woodwork';
+    trades = 'Artisan Carpenter';
+    duration = '1-2 Days';
+    labor = 2500;
+    notes = ['Seal all exposed plywood edges before laminate bonding to resist humidity', 'Inspect door frame plumb before mortise lock chiseling'];
+    boq = [
+      { name: 'CenturyPly MR Grade Commercial Plywood (19mm)', spec: 'IS:303 moisture resistant 8x4 sheet', price: 2450, qty: 1, unit: 'sheet', checked: true },
+      { name: 'Godrej Nav-Tal Brass Mortise Door Lock', spec: 'Double cylinder 6-lever mechanism with brass keys', price: 1450, qty: 1, unit: 'set', checked: true },
+      { name: 'Ebco Soft-Close Hydraulic Concealed Hinges', spec: 'Pack of 4 pairs, zero-creak hydraulic dampers', price: 960, qty: 1, unit: 'pack', checked: true },
+      { name: 'Fevicol Marine Waterproof Wood Adhesive (1kg)', spec: 'D3 water-resistant synthetic resin glue', price: 390, qty: 1, unit: 'bottle', checked: true }
     ];
   } else {
-    type = 'Painting & Carpentry';
-    trades = '1 Painter, 1 Carpenter';
+    type = 'Interior Wall Painting & Surface Prep';
+    trades = 'Painter, Wall Finishing Artisan';
     duration = '2-3 Days';
-    labor = 4200;
-    notes = ['Light-sand with 220 grit between putty and primer coats', 'Ensure calibrated 19mm marine grade plywood'];
+    labor = 3200;
+    notes = ['Surface moisture test recommended prior to primer application (max allowable moisture: 12%)', 'Light-sand with 220-grit paper between putty and emulsion coats'];
     boq = [
-      { name: 'Asian Paints Royale Emulsion (10L Bucket)', price: 3850, qty: 1, unit: 'bucket', checked: true },
-      { name: 'Birla White Wall Seal Primer (1 Bag 30kg)', price: 755, qty: 1, unit: 'bag', checked: true },
-      { name: 'Commercial Grade Marine Ply (19mm Half Sheet)', price: 1450, qty: 1, unit: 'sheet', checked: true },
-      { name: 'Ebco Soft-Close Cabinet Hinges (2 Pairs)', price: 480, qty: 1, unit: 'pack', checked: true }
+      { name: 'Asian Paints Tractor Emulsion (Matte White)', spec: '20L bucket, superior 260 sq.ft/L coverage', price: 2850, qty: 1, unit: 'bucket', checked: true },
+      { name: 'Birla White Polymer Wall Putty (40kg)', spec: 'IS:15489 certified white polymer plaster', price: 820, qty: 2, unit: 'bags', checked: true },
+      { name: 'Asian Paints Decoprime Alkali Primer (10L)', spec: 'Deep penetrating water-thinnable alkali shield', price: 1420, qty: 1, unit: 'can', checked: true },
+      { name: 'Painter Consumables Kit (Rollers, Masking Tape, Drop Sheet)', spec: 'Standard finishing consumables pack', price: 650, qty: 1, unit: 'kit', checked: true }
     ];
   }
 
@@ -830,11 +839,12 @@ function setupScopeDataFallback(input, city = 'Mumbai') {
     type,
     trades,
     duration,
-    confidence: 96.8,
     laborCost: labor,
     technicalNotes: notes,
     boq,
-    engine: 'GharSetu Parametric Engine v4.0 (CPWD Benchmarks)'
+    estimate_type: 'Preliminary Estimate (Editable Prototype)',
+    disclaimer: 'Indicative benchmark estimate for quotation comparison. Not a guaranteed price. (Demo data)',
+    engine: 'GharSetu Parametric Scoping Core (CPWD Reference)'
   };
 
   applyScopeData(fallbackScope, input, city);
@@ -860,7 +870,7 @@ function renderBoQ() {
         </label>
         <div style="text-align:right;min-width:110px;">
           <div class="item-price" style="font-size:.95rem;">₹${itemTotal.toLocaleString('en-IN')}</div>
-          <div style="font-size:.75rem;color:var(--text-muted);">₹${itemRate.toLocaleString('en-IN')}/${escapeHTML(item.unit || 'unit')}</div>
+          <div style="font-size:.75rem;color:var(--text-muted);">₹${itemRate.toLocaleString('en-IN')}/${escapeHTML(item.unit || 'unit')} (Benchmark)</div>
         </div>
       </li>
     `;
@@ -879,21 +889,22 @@ function toggleBoQItem(i) {
 function addBoQToCart() {
   const selected = currentBoQ.filter(i => i.checked);
   if (!selected.length) {
-    showToast('Select at least one item from the BoQ', '⚠️');
+    showToast('Select at least one scope item', '⚠️');
     return;
   }
-  selected.forEach(item => cartItems.push({ name: item.name, price: item.price, qty: item.qty || 1 }));
+  selected.forEach(item => cartItems.push({ name: item.name || item.material, price: item.price || item.rate || 0, qty: item.qty || 1 }));
   localStorage.setItem('gharsetu_cart', JSON.stringify(cartItems));
   updateCartCounter();
-  showToast(`Pushed ${selected.length} items to Job Cart!`, '📦');
+  showToast(`Added ${selected.length} items to Repair Plan! 📋`, '✓');
+  toggleCart(true);
 }
 
 function copyProjectSummary() {
   const trades = document.getElementById('resTrades')?.innerText || '--';
   const duration = document.getElementById('resDuration')?.innerText || '--';
   const total = document.getElementById('resCost')?.innerText || 'Rs.0';
-  const text = `GharSetu Verified Scope\nTrades: ${trades}\nDuration: ${duration}\nTotal: ${total}\nSource: GharSetu AI Engine v4.0`;
-  navigator.clipboard.writeText(text).then(() => showToast('Scope copied to clipboard!', '📋'));
+  const text = `GharSetu Preliminary Scope (Prototype Demo)\nTrades: ${trades}\nDuration: ${duration}\nPreliminary Benchmark Total: ${total}\n*Indicative demo benchmark for homeowner quotation.`;
+  navigator.clipboard.writeText(text).then(() => showToast('Preliminary scope copied!', '📋'));
 }
 
 // ═════════════════════════════════════════════════════════════════════
@@ -979,7 +990,7 @@ async function openDashboardModal() {
   if (authUser && card) {
     card.style.display = 'flex';
     document.getElementById('dashName').innerText = authUser.name;
-    document.getElementById('dashEmailCity').innerText = `${authUser.email} • ${authUser.city || 'Mumbai'} (Depot Tier 1)`;
+    document.getElementById('dashEmailCity').innerText = `${authUser.email} • ${authUser.city || 'Mumbai'} (Local Pro Partner)`;
   } else if (card) {
     card.style.display = 'none';
   }
@@ -1010,7 +1021,7 @@ async function loadDepotOrders() {
   const list = document.getElementById('dashOrdersList');
   if (!list) return;
 
-  list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted);">Syncing with Regional Depot Hub... 🚚</div>';
+  list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted);">Syncing with Homeowner Quote Hub... 🏠</div>';
 
   let orders = [];
   try {
@@ -1033,15 +1044,15 @@ async function loadDepotOrders() {
   if (!orders.length) {
     list.innerHTML = `
       <div style="text-align:center;padding:2.5rem;color:var(--text-muted);border:1px dashed var(--border-subtle);border-radius:14px;">
-        <div style="font-size:2.2rem;margin-bottom:.5rem;">📦</div>
-        <div style="font-weight:700;color:var(--text-main);">No dispatches allocated yet</div>
-        <p style="font-size:.85rem;margin-top:.3rem;">Add materials from the BoQ or B2B store and complete checkout.</p>
+        <div style="font-size:2.2rem;margin-bottom:.5rem;">📋</div>
+        <div style="font-weight:700;color:var(--text-main);">No quote requests submitted yet</div>
+        <p style="font-size:.85rem;margin-top:.3rem;">Plan a scope above or add items from the benchmark guide to request competitive local quotes.</p>
       </div>
     `;
     return;
   }
 
-  list.innerHTML = orders.map(ord => {
+  const ordersHTML = orders.map(ord => {
     const itemsText = (ord.items || []).map(i => `${parseInt(i.qty || 1, 10)}x ${escapeHTML(i.name)}`).join(', ');
     const dateStr = new Date(ord.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
     return `
@@ -1049,18 +1060,51 @@ async function loadDepotOrders() {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
           <div style="display:flex;align-items:center;gap:.6rem;">
             <span style="font-weight:800;color:var(--terracotta);font-size:.95rem;">${escapeHTML(ord.id)}</span>
-            <span style="font-size:.75rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.2rem .6rem;border-radius:12px;">● ${escapeHTML(ord.status || 'Depot Allocated')}</span>
+            <span style="font-size:.75rem;background:#ECFDF5;color:#10B981;font-weight:700;padding:.2rem .6rem;border-radius:12px;">● ${escapeHTML(ord.status || '3 Quotes Received (Demo)')}</span>
           </div>
-          <div style="font-weight:800;font-size:1.05rem;color:var(--text-main);">Rs.${(ord.total || 0).toLocaleString('en-IN')}</div>
+          <div style="font-weight:800;font-size:1.05rem;color:var(--text-main);">₹${(ord.total || 0).toLocaleString('en-IN')} <span style="font-size:.75rem;font-weight:500;color:var(--text-muted);">(Est.)</span></div>
         </div>
-        <p style="font-size:.85rem;color:var(--text-main);font-weight:600;margin-bottom:.4rem;">${itemsText || 'General construction supplies'}</p>
+        <p style="font-size:.85rem;color:var(--text-main);font-weight:600;margin-bottom:.4rem;">${itemsText || 'Standard repair scope items'}</p>
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text-muted);border-top:1px dashed var(--border-subtle);padding-top:.6rem;">
-          <span>📅 Placed: ${dateStr}</span>
-          <span>📍 Hub: ${escapeHTML(ord.city || 'Mumbai')} (Dispatch: 48h)</span>
+          <span>📅 Submitted: ${dateStr}</span>
+          <span>📍 Region: ${escapeHTML(ord.city || 'Mumbai')} (Demo Trade Responses: 3)</span>
         </div>
       </div>
     `;
   }).join('');
+
+  const demoQuotesHTML = `
+    <div style="margin-top:1.2rem;padding:1.1rem 1.3rem;background:var(--warm-50);border:1px dashed var(--warm-200);border-radius:14px;">
+      <h4 style="font-size:.88rem;font-weight:800;color:var(--terracotta);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;">
+        <span>👷</span> Seeded Local Pro Responses (Prototype Demo Data)
+      </h4>
+      <div style="display:flex;flex-direction:column;gap:.6rem;font-size:.84rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border-subtle);">
+          <div>
+            <div style="font-weight:700;color:var(--text-main);">Apex Trade Solutions <span style="color:#F59E0B;font-size:.78rem;">★★★★★ (4.9)</span></div>
+            <div style="font-size:.76rem;color:var(--text-muted);">Local trade crew (Demo Data) • Indicative proposal</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:800;color:var(--terracotta);">₹3,850</div>
+            <span style="font-size:.72rem;background:#ECFDF5;color:#10B981;padding:.15rem .45rem;border-radius:6px;font-weight:700;">Demo Quote</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border-subtle);">
+          <div>
+            <div style="font-weight:700;color:var(--text-main);">Metro Craftsmen Hub <span style="color:#F59E0B;font-size:.78rem;">★★★★☆ (4.8)</span></div>
+            <div style="font-size:.76rem;color:var(--text-muted);">Independent local trade team (Demo Data) • Indicative proposal</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:800;color:var(--terracotta);">₹4,100</div>
+            <span style="font-size:.72rem;background:#ECFDF5;color:#10B981;padding:.15rem .45rem;border-radius:6px;font-weight:700;">Demo Quote</span>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.74rem;color:var(--text-muted);margin-top:.6rem;margin-bottom:0;">*Demonstration only: Quotes shown are illustrative mockups to demonstrate the homeowner comparison workflow.</p>
+    </div>
+  `;
+
+  list.innerHTML = ordersHTML + demoQuotesHTML;
 }
 
 function switchDashTab(tab) {
@@ -1102,7 +1146,7 @@ function removeFromCart(index) {
   localStorage.setItem('gharsetu_cart', JSON.stringify(cartItems));
   updateCartCounter();
   renderCart();
-  showToast('Item removed from cart', '🗑');
+  showToast('Item removed from Repair Plan', '🗑');
 }
 
 function updateCartCounter() {
@@ -1121,7 +1165,7 @@ function renderCart() {
   if (!cartItems.length) {
     listEl.innerHTML = `
       <p style="color:var(--text-muted);text-align:center;margin-top:3rem;font-size:.92rem;">
-        Your procurement cart is empty<br><span style="font-size:2.5rem;display:inline-block;margin-top:.5rem;">🧱</span>
+        Your Repair Plan is empty<br><span style="font-size:2.5rem;display:inline-block;margin-top:.5rem;">🛠️</span>
       </p>
     `;
     totalDisplay.innerText = 'Rs.0';
@@ -1130,12 +1174,12 @@ function renderCart() {
 
   let html = '', total = 0;
   cartItems.forEach((item, idx) => {
-    total += item.price;
+    total += (item.price || 0) * (item.qty || 1);
     html += `
       <div class="cart-item">
         <div>
-          <h5>${item.name}</h5>
-          <p>Rs.${item.price.toLocaleString('en-IN')}</p>
+          <h5>${escapeHTML(item.name)}</h5>
+          <p>₹${(item.price || 0).toLocaleString('en-IN')} (Benchmark)</p>
         </div>
         <button class="cart-item-remove" onclick="removeFromCart(${idx})">Remove</button>
       </div>
@@ -1143,30 +1187,30 @@ function renderCart() {
   });
 
   listEl.innerHTML = html;
-  totalDisplay.innerText = 'Rs.' + total.toLocaleString('en-IN');
+  totalDisplay.innerText = '₹' + total.toLocaleString('en-IN');
 }
 
 async function checkoutCart(event) {
   if (!cartItems.length) {
-    showToast('Add items to cart first', '⚠️');
+    showToast('Add items to your repair plan first', '⚠️');
     return;
   }
 
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = 'Allocating Depot Hub...';
+  btn.innerText = 'Submitting Quote Request (Demo)...';
 
-  const contactName = authUser ? authUser.name : 'Verified Contractor';
+  const contactName = authUser ? authUser.name : 'Homeowner (Demo)';
   const city = (authUser && authUser.city) || (document.getElementById('userCity')?.value) || 'Mumbai';
-  const total = cartItems.reduce((s, i) => s + (i.price * (i.qty || 1)), 0);
+  const total = cartItems.reduce((s, i) => s + ((i.price || 0) * (i.qty || 1)), 0);
 
-  // Create persistent order object
+  // Create persistent quote request object
   const newOrder = {
-    id: 'GS-' + Math.floor(100000 + Math.random() * 900000),
-    status: 'depot_allocated',
+    id: 'REQ-' + Math.floor(100000 + Math.random() * 900000),
+    status: 'Quotes Requested (Demo)',
     items: [...cartItems],
     total,
-    contact_name: contactName,
+    customer_name: contactName,
     city,
     created_at: new Date().toISOString()
   };
@@ -1176,10 +1220,13 @@ async function checkoutCart(event) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        items: cartItems,
-        contactName,
+        customer_name: contactName,
+        customer_email: authUser ? authUser.email : 'homeowner@example.com',
         city,
-        notes: 'Placed via GharSetu Web Platform'
+        items: cartItems,
+        subtotal: total,
+        gst: 0,
+        total: total
       })
     });
     const data = await res.json();
@@ -1187,7 +1234,7 @@ async function checkoutCart(event) {
       newOrder.id = data.order.id;
     }
   } catch (err) {
-    console.warn('Backend offline; storing order locally in localStorage', err);
+    console.warn('Backend offline; storing request locally in localStorage', err);
   }
 
   // Persist locally in localStorage
@@ -1195,14 +1242,17 @@ async function checkoutCart(event) {
   existingOrders.unshift(newOrder);
   localStorage.setItem('gharsetu_orders', JSON.stringify(existingOrders));
 
-  showToast(`${newOrder.id} allocated to nearest regional depot! 🚚`, '✓');
+  showToast(`Quote request ${newOrder.id} submitted! Seeded local pros notified (Demo) 🚀`, '✓');
   cartItems = [];
   localStorage.setItem('gharsetu_cart', JSON.stringify(cartItems));
   updateCartCounter();
 
   btn.disabled = false;
-  btn.innerText = 'Proceed to B2B Dispatch 🚚';
-  setTimeout(() => toggleCart(false), 800);
+  btn.innerText = 'Request Quotes from Local Pros 🚀';
+  setTimeout(() => {
+    toggleCart(false);
+    openDashboardModal();
+  }, 900);
 }
 
 // ═════════════════════════════════════════════════════════════════════
@@ -1251,8 +1301,8 @@ function switchTab(tab) {
     tabReg.style.background = isLogin ? 'transparent' : '#E25822';
     tabReg.style.color = isLogin ? 'var(--text-muted,#666)' : '#fff';
   }
-  if (title) title.textContent = isLogin ? 'Contractor Login' : 'Create Account';
-  if (sub) sub.textContent = isLogin ? 'Access your GharSetu dashboard' : 'Join verified contractors on GharSetu';
+  if (title) title.textContent = isLogin ? 'Pro Partner Login' : 'Register as Pro Partner (Demo)';
+  if (sub) sub.textContent = isLogin ? 'Access your local trade partner portal (Prototype Demo)' : 'Register your local trade service on GharSetu (Prototype Demo)';
   if (msg) msg.textContent = '';
 }
 
@@ -1390,7 +1440,7 @@ function showContractorMenu() {
     <div style="font-weight:700;margin-bottom:.4rem;padding-bottom:.4rem;border-bottom:1px solid var(--border,#eee);">👷 ${escapeHTML(authUser.name)}</div>
     <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.3rem;">📧 ${escapeHTML(authUser.email)}</div>
     <div style="font-size:.82rem;color:var(--text-muted,#888);margin-bottom:.8rem;">🏙️ ${escapeHTML(authUser.city || 'Not set')}</div>
-    <button onclick="document.getElementById('contractorMenu').remove();openDashboardModal();" style="width:100%;padding:.6rem;background:#E25822;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.85rem;margin-bottom:.5rem;">📋 View Hub Dispatches</button>
+    <button onclick="document.getElementById('contractorMenu').remove();openDashboardModal();" style="width:100%;padding:.6rem;background:#E25822;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.85rem;margin-bottom:.5rem;">📋 Project &amp; Quote Tracker</button>
     <button onclick="logoutContractor()" style="width:100%;padding:.5rem;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:.85rem;">Logout</button>
   `;
   document.body.appendChild(menu);
@@ -1411,13 +1461,13 @@ function logoutContractor() {
   authUser = null;
   const btn = document.getElementById('authNavBtn');
   if (btn) {
-    btn.innerHTML = 'Contractor Login';
+    btn.innerHTML = 'Pro Partner (Demo)';
     btn.style = '';
     btn.onclick = e => { e.preventDefault(); openAuthModal(); };
   }
   const mobileLink = document.getElementById('mobileAuthLink');
   if (mobileLink) {
-    mobileLink.innerHTML = 'Contractor Login';
+    mobileLink.innerHTML = 'Pro Partner (Demo)';
     mobileLink.onclick = () => { closeMobileMenu(); openAuthModal(); };
   }
   const menu = document.getElementById('contractorMenu');

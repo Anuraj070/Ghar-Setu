@@ -1,6 +1,6 @@
 """
 GharSetu (घर सेतु) - FastAPI Full-Stack Application Engine
-v4.0 AI Renovation Scoping & B2B Construction Procurement Platform
+v4.0 Homeowner Repair & Renovation Coordination Platform (Prototype Demo)
 """
 
 import os
@@ -30,8 +30,8 @@ database.init_db()
 
 # Initialize FastAPI App
 app = FastAPI(
-    title="GharSetu API Core",
-    description="AI Renovation Scoping, CPWD Schedule of Rates (DSR), and B2B Material Procurement Hub",
+    title="GharSetu Prototype Core",
+    description="Homeowner Repair & Renovation Coordination Platform - Preliminary Scoping & Local Pro Quote Management",
     version="4.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -337,47 +337,82 @@ def run_parametric_civil_engine(prompt: str, city: str, trades: List[str]) -> Di
         duration = "4-6 Days"
         notes.append("Allow minimum 48 hours ponding water test before laying top protection screed.")
 
-    # Default Fallback if nothing matched
-    if not items:
-        trade_list = ["Masonry", "General Finishing"]
+    # Domain 5: Carpentry & Woodwork
+    if any(k in lower for k in ["carpenter", "wood", "cabinet", "door", "hinge", "plywood", "lock", "wardrobe", "shelf", "furniture"]):
+        if "Carpentry" not in trade_list:
+            trade_list.append("Carpentry")
         items.extend([
             {
-                "material": "Ambuja Portland Pozzolana Cement (PPC)",
-                "spec": "IS:1489 Certified • 50kg Bag",
-                "qty": 6,
-                "unit": "bags",
-                "rate": round(380 * city_mult),
-                "total": round(380 * 6 * city_mult)
+                "material": "CenturyPly MR Commercial Plywood (19mm)",
+                "spec": "IS:303 Moisture Resistant • 8ft x 4ft Sheet",
+                "qty": 2,
+                "unit": "sheets",
+                "rate": round(2450 * city_mult),
+                "total": round(2450 * 2 * city_mult)
             },
             {
-                "material": "Coarse River Sand / M-Sand (Zone II)",
-                "spec": "Washed Plaster Grade Silt < 3%",
-                "qty": 25,
-                "unit": "cu.ft",
-                "rate": round(55 * city_mult),
-                "total": round(55 * 25 * city_mult)
-            },
-            {
-                "material": "Consumables & Surface Binding Polymer",
-                "spec": "SBR Latex Bonding Agent • 2L",
+                "material": "Godrej Nav-Tal Brass Mortise Door Lock",
+                "spec": "Double Cylinder • 6-Lever Mechanism",
                 "qty": 1,
-                "unit": "can",
-                "rate": round(780 * city_mult),
-                "total": round(780 * city_mult)
+                "unit": "set",
+                "rate": round(1450 * city_mult),
+                "total": round(1450 * city_mult)
+            },
+            {
+                "material": "Ebco Soft-Close Hydraulic Cabinet Hinges",
+                "spec": "Pack of 4 Pairs • Nickel-plated Cold Rolled Steel",
+                "qty": 1,
+                "unit": "pack",
+                "rate": round(960 * city_mult),
+                "total": round(960 * city_mult)
+            },
+            {
+                "material": "Fevicol Marine Waterproof Wood Adhesive (1kg)",
+                "spec": "Synthetic Resin Adhesive • D3 Water Resistance",
+                "qty": 1,
+                "unit": "bottle",
+                "rate": round(390 * city_mult),
+                "total": round(390 * city_mult)
             }
         ])
-        duration = "3-5 Days"
-        notes.append("Curing of cement plastering must be maintained wet for a minimum of 7 consecutive days.")
+        duration = "2-4 Days"
+        notes.append("Edge sealing verification recommended on all exposed plywood edges before veneer/laminate bonding.")
+
+    # Default Fallback if nothing matched
+    if not items:
+        trade_list = ["Home Maintenance", "General Repairs"]
+        items.extend([
+            {
+                "material": "General Repair Consumables & Fasteners Kit",
+                "spec": "Multi-purpose wall plugs, screws, anchors & sealant",
+                "qty": 1,
+                "unit": "kit",
+                "rate": round(650 * city_mult),
+                "total": round(650 * city_mult)
+            },
+            {
+                "material": "Polymer Crack Fill & Touch-Up Putty (5kg)",
+                "spec": "Ready-to-use water-resistant interior filler",
+                "qty": 1,
+                "unit": "tub",
+                "rate": round(420 * city_mult),
+                "total": round(420 * city_mult)
+            }
+        ])
+        duration = "1-2 Days"
+        notes.append("On-site inspection by local professional recommended to finalize exact scope.")
 
     mat_subtotal = sum(i["total"] for i in items)
     # Skilled Artisan Labor indexed to CPWD Minimum Wage DSR Schedule
     labor_rate_per_day = round(1650 * city_mult)
-    est_days = 4
+    est_days = 3
     labor_total = labor_rate_per_day * est_days
     grand_total = mat_subtotal + labor_total
 
     return {
-        "engine": "GharSetu Parametric Civil Core v4.0 (CPWD/DSR)",
+        "engine": "GharSetu Parametric Scoping Core (CPWD Reference)",
+        "estimate_type": "Preliminary Estimate (Editable Prototype)",
+        "disclaimer": "Indicative benchmark estimate for quotation comparison. Not a guaranteed price. (Demo data)",
         "project": prompt,
         "city": city,
         "region_multiplier": city_mult,
