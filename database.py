@@ -93,10 +93,35 @@ def init_db():
 
     conn.commit()
 
+    # Ensure image_url column exists in products table
+    try:
+        cursor.execute("ALTER TABLE products ADD COLUMN image_url TEXT")
+    except Exception:
+        pass
+
     # Seed initial data idempotently (INSERT OR IGNORE)
     seed_data(cursor)
-    conn.commit()
 
+    # Populate image URLs for standard catalog products if missing
+    image_map = {
+        "prod-001": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80",
+        "prod-002": "https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80",
+        "prod-003": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80",
+        "prod-004": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80",
+        "prod-005": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
+        "prod-006": "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=600&q=80",
+        "prod-007": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+        "prod-008": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+        "prod-009": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80",
+        "prod-010": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80",
+        "prod-011": "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=600&q=80",
+        "prod-012": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=600&q=80",
+        "prod-013": "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80",
+    }
+    for pid, img in image_map.items():
+        cursor.execute("UPDATE products SET image_url = ? WHERE id = ? AND (image_url IS NULL OR image_url = '')", (img, pid))
+
+    conn.commit()
     conn.close()
 
 

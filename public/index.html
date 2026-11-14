@@ -334,36 +334,56 @@ nav.scrolled{padding:.7rem 6%;box-shadow:0 4px 30px rgba(0,0,0,.04);}
 .tag-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.3rem;padding-top:1.3rem;border-top:1px dashed var(--border-subtle);flex-wrap:wrap;gap:1rem;}
 
 /* ═══════════ MARKETPLACE ═══════════ */
-.marketplace{padding:6rem 6%;max-width:1200px;margin:0 auto;text-align:center;}
-.market-search-bar{max-width:520px;margin:1.8rem auto 0 auto;position:relative;}
-.market-search-bar input{width:100%;padding:.8rem 1rem .8rem 2.8rem;border-radius:28px;border:2px solid var(--border-subtle);background:var(--surface-white);outline:none;font-size:.92rem;color:var(--text-main);transition:var(--transition-smooth);}
-.market-search-bar input:focus{border-color:var(--terracotta);box-shadow:0 0 0 4px rgba(226,88,34,.08);}
-.search-icon-fixed{position:absolute;left:1rem;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none;}
-.category-tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;}
-.cat-tab{padding:.5rem 1.1rem;border-radius:22px;background:var(--warm-50);border:1.5px solid var(--border-subtle);font-size:.82rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:var(--transition-bounce);}
-.cat-tab:hover{transform:translateY(-2px);border-color:var(--terracotta);color:var(--terracotta);box-shadow:0 4px 12px rgba(226,88,34,.1);}
-.cat-tab.active{background:var(--terracotta);color:#fff;border-color:var(--terracotta);box-shadow:0 4px 14px rgba(226,88,34,.25);}
-.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;margin-top:2.5rem;}
+.marketplace{padding:5.5rem 6%;max-width:1240px;margin:0 auto;text-align:center;}
+.market-search-bar{max-width:540px;margin:1.6rem auto 0 auto;position:relative;}
+.market-search-bar input{width:100%;padding:.85rem 1.2rem .85rem 3rem;border-radius:28px;border:1.5px solid var(--border-subtle);background:var(--surface-white);outline:none;font-size:.92rem;color:var(--text-main);transition:var(--transition-smooth);box-shadow:var(--shadow-soft);}
+.market-search-bar input:focus{border-color:var(--terracotta);box-shadow:0 0 0 4px rgba(226,88,34,.1);}
+.search-icon-fixed{position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);opacity:.45;pointer-events:none;font-size:1.05rem;}
+
+.category-tabs-wrap{position:relative;margin:1.8rem auto .5rem auto;max-width:100%;}
+.category-tabs{display:flex;gap:.55rem;overflow-x:auto;padding:.4rem 1rem 1rem 1rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
+.category-tabs::-webkit-scrollbar{display:none;}
+@media(min-width:1040px){.category-tabs{justify-content:center;}}
+.cat-tab{white-space:nowrap;flex-shrink:0;padding:.52rem 1.2rem;border-radius:24px;background:var(--surface-white);border:1.5px solid var(--border-subtle);font-size:.82rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:var(--transition-bounce);box-shadow:var(--shadow-soft);}
+.cat-tab:hover{transform:translateY(-2px);border-color:var(--terracotta);color:var(--terracotta);box-shadow:0 6px 16px rgba(226,88,34,.12);}
+.cat-tab.active{background:var(--terracotta);color:#fff;border-color:var(--terracotta);box-shadow:0 6px 20px rgba(226,88,34,.28);}
+
+.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.8rem;margin-top:2rem;}
 .store-grid .product{opacity:1 !important;transform:none !important;}
 .store-grid .product.hidden{display:none !important;}
 
-.product{background:var(--surface-white);padding:2rem;border-radius:var(--radius-xl);border:1px solid var(--border-subtle);box-shadow:var(--shadow-soft);text-align:left;display:flex;flex-direction:column;justify-content:space-between;transition:var(--transition-bounce);position:relative;overflow:hidden;}
-.product::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;background:linear-gradient(135deg,rgba(226,88,34,.04),rgba(255,140,96,.02),transparent);transition:opacity .4s;}
-.product:hover::before{opacity:1;}
-.product:hover{transform:translateY(-10px);box-shadow:var(--shadow-elevated),var(--shadow-glow);border-color:rgba(226,88,34,.2);}
-.product.hidden{display:none;}
-.discount-pill{position:absolute;top:1rem;right:1rem;background:var(--warm-100);color:#92400E;font-size:.75rem;font-weight:800;padding:.3rem .7rem;border-radius:8px;border:1px solid rgba(226,88,34,.15);}
-.product h3{color:var(--text-main);font-size:1.15rem;margin-bottom:.4rem;font-weight:700;}
-.product-meta{color:var(--text-muted);font-size:.88rem;margin-bottom:1.5rem;}
-.pricing-wrap{margin-bottom:1rem;display:flex;align-items:baseline;gap:.6rem;}
-.product .price{font-size:1.5rem;font-weight:800;color:var(--terracotta);font-family:'JetBrains Mono',monospace;}
-.product strike{color:#94A3B8;font-size:.95rem;}
-.qty-control{display:flex;align-items:center;gap:.5rem;margin-bottom:.9rem;}
-.qty-btn{width:30px;height:30px;border:1.5px solid var(--border-subtle);background:var(--warm-50);border-radius:8px;cursor:pointer;font-size:1rem;font-weight:700;color:var(--text-main);transition:var(--transition-bounce);display:flex;align-items:center;justify-content:center;padding:0;}
-.qty-btn:hover{background:var(--terracotta);color:#fff;border-color:var(--terracotta);transform:scale(1.1);}
-.qty-val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;min-width:28px;text-align:center;color:var(--text-main);}
-.btn-outline{width:100%;padding:.9rem;background:transparent;border:2px solid var(--border-hover);color:var(--text-main);font-weight:700;border-radius:10px;cursor:pointer;transition:var(--transition-bounce);position:relative;overflow:hidden;}
-.btn-outline:hover{background:var(--terracotta);color:#fff;border-color:var(--terracotta);transform:translateY(-2px);box-shadow:0 6px 18px rgba(226,88,34,.2);}
+.product{background:var(--surface-white);border-radius:var(--radius-xl);border:1px solid var(--border-subtle);box-shadow:var(--shadow-soft);text-align:left;display:flex;flex-direction:column;justify-content:space-between;transition:var(--transition-bounce);position:relative;overflow:hidden;}
+.product:hover{transform:translateY(-8px);box-shadow:var(--shadow-elevated),var(--shadow-glow);border-color:rgba(226,88,34,.25);}
+
+.product-media{position:relative;width:100%;height:175px;background:var(--warm-50);border-bottom:1px solid var(--border-subtle);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.product-img{width:100%;height:100%;object-fit:cover;transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.product:hover .product-img{transform:scale(1.05);}
+.product-img-fallback{width:100%;height:100%;display:none;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(226,88,34,.08),var(--warm-50));font-size:3rem;}
+.product-cat-pill{position:absolute;top:.85rem;left:.85rem;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border:1px solid rgba(0,0,0,.06);font-size:.72rem;font-weight:700;color:var(--text-main);padding:.3rem .7rem;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+[data-theme="dark"] .product-cat-pill{background:rgba(26,29,38,.92);color:#fff;border-color:rgba(255,255,255,.12);}
+.product-discount-badge{position:absolute;top:.85rem;right:.85rem;background:linear-gradient(135deg,#E25822,#FF8C60);color:#fff;font-size:.72rem;font-weight:800;padding:.3rem .65rem;border-radius:8px;box-shadow:0 4px 12px rgba(226,88,34,.35);}
+
+.product-body{padding:1.3rem 1.3rem .6rem 1.3rem;display:flex;flex-direction:column;flex:1;}
+.product-title{color:var(--text-main);font-size:1.1rem;font-weight:700;line-height:1.35;margin-bottom:.35rem;}
+.product-meta{color:var(--text-muted);font-size:.83rem;line-height:1.45;margin-bottom:.8rem;}
+.product-badge-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:auto;}
+.badge-depot{font-size:.72rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);padding:.2rem .55rem;border-radius:6px;}
+.badge-stock{font-size:.72rem;color:var(--text-muted);font-weight:600;}
+
+.product-footer{padding:.8rem 1.3rem 1.3rem 1.3rem;border-top:1px dashed var(--border-subtle);margin-top:.8rem;}
+.product-footer .pricing-wrap{display:flex;align-items:baseline;gap:.55rem;margin-bottom:.85rem;}
+.product-footer .price{font-size:1.4rem;font-weight:800;color:var(--terracotta);font-family:'JetBrains Mono',monospace;}
+.product-footer strike{color:#94A3B8;font-size:.88rem;}
+.depot-tag{margin-left:auto;font-size:.72rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.08);padding:.2rem .5rem;border-radius:4px;}
+
+.product-action-row{display:flex;align-items:center;gap:.5rem;}
+.product-action-row .qty-control{display:flex;align-items:center;background:var(--warm-50);border:1.5px solid var(--border-subtle);border-radius:10px;padding:.2rem .3rem;margin-bottom:0;}
+.product-action-row .qty-btn{width:26px;height:26px;border:none;background:transparent;font-size:1rem;font-weight:700;color:var(--text-main);cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:var(--transition-bounce);}
+.product-action-row .qty-btn:hover{background:var(--surface-white);color:var(--terracotta);}
+.product-action-row .qty-val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.88rem;min-width:24px;text-align:center;color:var(--text-main);}
+.add-cart-btn{flex:1;padding:.75rem .9rem;font-size:.86rem;font-weight:700;border-radius:10px;white-space:nowrap;justify-content:center;}
+.btn-specs-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--warm-50);border:1.5px solid var(--border-subtle);border-radius:10px;cursor:pointer;font-size:.92rem;transition:var(--transition-bounce);flex-shrink:0;}
+.btn-specs-icon:hover{background:var(--surface-white);border-color:var(--terracotta);transform:scale(1.06);}
 
 /* ═══════════ TESTIMONIALS ═══════════ */
 .testimonials-section{padding:6rem 6%;background:var(--warm-50);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);text-align:center;transition:background .5s;position:relative;overflow:hidden;}
@@ -398,13 +418,13 @@ nav.scrolled{padding:.7rem 6%;box-shadow:0 4px 30px rgba(0,0,0,.04);}
 .cart-total-row{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:1.15rem;color:var(--text-main);margin-bottom:1rem;}
 
 /* ═══════════ TOAST ═══════════ */
-.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface-white);color:var(--text-main);padding:.9rem 1.6rem;border-radius:14px;font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:.6rem;box-shadow:var(--shadow-elevated);border:1px solid var(--border-subtle);border-left:4px solid var(--terracotta);transform:translateY(120px);opacity:0;transition:var(--transition-bounce);z-index:3000;}
-.toast.show{transform:translateY(0);opacity:1;}
+.toast{position:fixed;bottom:2.2rem;left:50%;transform:translateX(-50%) translateY(120px);background:var(--surface-white);color:var(--text-main);padding:.85rem 1.6rem;border-radius:30px;font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:.65rem;box-shadow:0 12px 36px rgba(0,0,0,.15);border:1.5px solid var(--border-subtle);opacity:0;transition:var(--transition-bounce);z-index:3000;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 
 /* ═══════════ SCROLL TO TOP ═══════════ */
-#scrollTop{position:fixed;bottom:2rem;left:2rem;width:48px;height:48px;background:var(--terracotta);color:#fff;border:none;border-radius:14px;cursor:pointer;font-size:1.1rem;font-weight:700;box-shadow:0 8px 24px rgba(226,88,34,.3);opacity:0;transform:translateY(20px) scale(.8);transition:var(--transition-bounce);z-index:999;}
+#scrollTop{position:fixed;bottom:2rem;right:2rem;width:46px;height:46px;background:var(--surface-white);color:var(--terracotta);border:1.5px solid var(--border-subtle);border-radius:14px;cursor:pointer;font-size:1.2rem;font-weight:700;box-shadow:var(--shadow-card);opacity:0;transform:translateY(20px) scale(.85);transition:var(--transition-bounce);z-index:999;display:flex;align-items:center;justify-content:center;}
 #scrollTop.visible{opacity:1;transform:translateY(0) scale(1);}
-#scrollTop:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 12px 32px rgba(226,88,34,.4);}
+#scrollTop:hover{background:var(--terracotta);color:#fff;border-color:var(--terracotta);transform:translateY(-4px) scale(1.08);box-shadow:0 10px 28px rgba(226,88,34,.35);}
 
 /* ═══════════ FOOTER ═══════════ */
 footer{background:var(--text-main);color:#94A3B8;padding:4.5rem 6% 3rem 6%;margin-top:5rem;border-top:none;position:relative;overflow:hidden;}
@@ -449,8 +469,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   .cat-tab{font-size:.78rem;padding:.45rem .9rem;}
   .prompt-pills{gap:.4rem;}
   .prompt-pill{font-size:.76rem;padding:.4rem .85rem;}
-  #scrollTop{left:1rem;bottom:1rem;width:42px;height:42px;}
-  .toast{right:1rem;bottom:1rem;left:1rem;font-size:.84rem;}
+  #scrollTop{right:1rem;bottom:1rem;left:auto;width:42px;height:42px;}
+  .toast{bottom:1.5rem;font-size:.84rem;max-width:92%;}
   .floating-elements{display:none;}
   .hero-skyline svg{height:60px;}
   .materials-list{padding:1.2rem;}
@@ -498,21 +518,17 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <!-- NAVBAR -->
 <nav id="mainNav">
   <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    Ghar<span>Setu</span><div class="logo-badge">v4.0 AI</div>
+    Ghar<span>Setu</span>
   </div>
   <div class="nav-links">
-    <a href="#hiw">How it Works</a>
     <a href="#demo">AI Scoper</a>
     <a href="#marketplace">B2B Store</a>
-    <a href="#" onclick="openDashboardModal();return false;" id="ordersNavBtn" style="display:flex;align-items:center;gap:.3rem;color:var(--text-main);font-weight:600;">
-      📋 Hub Orders
-    </a>
-    <div style="display:flex;align-items:center;gap:.4rem;">
-      <span class="theme-label" id="themeLabel">☀️</span>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode"></button>
-    </div>
+    <a href="#hiw">How it Works</a>
+    <a href="#" onclick="openDashboardModal();return false;" id="ordersNavBtn">Hub Orders</a>
+    <div style="width:1px;height:22px;background:var(--border-subtle);margin:0 .2rem;"></div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Theme"></button>
     <div class="cart-trigger" onclick="toggleCart(true)">
-      <span>📦 Job Cart</span>
+      <span>Job Cart</span>
       <span class="cart-badge" id="cartCount">0</span>
     </div>
     <a href="#" class="btn-nav" id="authNavBtn" onclick="openAuthModal();return false;">Contractor Login</a>
@@ -524,10 +540,10 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#hiw" onclick="closeMobileMenu()">How it Works</a>
   <a href="#demo" onclick="closeMobileMenu()">AI Scoper</a>
   <a href="#marketplace" onclick="closeMobileMenu()">B2B Store</a>
-  <a href="#" onclick="closeMobileMenu();openDashboardModal();">📋 Hub Orders &amp; Dispatches</a>
+  <a href="#hiw" onclick="closeMobileMenu()">How it Works</a>
+  <a href="#" onclick="closeMobileMenu();openDashboardModal();">Hub Orders &amp; Dispatches</a>
   <a href="#" onclick="closeMobileMenu();openAuthModal();" id="mobileAuthLink">Contractor Login</a>
 </div>
 
@@ -845,70 +861,145 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <span class="search-icon-fixed">🔍</span>
     <input type="text" id="marketSearch" placeholder="Search cement, pipes, emulsion..." oninput="filterMarketplace()">
   </div>
-  <div class="category-tabs reveal stagger-4" id="categoryTabs">
-    <button class="cat-tab active" data-cat="all" onclick="filterByCategory(this,'all')">All Products</button>
-    <button class="cat-tab" data-cat="cement" onclick="filterByCategory(this,'cement')">🧱 Cement</button>
-    <button class="cat-tab" data-cat="plumbing" onclick="filterByCategory(this,'plumbing')">🚰 Plumbing</button>
-    <button class="cat-tab" data-cat="paint" onclick="filterByCategory(this,'paint')">🎨 Paint</button>
-    <button class="cat-tab" data-cat="electrical" onclick="filterByCategory(this,'electrical')">⚡ Electrical</button>
-    <button class="cat-tab" data-cat="hardware" onclick="filterByCategory(this,'hardware')">🔩 Hardware</button>
-    <button class="cat-tab" data-cat="steel" onclick="filterByCategory(this,'steel')">🏗️ Steel</button>
-    <button class="cat-tab" data-cat="tiles" onclick="filterByCategory(this,'tiles')">📐 Tiles</button>
-    <button class="cat-tab" data-cat="waterproofing" onclick="filterByCategory(this,'waterproofing')">💧 Waterproofing</button>
+  <div class="category-tabs-wrap reveal stagger-4">
+    <div class="category-tabs" id="categoryTabs">
+      <button class="cat-tab active" data-cat="all" onclick="filterByCategory(this,'all')">All Products</button>
+      <button class="cat-tab" data-cat="cement" onclick="filterByCategory(this,'cement')">🧱 Cement</button>
+      <button class="cat-tab" data-cat="plumbing" onclick="filterByCategory(this,'plumbing')">🚰 Plumbing</button>
+      <button class="cat-tab" data-cat="paint" onclick="filterByCategory(this,'paint')">🎨 Paint</button>
+      <button class="cat-tab" data-cat="electrical" onclick="filterByCategory(this,'electrical')">⚡ Electrical</button>
+      <button class="cat-tab" data-cat="hardware" onclick="filterByCategory(this,'hardware')">🔩 Hardware</button>
+      <button class="cat-tab" data-cat="steel" onclick="filterByCategory(this,'steel')">🏗️ Steel</button>
+      <button class="cat-tab" data-cat="tiles" onclick="filterByCategory(this,'tiles')">📐 Tiles</button>
+      <button class="cat-tab" data-cat="waterproofing" onclick="filterByCategory(this,'waterproofing')">💧 Waterproofing</button>
+    </div>
   </div>
   <div class="store-grid" id="storeGrid">
-    <div class="product cursor-pointer" data-name="ambuja portland cement 50kg bag cement grade53 portland ambuja" data-cat="cement">
-      <div class="discount-pill">15% OFF</div>
-      <div><h3>Ambuja Portland Cement</h3><p class="product-meta">50kg Bag • Grade 53 • Verified Depot</p></div>
-      <div>
-        <div class="pricing-wrap"><span class="price">Rs.380</span><strike>Rs.450</strike></div>
-        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Ambuja Portland Cement (50kg)',380)">Add to Job Cart</button>
+    <div class="product visible cursor-pointer" data-name="ambuja portland cement 50kg bag cement grade53 portland ambuja" data-cat="cement" onclick="handleProductCardClick(event, 'prod-001')">
+      <div class="product-media">
+        <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80" alt="Ambuja Portland Cement" class="product-img" loading="lazy">
+        <span class="product-cat-pill">🧱 CEMENT</span>
+        <span class="product-discount-badge">15% OFF</span>
+      </div>
+      <div class="product-body">
+        <h3 class="product-title">Ambuja Portland Cement</h3>
+        <p class="product-meta">50kg Bag • Grade 53 • Verified Depot</p>
+        <div class="product-badge-row">
+          <span class="badge-depot">✓ BIS Certified Depot</span>
+          <span class="badge-stock">240 bags ready</span>
+        </div>
+      </div>
+      <div class="product-footer">
+        <div class="pricing-wrap">
+          <span class="price">₹380</span>
+          <strike>₹450</strike>
+          <span class="depot-tag">Wholesale Index</span>
+        </div>
+        <div class="product-action-row">
+          <div class="qty-control" onclick="event.stopPropagation()">
+            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+            <span class="qty-val">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+          </div>
+          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Ambuja Portland Cement (50kg)',380)">Add to Cart</button>
+          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-001')" title="Technical Specs">ℹ️</button>
+        </div>
       </div>
     </div>
-    <div class="product cursor-pointer" data-name="astral cpvc pipes heavy duty 3m plumbing cpvc pipe plumbing astral" data-cat="plumbing">
-      <div class="discount-pill">18% OFF</div>
-      <div><h3>Astral CPVC Pipes (Heavy Duty)</h3><p class="product-meta">3m Length • 1-inch • Plumbing Grade</p></div>
-      <div>
-        <div class="pricing-wrap"><span class="price">Rs.420</span><strike>Rs.510</strike></div>
-        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Astral CPVC Pipe (3m)',420)">Add to Job Cart</button>
+
+    <div class="product visible cursor-pointer" data-name="astral cpvc pipes heavy duty 3m plumbing cpvc pipe plumbing astral" data-cat="plumbing" onclick="handleProductCardClick(event, 'prod-002')">
+      <div class="product-media">
+        <img src="https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80" alt="Astral CPVC Pipes (Heavy Duty)" class="product-img" loading="lazy">
+        <span class="product-cat-pill">🚰 PLUMBING</span>
+        <span class="product-discount-badge">18% OFF</span>
+      </div>
+      <div class="product-body">
+        <h3 class="product-title">Astral CPVC Pipes (Heavy Duty)</h3>
+        <p class="product-meta">3m Length • 1-inch • Plumbing Grade</p>
+        <div class="product-badge-row">
+          <span class="badge-depot">✓ BIS Certified Depot</span>
+          <span class="badge-stock">180 pieces ready</span>
+        </div>
+      </div>
+      <div class="product-footer">
+        <div class="pricing-wrap">
+          <span class="price">₹420</span>
+          <strike>₹510</strike>
+          <span class="depot-tag">Wholesale Index</span>
+        </div>
+        <div class="product-action-row">
+          <div class="qty-control" onclick="event.stopPropagation()">
+            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+            <span class="qty-val">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+          </div>
+          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Astral CPVC Pipe (3m)',420)">Add to Cart</button>
+          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-002')" title="Technical Specs">ℹ️</button>
+        </div>
       </div>
     </div>
-    <div class="product cursor-pointer" data-name="asian paints tractor emulsion 20l bucket matte paint paint emulsion asian paints" data-cat="paint">
-      <div class="discount-pill">12% OFF</div>
-      <div><h3>Asian Paints Tractor Emulsion</h3><p class="product-meta">20L Bucket • Matte White Finish</p></div>
-      <div>
-        <div class="pricing-wrap"><span class="price">Rs.2,850</span><strike>Rs.3,240</strike></div>
-        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Asian Paints Tractor Emulsion (20L)',2850)">Add to Job Cart</button>
+
+    <div class="product visible cursor-pointer" data-name="asian paints tractor emulsion 20l bucket matte paint paint emulsion asian paints" data-cat="paint" onclick="handleProductCardClick(event, 'prod-003')">
+      <div class="product-media">
+        <img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80" alt="Asian Paints Tractor Emulsion" class="product-img" loading="lazy">
+        <span class="product-cat-pill">🎨 PAINT</span>
+        <span class="product-discount-badge">12% OFF</span>
+      </div>
+      <div class="product-body">
+        <h3 class="product-title">Asian Paints Tractor Emulsion</h3>
+        <p class="product-meta">20L Bucket • Matte White Finish</p>
+        <div class="product-badge-row">
+          <span class="badge-depot">✓ BIS Certified Depot</span>
+          <span class="badge-stock">90 buckets ready</span>
+        </div>
+      </div>
+      <div class="product-footer">
+        <div class="pricing-wrap">
+          <span class="price">₹2,850</span>
+          <strike>₹3,240</strike>
+          <span class="depot-tag">Wholesale Index</span>
+        </div>
+        <div class="product-action-row">
+          <div class="qty-control" onclick="event.stopPropagation()">
+            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+            <span class="qty-val">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+          </div>
+          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Asian Paints Tractor Emulsion (20L)',2850)">Add to Cart</button>
+          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-003')" title="Technical Specs">ℹ️</button>
+        </div>
       </div>
     </div>
-    <div class="product cursor-pointer" data-name="polycab fr wire 1.5 sqmm electrical wiring coil wire electrical fr polycab" data-cat="electrical">
-      <div class="discount-pill">10% OFF</div>
-      <div><h3>Polycab FR Wire 1.5 sq mm</h3><p class="product-meta">90m Coil • Fire Retardant • ISI Marked</p></div>
-      <div>
-        <div class="pricing-wrap"><span class="price">Rs.1,580</span><strike>Rs.1,750</strike></div>
-        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Polycab FR Wire 1.5sqmm (90m)',1580)">Add to Job Cart</button>
+
+    <div class="product visible cursor-pointer" data-name="polycab fr wire 1.5 sqmm electrical wiring coil wire electrical fr polycab" data-cat="electrical" onclick="handleProductCardClick(event, 'prod-004')">
+      <div class="product-media">
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80" alt="Polycab FR Wire 1.5 sq mm" class="product-img" loading="lazy">
+        <span class="product-cat-pill">⚡ ELECTRICAL</span>
+        <span class="product-discount-badge">10% OFF</span>
       </div>
-    </div>
-    <div class="product cursor-pointer" data-name="ebco soft close cabinet hinges hardware fittings hinge cabinet hardware ebco" data-cat="hardware">
-      <div class="discount-pill">20% OFF</div>
-      <div><h3>Ebco Soft-Close Cabinet Hinges</h3><p class="product-meta">Pack of 4 Pairs • Concealed Mount</p></div>
-      <div>
-        <div class="pricing-wrap"><span class="price">Rs.960</span><strike>Rs.1,200</strike></div>
-        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Ebco Soft-Close Hinges (4 pairs)',960)">Add to Job Cart</button>
+      <div class="product-body">
+        <h3 class="product-title">Polycab FR Wire 1.5 sq mm</h3>
+        <p class="product-meta">90m Coil • Fire Retardant • ISI Marked</p>
+        <div class="product-badge-row">
+          <span class="badge-depot">✓ BIS Certified Depot</span>
+          <span class="badge-stock">120 coils ready</span>
+        </div>
       </div>
-    </div>
-    <div class="product cursor-pointer" data-name="birla white wall seal putty 40kg bag white polymer plaster putty birla white wall putty" data-cat="paint">
-      <div class="discount-pill">13% OFF</div>
-      <div><h3>Birla White Wall Seal Putty</h3><p class="product-meta">40kg Bag • White Polymer Plaster</p></div>
-      <div>
-        <div class="pricing-wrap"><span class="price">Rs.820</span><strike>Rs.940</strike></div>
-        <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Birla White Wall Seal Putty (40kg)',820)">Add to Job Cart</button>
+      <div class="product-footer">
+        <div class="pricing-wrap">
+          <span class="price">₹1,580</span>
+          <strike>₹1,750</strike>
+          <span class="depot-tag">Wholesale Index</span>
+        </div>
+        <div class="product-action-row">
+          <div class="qty-control" onclick="event.stopPropagation()">
+            <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+            <span class="qty-val">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+          </div>
+          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'Polycab FR Wire 1.5sqmm (90m)',1580)">Add to Cart</button>
+          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('prod-004')" title="Technical Specs">ℹ️</button>
+        </div>
       </div>
     </div>
     <div id="storeNoResults" class="hidden" style="grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; color: var(--text-muted);">
@@ -1011,7 +1102,8 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 <!-- ═══ PRODUCT DETAIL MODAL ═══ -->
 <div id="productDetailModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem;">
   <div style="background:var(--card-bg,#fff);border-radius:20px;max-width:540px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.25);padding:2rem;position:relative;animation:slideUp .2s ease;">
-    <button onclick="closeProductDetailModal()" style="position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted,#888);">✕</button>
+    <button onclick="closeProductDetailModal()" style="position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted,#888);z-index:2;">✕</button>
+    <img id="detailProdImg" src="" alt="Product preview" style="width:100%;height:180px;object-fit:cover;border-radius:14px;margin-bottom:1.2rem;border:1px solid var(--border-subtle);background:var(--warm-50);display:block;">
     <div style="font-size:.78rem;font-weight:800;color:var(--terracotta);letter-spacing:0.5px;margin-bottom:.4rem;" id="detailProdCategory">MATERIAL • REGIONAL DEPOT CERTIFIED</div>
     <h2 style="font-size:1.4rem;font-weight:800;color:var(--text-main);margin-bottom:.3rem;" id="detailProdTitle">Product Name</h2>
     <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.2rem;" id="detailProdMeta">50kg Bag • Grade 53 • Verified Depot</p>

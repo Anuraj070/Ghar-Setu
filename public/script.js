@@ -390,6 +390,33 @@ function animateCounter(el, target, prefix = '₹', duration = 800) {
 // 4. DYNAMIC MARKETPLACE, LIVE SEARCH & DETAIL MODAL
 // ═════════════════════════════════════════════════════════════════════
 
+const PRODUCT_IMAGES = {
+  'prod-001': 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80', // Ambuja Cement
+  'prod-011': 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=600&q=80', // UltraTech Cement
+  'prod-002': 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80', // Astral CPVC Pipes
+  'prod-012': 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=600&q=80', // Finolex Ball Valve
+  'prod-003': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80', // Asian Paints Emulsion
+  'prod-009': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80', // Birla White Putty
+  'prod-004': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80', // Polycab FR Wire
+  'prod-008': 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', // Schneider MCB
+  'prod-005': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80', // Tata Tiscon Rebar
+  'prod-006': 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=600&q=80', // Kajaria Floor Tiles
+  'prod-007': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80', // Dr. Fixit Waterproofing
+  'prod-010': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80', // Godrej Brass Lock
+  'prod-013': 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80', // Ebco Soft-Close Hinges
+};
+
+const CATEGORY_DEFAULT_IMAGES = {
+  cement: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80',
+  plumbing: 'https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=600&q=80',
+  paint: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80',
+  electrical: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80',
+  steel: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80',
+  tiles: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=600&q=80',
+  waterproofing: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80',
+  hardware: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80'
+};
+
 async function loadMarketplaceProducts() {
   try {
     const res = await fetch('/api/products');
@@ -423,33 +450,41 @@ function renderProductsGrid(products) {
     const icon = categoryIcons[cat] || '📦';
     const originalPrice = p.originalPrice || Math.round((p.price || 0) * 1.2);
     const discount = p.discount || Math.round(((originalPrice - p.price) / originalPrice) * 100);
+    const imgUrl = p.image_url || PRODUCT_IMAGES[p.id] || CATEGORY_DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80';
     return `
     <div class="product visible cursor-pointer" data-name="${escapeHTML((p.name || '').toLowerCase())} ${(p.tags || []).map(t => escapeHTML(t)).join(' ')}" data-cat="${escapeHTML(cat)}" onclick="handleProductCardClick(event, '${escapeHTML(p.id)}')">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;">
-        <span style="font-size:.75rem;font-weight:700;color:var(--text-muted);background:var(--surface-elevated);border:1px solid var(--border-subtle);padding:.25rem .7rem;border-radius:20px;text-transform:uppercase;">
-          ${icon} ${escapeHTML(cat)}
-        </span>
-        <div class="discount-pill" style="position:static;">${parseInt(discount, 10)}% OFF</div>
-      </div>
-      <div>
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:.3rem;color:var(--text-main);">${escapeHTML(p.name)}</h3>
-        <p class="product-meta" style="font-size:.84rem;color:var(--text-muted);margin-bottom:1.2rem;">${escapeHTML(p.meta || '')}</p>
-      </div>
-      <div style="margin-top:auto;">
-        <div class="pricing-wrap" style="display:flex;align-items:baseline;gap:.6rem;margin-bottom:.8rem;">
-          <span class="price" style="font-size:1.35rem;font-weight:800;color:var(--terracotta);">₹${(p.price || 0).toLocaleString('en-IN')}</span>
-          <strike style="color:#94A3B8;font-size:.88rem;">₹${(originalPrice || 0).toLocaleString('en-IN')}</strike>
-          <span style="font-size:.75rem;color:var(--accent-green);font-weight:700;">Depot Direct</span>
+      <div class="product-media">
+        <img src="${imgUrl}" alt="${escapeHTML(p.name)}" class="product-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="product-img-fallback">
+          <span>${icon}</span>
         </div>
-        <div class="qty-control" onclick="event.stopPropagation()">
-          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
-          <span class="qty-val">1</span>
-          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
-          <span style="font-size:.78rem;color:var(--text-muted);margin-left:auto;">${p.stock ? p.stock + ' in stock' : 'Verified Hub'}</span>
+        <span class="product-cat-pill">${icon} ${escapeHTML(cat)}</span>
+        <span class="product-discount-badge">${parseInt(discount, 10)}% OFF</span>
+      </div>
+
+      <div class="product-body">
+        <h3 class="product-title">${escapeHTML(p.name)}</h3>
+        <p class="product-meta">${escapeHTML(p.meta || '')}</p>
+        <div class="product-badge-row">
+          <span class="badge-depot">✓ BIS Certified Depot</span>
+          <span class="badge-stock">${p.stock ? p.stock + ' ' + (p.unit || 'units') + ' ready' : 'In Stock'}</span>
         </div>
-        <div style="display:flex;gap:.5rem;margin-top:.6rem;">
-          <button class="btn-primary" style="flex:1;padding:.75rem;font-size:.88rem;border-radius:10px;" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit || 'unit')})',${p.price})">Add to Job Cart</button>
-          <button class="btn-copy" style="padding:.75rem .9rem;font-size:.85rem;border-radius:10px;" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">Specs ℹ️</button>
+      </div>
+
+      <div class="product-footer">
+        <div class="pricing-wrap">
+          <span class="price">₹${(p.price || 0).toLocaleString('en-IN')}</span>
+          <strike>₹${(originalPrice || 0).toLocaleString('en-IN')}</strike>
+          <span class="depot-tag">Wholesale Index</span>
+        </div>
+        <div class="product-action-row">
+          <div class="qty-control" onclick="event.stopPropagation()">
+            <button class="qty-btn" onclick="changeQty(this,-1)" aria-label="Decrease quantity">−</button>
+            <span class="qty-val">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="btn-primary add-cart-btn" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit || 'unit')})',${p.price})">Add to Cart</button>
+          <button class="btn-specs-icon" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">ℹ️</button>
         </div>
       </div>
     </div>
@@ -543,11 +578,19 @@ function openProductDetailModal(id) {
   const modal = document.getElementById('productDetailModal');
   if (!modal) return;
 
+  const cat = (product.category || 'material').toLowerCase().trim();
+  const imgUrl = product.image_url || PRODUCT_IMAGES[product.id] || CATEGORY_DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80';
+  const imgEl = document.getElementById('detailProdImg');
+  if (imgEl) {
+    imgEl.src = imgUrl;
+    imgEl.alt = product.name;
+  }
+
   document.getElementById('detailProdTitle').innerText = product.name;
   document.getElementById('detailProdCategory').innerText = (product.category || 'MATERIAL').toUpperCase() + ' • REGIONAL DEPOT CERTIFIED';
   document.getElementById('detailProdMeta').innerText = product.meta;
-  document.getElementById('detailProdPrice').innerText = 'Rs.' + product.price.toLocaleString('en-IN');
-  document.getElementById('detailProdOriginal').innerText = 'Rs.' + product.originalPrice.toLocaleString('en-IN');
+  document.getElementById('detailProdPrice').innerText = '₹' + product.price.toLocaleString('en-IN');
+  document.getElementById('detailProdOriginal').innerText = '₹' + product.originalPrice.toLocaleString('en-IN');
   document.getElementById('detailProdDiscount').innerText = product.discount + '% Wholesale Discount';
   document.getElementById('detailProdSpecs').innerText = product.specs || 'Certified according to Bureau of Indian Standards (BIS) and regional building regulations.';
   document.getElementById('detailProdStock').innerText = (product.stock || 150) + ' ' + (product.unit || 'units') + ' available at nearest regional depot hub.';
