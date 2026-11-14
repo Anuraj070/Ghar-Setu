@@ -93,11 +93,9 @@ def init_db():
 
     conn.commit()
 
-    # Check if products need seeding
-    cursor.execute("SELECT COUNT(*) as count FROM products")
-    if cursor.fetchone()["count"] == 0:
-        seed_data(cursor)
-        conn.commit()
+    # Seed initial data idempotently (INSERT OR IGNORE)
+    seed_data(cursor)
+    conn.commit()
 
     conn.close()
 
@@ -274,11 +272,53 @@ def seed_data(cursor):
             json.dumps(["lock", "door lock", "godrej", "hardware"]),
             now,
         ),
+        (
+            "prod-011",
+            "UltraTech Super Cement",
+            "50kg Bag • Grade 53 PPC/OPC",
+            395.0,
+            455.0,
+            13,
+            "cement",
+            320,
+            "bag",
+            "Engineered micro-fine slag particles creating an impermeable concrete barrier resisting sulfate and chloride attack.",
+            json.dumps(["cement", "ultratech", "ppc"]),
+            now,
+        ),
+        (
+            "prod-012",
+            "Finolex CPVC Ball Valve",
+            "1-inch • Heavy Duty Brass Core",
+            280.0,
+            340.0,
+            18,
+            "plumbing",
+            200,
+            "piece",
+            "Full-port design for zero friction pressure drop. Leak-proof PTFE seats with ergonomic high-torque quarter-turn lever.",
+            json.dumps(["valve", "cpvc", "finolex"]),
+            now,
+        ),
+        (
+            "prod-013",
+            "Ebco Soft-Close Cabinet Hinges",
+            "Pack of 4 Pairs • Concealed Mount",
+            960.0,
+            1200.0,
+            20,
+            "hardware",
+            300,
+            "pack",
+            "Nickel-plated cold-rolled steel with integrated hydraulic soft-close damper. 105° opening angle tested for 50,000 motion cycles.",
+            json.dumps(["hinge", "cabinet", "hardware", "ebco"]),
+            now,
+        ),
     ]
 
     cursor.executemany(
         """
-        INSERT INTO products (id, name, meta, price, original_price, discount, category, stock, unit, specs, tags, created_at)
+        INSERT OR IGNORE INTO products (id, name, meta, price, original_price, discount, category, stock, unit, specs, tags, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
         initial_products,
@@ -287,7 +327,7 @@ def seed_data(cursor):
     # Seed Default Contractor
     cursor.execute(
         """
-        INSERT INTO contractors (id, name, email, password_hash, phone, city, created_at)
+        INSERT OR IGNORE INTO contractors (id, name, email, password_hash, phone, city, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """,
         (
@@ -349,7 +389,7 @@ def seed_data(cursor):
 
     cursor.executemany(
         """
-        INSERT INTO orders (id, customer_name, customer_email, city, items, subtotal, gst, total, status, timeline, created_at)
+        INSERT OR IGNORE INTO orders (id, customer_name, customer_email, city, items, subtotal, gst, total, status, timeline, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
         initial_orders,

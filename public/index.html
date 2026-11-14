@@ -344,6 +344,8 @@ nav.scrolled{padding:.7rem 6%;box-shadow:0 4px 30px rgba(0,0,0,.04);}
 .cat-tab:hover{transform:translateY(-2px);border-color:var(--terracotta);color:var(--terracotta);box-shadow:0 4px 12px rgba(226,88,34,.1);}
 .cat-tab.active{background:var(--terracotta);color:#fff;border-color:var(--terracotta);box-shadow:0 4px 14px rgba(226,88,34,.25);}
 .store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;margin-top:2.5rem;}
+.store-grid .product{opacity:1 !important;transform:none !important;}
+.store-grid .product.hidden{display:none !important;}
 
 .product{background:var(--surface-white);padding:2rem;border-radius:var(--radius-xl);border:1px solid var(--border-subtle);box-shadow:var(--shadow-soft);text-align:left;display:flex;flex-direction:column;justify-content:space-between;transition:var(--transition-bounce);position:relative;overflow:hidden;}
 .product::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;background:linear-gradient(135deg,rgba(226,88,34,.04),rgba(255,140,96,.02),transparent);transition:opacity .4s;}
@@ -850,9 +852,12 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     <button class="cat-tab" data-cat="paint" onclick="filterByCategory(this,'paint')">🎨 Paint</button>
     <button class="cat-tab" data-cat="electrical" onclick="filterByCategory(this,'electrical')">⚡ Electrical</button>
     <button class="cat-tab" data-cat="hardware" onclick="filterByCategory(this,'hardware')">🔩 Hardware</button>
+    <button class="cat-tab" data-cat="steel" onclick="filterByCategory(this,'steel')">🏗️ Steel</button>
+    <button class="cat-tab" data-cat="tiles" onclick="filterByCategory(this,'tiles')">📐 Tiles</button>
+    <button class="cat-tab" data-cat="waterproofing" onclick="filterByCategory(this,'waterproofing')">💧 Waterproofing</button>
   </div>
   <div class="store-grid" id="storeGrid">
-    <div class="product reveal stagger-1" data-name="ambuja portland cement 50kg bag" data-cat="cement">
+    <div class="product cursor-pointer" data-name="ambuja portland cement 50kg bag cement grade53 portland ambuja" data-cat="cement">
       <div class="discount-pill">15% OFF</div>
       <div><h3>Ambuja Portland Cement</h3><p class="product-meta">50kg Bag • Grade 53 • Verified Depot</p></div>
       <div>
@@ -861,7 +866,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <button class="btn-outline" onclick="addToCartQty(this,'Ambuja Portland Cement (50kg)',380)">Add to Job Cart</button>
       </div>
     </div>
-    <div class="product reveal stagger-2" data-name="astral cpvc pipes heavy duty 3m plumbing" data-cat="plumbing">
+    <div class="product cursor-pointer" data-name="astral cpvc pipes heavy duty 3m plumbing cpvc pipe plumbing astral" data-cat="plumbing">
       <div class="discount-pill">18% OFF</div>
       <div><h3>Astral CPVC Pipes (Heavy Duty)</h3><p class="product-meta">3m Length • 1-inch • Plumbing Grade</p></div>
       <div>
@@ -870,7 +875,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <button class="btn-outline" onclick="addToCartQty(this,'Astral CPVC Pipe (3m)',420)">Add to Job Cart</button>
       </div>
     </div>
-    <div class="product reveal stagger-3" data-name="asian paints tractor emulsion 20l bucket matte paint" data-cat="paint">
+    <div class="product cursor-pointer" data-name="asian paints tractor emulsion 20l bucket matte paint paint emulsion asian paints" data-cat="paint">
       <div class="discount-pill">12% OFF</div>
       <div><h3>Asian Paints Tractor Emulsion</h3><p class="product-meta">20L Bucket • Matte White Finish</p></div>
       <div>
@@ -879,7 +884,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <button class="btn-outline" onclick="addToCartQty(this,'Asian Paints Tractor Emulsion (20L)',2850)">Add to Job Cart</button>
       </div>
     </div>
-    <div class="product reveal stagger-1" data-name="polycab fr wire 1.5 sqmm electrical wiring coil" data-cat="electrical">
+    <div class="product cursor-pointer" data-name="polycab fr wire 1.5 sqmm electrical wiring coil wire electrical fr polycab" data-cat="electrical">
       <div class="discount-pill">10% OFF</div>
       <div><h3>Polycab FR Wire 1.5 sq mm</h3><p class="product-meta">90m Coil • Fire Retardant • ISI Marked</p></div>
       <div>
@@ -888,7 +893,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <button class="btn-outline" onclick="addToCartQty(this,'Polycab FR Wire 1.5sqmm (90m)',1580)">Add to Job Cart</button>
       </div>
     </div>
-    <div class="product reveal stagger-2" data-name="ebco soft close cabinet hinges hardware fittings" data-cat="hardware">
+    <div class="product cursor-pointer" data-name="ebco soft close cabinet hinges hardware fittings hinge cabinet hardware ebco" data-cat="hardware">
       <div class="discount-pill">20% OFF</div>
       <div><h3>Ebco Soft-Close Cabinet Hinges</h3><p class="product-meta">Pack of 4 Pairs • Concealed Mount</p></div>
       <div>
@@ -897,14 +902,20 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <button class="btn-outline" onclick="addToCartQty(this,'Ebco Soft-Close Hinges (4 pairs)',960)">Add to Job Cart</button>
       </div>
     </div>
-    <div class="product reveal stagger-3" data-name="birla white primer wall seal bag paint interior" data-cat="paint">
-      <div class="discount-pill">8% OFF</div>
-      <div><h3>Birla White Wall Seal Primer</h3><p class="product-meta">1 Bag (30kg) • Interior/Exterior</p></div>
+    <div class="product cursor-pointer" data-name="birla white wall seal putty 40kg bag white polymer plaster putty birla white wall putty" data-cat="paint">
+      <div class="discount-pill">13% OFF</div>
+      <div><h3>Birla White Wall Seal Putty</h3><p class="product-meta">40kg Bag • White Polymer Plaster</p></div>
       <div>
-        <div class="pricing-wrap"><span class="price">Rs.755</span><strike>Rs.820</strike></div>
+        <div class="pricing-wrap"><span class="price">Rs.820</span><strike>Rs.940</strike></div>
         <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><span class="qty-val">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
-        <button class="btn-outline" onclick="addToCartQty(this,'Birla White Wall Seal Primer (30kg)',755)">Add to Job Cart</button>
+        <button class="btn-outline" onclick="addToCartQty(this,'Birla White Wall Seal Putty (40kg)',820)">Add to Job Cart</button>
       </div>
+    </div>
+    <div id="storeNoResults" class="hidden" style="grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; color: var(--text-muted);">
+      <div style="font-size: 2.5rem; margin-bottom: .6rem;">🔍</div>
+      <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: .4rem;">No products match your filter</div>
+      <p style="font-size: .88rem; margin-bottom: 1rem;">Try searching for other materials or select a different category.</p>
+      <button class="btn-outline" style="display:inline-block;width:auto;padding:.6rem 1.4rem;" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\'all\']'), 'all')">Show All Materials</button>
     </div>
   </div>
 </section>

@@ -33,12 +33,15 @@ const DEFAULT_PRODUCTS = [
   { id: 'prod-002', name: 'Astral CPVC Pipes (Heavy Duty)', meta: '3m Length • 1-inch • Plumbing Grade', price: 420, originalPrice: 510, discount: 18, category: 'plumbing', stock: 180, unit: 'piece', specs: 'SDR 11 certified up to 93°C hot/cold potable water distribution. 100% lead-free formulation with NSF international approval.', tags: ['cpvc', 'pipe', 'plumbing', 'astral'] },
   { id: 'prod-003', name: 'Asian Paints Tractor Emulsion', meta: '20L Bucket • Matte White Finish', price: 2850, originalPrice: 3240, discount: 12, category: 'paint', stock: 90, unit: 'bucket', specs: 'Smooth plastic emulsion finish offering superior coverage (260-300 sq.ft/L for 1 coat) with anti-fungal shield and washability.', tags: ['paint', 'emulsion', 'asian paints'] },
   { id: 'prod-004', name: 'Polycab FR Wire 1.5 sq mm', meta: '90m Coil • Fire Retardant • ISI Marked', price: 1580, originalPrice: 1750, discount: 10, category: 'electrical', stock: 120, unit: 'coil', specs: 'IS:694 certified copper conductor. 100% electrolytic grade with oxygen-index >29% flame-retardant virgin PVC sheath.', tags: ['wire', 'electrical', 'fr', 'polycab'] },
-  { id: 'prod-005', name: 'Ebco Soft-Close Cabinet Hinges', meta: 'Pack of 4 Pairs • Concealed Mount', price: 960, originalPrice: 1200, discount: 20, category: 'hardware', stock: 300, unit: 'pack', specs: 'Nickel-plated cold-rolled steel with integrated hydraulic soft-close damper. 105° opening angle tested for 50,000 motion cycles.', tags: ['hinge', 'cabinet', 'hardware', 'ebco'] },
-  { id: 'prod-006', name: 'Birla White Wall Seal Primer', meta: '1 Bag (30kg) • Interior/Exterior', price: 755, originalPrice: 820, discount: 8, category: 'paint', stock: 150, unit: 'bag', specs: 'White cement-based polymer modified reactive primer. Penetrates substrate capillaries to permanently eliminate alkali efflorescence.', tags: ['primer', 'paint', 'wall', 'birla'] },
-  { id: 'prod-007', name: 'UltraTech Super Cement', meta: '50kg Bag • Grade 53 PPC/OPC', price: 395, originalPrice: 455, discount: 13, category: 'cement', stock: 320, unit: 'bag', specs: 'Engineered micro-fine slag particles creating an impermeable concrete barrier resisting sulfate and chloride attack.', tags: ['cement', 'ultratech', 'ppc'] },
-  { id: 'prod-008', name: 'Finolex CPVC Ball Valve', meta: '1-inch • Heavy Duty Brass Core', price: 280, originalPrice: 340, discount: 18, category: 'plumbing', stock: 200, unit: 'piece', specs: 'Full-port design for zero friction pressure drop. Leak-proof PTFE seats with ergonomic high-torque quarter-turn lever.', tags: ['valve', 'cpvc', 'finolex'] },
-  { id: 'prod-009', name: 'Dr. Fixit Damp Shield Elasto', meta: '4kg Bucket • Polymer Waterproofing', price: 1450, originalPrice: 1720, discount: 16, category: 'paint', stock: 110, unit: 'bucket', specs: 'Synthetic elastomeric polymer waterproof barrier with 300% elongation, bridging active hairline structural and plaster cracks.', tags: ['waterproofing', 'seepage', 'dr fixit', 'primer'] },
-  { id: 'prod-010', name: 'Schneider Electric 16A MCB', meta: 'Single Pole • C-Curve Industrial Grade', price: 220, originalPrice: 275, discount: 20, category: 'electrical', stock: 160, unit: 'piece', specs: '10kA breaking capacity according to IS/IEC 60898-1. Bi-connect terminals with positive contact indication flag.', tags: ['mcb', 'switch', 'electrical', 'schneider'] }
+  { id: 'prod-005', name: 'Tata Tiscon 550D TMT Rebar (12mm)', meta: '12m Bar • Fe-550D Super Ductile Grade', price: 690, originalPrice: 780, discount: 12, category: 'steel', stock: 310, unit: 'piece', specs: 'IS:1786 Fe-550D compliant. High earthquake-resistant ductility with superior corrosion resistance and rib design.', tags: ['tmt', 'steel', 'rebar', 'tata'] },
+  { id: 'prod-006', name: 'Kajaria Vitrified Floor Tiles (60x60 cm)', meta: 'Box of 4 Tiles (15.5 sq.ft) • Polished Glaze', price: 920, originalPrice: 1080, discount: 15, category: 'tiles', stock: 85, unit: 'box', specs: 'Nano-polished double charge vitrified porcelain body with water absorption <0.05% and scratch resistance Mohs 7.', tags: ['tiles', 'vitrified', 'flooring', 'kajaria'] },
+  { id: 'prod-007', name: 'Dr. Fixit 101 LW+ Waterproofing Admixture', meta: '5L Can • Integral Concrete Waterproofer', price: 640, originalPrice: 720, discount: 11, category: 'waterproofing', stock: 140, unit: 'can', specs: 'IS:2645 compliant integral liquid waterproofing compound for concrete and mortar. Prevents dampness and salt efflorescence.', tags: ['waterproofing', 'dr fixit', 'admixture'] },
+  { id: 'prod-008', name: 'Schneider Electric Easy9 MCB (16A Single Pole)', meta: 'C-Curve • 10kA Breaking Capacity', price: 185, originalPrice: 220, discount: 16, category: 'electrical', stock: 250, unit: 'piece', specs: 'IS/IEC 60898-1 certified. Complete bi-connect terminal protection with rapid arc quenching chamber.', tags: ['mcb', 'schneider', 'electrical', 'breaker'] },
+  { id: 'prod-009', name: 'Birla White Wall Seal Putty', meta: '40kg Bag • White Polymer Plaster', price: 820, originalPrice: 940, discount: 13, category: 'paint', stock: 110, unit: 'bag', specs: 'White Portland cement-based putty with re-dispersible polymer additives for water-resistant silky smooth drywall surfaces.', tags: ['putty', 'birla white', 'wall putty'] },
+  { id: 'prod-010', name: 'Godrej Brass Mortise Door Lock', meta: 'Double Cylinder • 6 Lever Heavy Duty', price: 1450, originalPrice: 1720, discount: 16, category: 'hardware', stock: 75, unit: 'set', specs: 'Solid brass forged bolt with manganese-hardened drill-resistant striker plate and 3 computer-cut brass keys.', tags: ['lock', 'door lock', 'godrej', 'hardware'] },
+  { id: 'prod-011', name: 'UltraTech Super Cement', meta: '50kg Bag • Grade 53 PPC/OPC', price: 395, originalPrice: 455, discount: 13, category: 'cement', stock: 320, unit: 'bag', specs: 'Engineered micro-fine slag particles creating an impermeable concrete barrier resisting sulfate and chloride attack.', tags: ['cement', 'ultratech', 'ppc'] },
+  { id: 'prod-012', name: 'Finolex CPVC Ball Valve', meta: '1-inch • Heavy Duty Brass Core', price: 280, originalPrice: 340, discount: 18, category: 'plumbing', stock: 200, unit: 'piece', specs: 'Full-port design for zero friction pressure drop. Leak-proof PTFE seats with ergonomic high-torque quarter-turn lever.', tags: ['valve', 'cpvc', 'finolex'] },
+  { id: 'prod-013', name: 'Ebco Soft-Close Cabinet Hinges', meta: 'Pack of 4 Pairs • Concealed Mount', price: 960, originalPrice: 1200, discount: 20, category: 'hardware', stock: 300, unit: 'pack', specs: 'Nickel-plated cold-rolled steel with integrated hydraulic soft-close damper. 105° opening angle tested for 50,000 motion cycles.', tags: ['hinge', 'cabinet', 'hardware', 'ebco'] }
 ];
 
 // Seed persistent storage if not present
@@ -416,23 +419,26 @@ function renderProductsGrid(products) {
     waterproofing: '💧'
   };
   grid.innerHTML = products.map((p, idx) => {
-    const icon = categoryIcons[p.category] || '📦';
+    const cat = (p.category || 'material').toLowerCase().trim();
+    const icon = categoryIcons[cat] || '📦';
+    const originalPrice = p.originalPrice || Math.round((p.price || 0) * 1.2);
+    const discount = p.discount || Math.round(((originalPrice - p.price) / originalPrice) * 100);
     return `
-    <div class="product reveal stagger-${(idx % 3) + 1} cursor-pointer" data-name="${escapeHTML(p.name.toLowerCase())} ${(p.tags || []).map(t => escapeHTML(t)).join(' ')}" data-cat="${escapeHTML(p.category)}" onclick="handleProductCardClick(event, '${escapeHTML(p.id)}')">
+    <div class="product visible cursor-pointer" data-name="${escapeHTML((p.name || '').toLowerCase())} ${(p.tags || []).map(t => escapeHTML(t)).join(' ')}" data-cat="${escapeHTML(cat)}" onclick="handleProductCardClick(event, '${escapeHTML(p.id)}')">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;">
         <span style="font-size:.75rem;font-weight:700;color:var(--text-muted);background:var(--surface-elevated);border:1px solid var(--border-subtle);padding:.25rem .7rem;border-radius:20px;text-transform:uppercase;">
-          ${icon} ${escapeHTML(p.category)}
+          ${icon} ${escapeHTML(cat)}
         </span>
-        <div class="discount-pill" style="position:static;">${parseInt(p.discount || 10, 10)}% OFF</div>
+        <div class="discount-pill" style="position:static;">${parseInt(discount, 10)}% OFF</div>
       </div>
       <div>
         <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:.3rem;color:var(--text-main);">${escapeHTML(p.name)}</h3>
-        <p class="product-meta" style="font-size:.84rem;color:var(--text-muted);margin-bottom:1.2rem;">${escapeHTML(p.meta)}</p>
+        <p class="product-meta" style="font-size:.84rem;color:var(--text-muted);margin-bottom:1.2rem;">${escapeHTML(p.meta || '')}</p>
       </div>
       <div style="margin-top:auto;">
         <div class="pricing-wrap" style="display:flex;align-items:baseline;gap:.6rem;margin-bottom:.8rem;">
           <span class="price" style="font-size:1.35rem;font-weight:800;color:var(--terracotta);">₹${(p.price || 0).toLocaleString('en-IN')}</span>
-          <strike style="color:#94A3B8;font-size:.88rem;">₹${(p.originalPrice || 0).toLocaleString('en-IN')}</strike>
+          <strike style="color:#94A3B8;font-size:.88rem;">₹${(originalPrice || 0).toLocaleString('en-IN')}</strike>
           <span style="font-size:.75rem;color:var(--accent-green);font-weight:700;">Depot Direct</span>
         </div>
         <div class="qty-control" onclick="event.stopPropagation()">
@@ -442,13 +448,29 @@ function renderProductsGrid(products) {
           <span style="font-size:.78rem;color:var(--text-muted);margin-left:auto;">${p.stock ? p.stock + ' in stock' : 'Verified Hub'}</span>
         </div>
         <div style="display:flex;gap:.5rem;margin-top:.6rem;">
-          <button class="btn-primary" style="flex:1;padding:.75rem;font-size:.88rem;border-radius:10px;" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit)})',${p.price})">Add to Job Cart</button>
+          <button class="btn-primary" style="flex:1;padding:.75rem;font-size:.88rem;border-radius:10px;" onclick="event.stopPropagation();addToCartQty(this,'${escapeHTML(p.name)} (${escapeHTML(p.unit || 'unit')})',${p.price})">Add to Job Cart</button>
           <button class="btn-copy" style="padding:.75rem .9rem;font-size:.85rem;border-radius:10px;" onclick="event.stopPropagation();openProductDetailModal('${escapeHTML(p.id)}')" title="Technical Specs">Specs ℹ️</button>
         </div>
       </div>
     </div>
   `;
   }).join('');
+
+  // Add empty state placeholder
+  const noRes = document.createElement('div');
+  noRes.id = 'storeNoResults';
+  noRes.className = 'hidden';
+  noRes.style = 'grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; color: var(--text-muted);';
+  noRes.innerHTML = `
+    <div style="font-size: 2.5rem; margin-bottom: .6rem;">🔍</div>
+    <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: .4rem;">No products match your filter</div>
+    <p style="font-size: .88rem; margin-bottom: 1rem;">Try searching for other materials or select a different category.</p>
+    <button class="btn-outline" style="display:inline-block;width:auto;padding:.6rem 1.4rem;" onclick="filterByCategory(document.querySelector('.cat-tab[data-cat=\\'all\\']'), 'all')">Show All Materials</button>
+  `;
+  grid.appendChild(noRes);
+
+  // Re-apply filter state to freshly rendered DOM
+  filterMarketplace();
 }
 
 function handleProductCardClick(event, id) {
@@ -460,23 +482,39 @@ function handleProductCardClick(event, id) {
 function filterMarketplace() {
   const searchInput = document.getElementById('marketSearch');
   const q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const targetCat = (activeCat || 'all').toLowerCase().trim();
+  let visibleCount = 0;
+
   document.querySelectorAll('#storeGrid .product').forEach(p => {
-    const n = p.getAttribute('data-name') || '';
-    const c = p.getAttribute('data-cat') || '';
+    const n = (p.getAttribute('data-name') || '').toLowerCase();
+    const c = (p.getAttribute('data-cat') || '').toLowerCase().trim();
     const matchesQ = !q || n.includes(q);
-    const matchesC = activeCat === 'all' || c === activeCat;
+    const matchesC = targetCat === 'all' || c === targetCat;
     const isVisible = matchesQ && matchesC;
+
     p.classList.toggle('hidden', !isVisible);
     if (isVisible) {
-      p.animate([{ opacity: 0, transform: 'scale(0.96)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 200, easing: 'ease-out' });
+      visibleCount++;
+      p.style.opacity = '1';
+      p.style.transform = 'none';
     }
   });
+
+  const noResults = document.getElementById('storeNoResults');
+  if (noResults) {
+    noResults.classList.toggle('hidden', visibleCount > 0);
+  }
 }
 
 function filterByCategory(btn, cat) {
-  activeCat = cat;
+  activeCat = (cat || 'all').toLowerCase().trim();
   document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    const matchingBtn = document.querySelector(`.cat-tab[data-cat="${activeCat}"]`);
+    if (matchingBtn) matchingBtn.classList.add('active');
+  }
   filterMarketplace();
 }
 
