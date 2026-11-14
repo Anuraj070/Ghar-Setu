@@ -23,7 +23,6 @@ India's residential renovation and repair sector exceeds **₹5.2 Trillion ($63B
 ## 🌐 Live Application
 
 - **Production URL:** [https://gharsetu-5vze.onrender.com](https://gharsetu-5vze.onrender.com)
-- **GitHub Repository:** [https://github.com/Anuraj070/Ghar-Setu](https://github.com/Anuraj070/Ghar-Setu)
 
 ---
 
@@ -109,9 +108,9 @@ India's residential renovation and repair sector exceeds **₹5.2 Trillion ($63B
 - Python 3.9+ (or Node.js 18+ if running alternative express server)
 - pip
 
-### 1. Clone the Repository
+### 1. Clone or Open the Project
 ```bash
-git clone https://github.com/Anuraj070/Ghar-Setu.git
+git clone <repository-url>
 cd Ghar-Setu
 ```
 
@@ -175,7 +174,7 @@ Ghar-Setu/
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Anuraj070/Ghar-Setu/issues).
+Contributions, issues, and feature requests are welcome!
 
 ---
 
