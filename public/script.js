@@ -959,7 +959,7 @@ async function loadMatchedProvidersForScope(city, trades, laborSubtotal, materia
   list.innerHTML = `
     <div style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-muted);">
       <div style="display:inline-block;width:24px;height:24px;border:3px solid var(--warm-200);border-top-color:var(--terracotta);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:.5rem;"></div>
-      <div>Matching verified trade professionals in ${escapeHTML(city || 'Mumbai')}...</div>
+      <div>Matching local trade professionals in ${escapeHTML(city || 'Mumbai')}...</div>
     </div>
   `;
 
@@ -1056,7 +1056,7 @@ async function loadMatchedProvidersForScope(city, trades, laborSubtotal, materia
           </div>
 
           <div style="margin-bottom:.8rem;display:flex;gap:.4rem;flex-wrap:wrap;">
-            <span style="font-size:.7rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.1);padding:.2rem .5rem;border-radius:4px;">${escapeHTML(p.badge || 'Verified Pro')}</span>
+            <span style="font-size:.7rem;font-weight:700;color:var(--accent-green);background:rgba(16,185,129,.1);padding:.2rem .5rem;border-radius:4px;">${escapeHTML(p.badge || 'Trade Partner (Demo)')}</span>
             ${specialtiesBadges}
           </div>
 

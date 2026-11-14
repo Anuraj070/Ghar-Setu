@@ -626,17 +626,20 @@ async def generate_scope(payload: ScopeRequest, request: Request):
     if not scope_data:
         scope_data = run_parametric_civil_engine(query, city, trades)
 
-    # 3. Persist estimate to SQLite
-    database.save_estimate({
-        "project_desc": scope_data.get("project", query),
-        "city": city,
-        "trades": scope_data.get("trades", []),
-        "duration": scope_data.get("estimated_duration", "3-5 Days"),
-        "items": scope_data.get("materials", []),
-        "material_subtotal": scope_data.get("material_subtotal", 0),
-        "labor_subtotal": scope_data.get("labor_subtotal", 0),
-        "grand_total": scope_data.get("grand_total", 0)
-    })
+    # 3. Persist estimate to SQLite safely
+    try:
+        database.save_estimate({
+            "project_desc": scope_data.get("project", query),
+            "city": city,
+            "trades": scope_data.get("trades", []),
+            "duration": scope_data.get("estimated_duration", "2-3 Days"),
+            "items": scope_data.get("materials", []),
+            "material_subtotal": scope_data.get("material_subtotal", 0),
+            "labor_subtotal": scope_data.get("labor_subtotal", 0),
+            "grand_total": scope_data.get("grand_total", 0)
+        })
+    except Exception as e:
+        logger.warning(f"Failed to persist estimate in SQLite: {e}")
 
     return {"success": True, "scope": scope_data}
 

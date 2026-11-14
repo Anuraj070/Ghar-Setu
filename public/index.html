@@ -674,7 +674,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   </div>
 </div>
 <div style="text-align:center;padding:.3rem 1rem .8rem;font-size:.76rem;color:var(--text-muted);">
-  *The current prototype solves the planning and standardisation layer. Provider matching, verified onboarding, and live quote comparison are the next pilot phase. Seeded quotes demonstrate how the workflow will work.
+  *The current prototype solves the planning and standardisation layer. Provider matching, pilot onboarding, and live quote comparison are the next pilot phase. Seeded quotes demonstrate how the workflow will work.
 </div>
 
 <!-- HOW IT WORKS -->
@@ -761,11 +761,11 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   </div>
 
   <div class="prompt-pills reveal stagger-1">
+    <span class="prompt-pill" onclick="setPrompt('10 by 12 bedroom painting with primer')">🎨 Painting: 10 by 12 Bedroom</span>
     <span class="prompt-pill" onclick="setPrompt('Fix leaking bathroom CPVC pipe and replace mixer tap')">🚰 Plumbing: Leaking Pipe &amp; Tap</span>
-    <span class="prompt-pill" onclick="setPrompt('Install 4 modular switchboards and fix tripping bedroom MCB circuit')">⚡ Electrical: Modular Switches &amp; MCB</span>
-    <span class="prompt-pill" onclick="setPrompt('Repaint 10x12 bedroom walls with primer and putty touch-up')">🎨 Painting: Bedroom Walls &amp; Primer</span>
-    <span class="prompt-pill" onclick="setPrompt('Water seepage near bedroom balcony wall causing paint dampness, need polymer waterproofing')">💧 Waterproofing: Balcony Seepage</span>
-    <span class="prompt-pill" onclick="setPrompt('Repair sagging kitchen cabinet hinges and replace wooden door lock')">🪵 Carpentry: Cabinet Hinges &amp; Lock</span>
+    <span class="prompt-pill" onclick="setPrompt('Install 4 modular switchboards and fix tripping MCB circuit')">⚡ Electrical: Modular Switches &amp; MCB</span>
+    <span class="prompt-pill" onclick="setPrompt('Water seepage near balcony wall, elastomeric waterproofing')">💧 Waterproofing: Balcony Seepage</span>
+    <span class="prompt-pill" onclick="setPrompt('Repair kitchen cabinet hydraulic hinges and wooden door lock')">🪵 Carpentry: Cabinet Hinges &amp; Lock</span>
   </div>
 
   <div class="scoper-workbench reveal stagger-2">
@@ -788,7 +788,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     </div>
     
     <div class="scoper-input-box">
-      <input type="text" id="userInput" placeholder="e.g. Fix leaking bathroom CPVC pipe, repaint bedroom, repair cabinet hinges..." value="Fix leaking bathroom CPVC pipe and replace mixer tap">
+      <input type="text" id="userInput" placeholder="e.g. 10 by 12 bedroom painting with primer, fix leaking pipe..." value="10 by 12 bedroom painting with primer">
       <button class="btn-primary" id="generateScopeBtn" onclick="simulateAI(event)">
         <span>Generate Scope ⚡</span>
       </button>
@@ -962,7 +962,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 <strong>GharSetu</strong>. All rights reserved. <em>Prototype Demonstration for Startup Pitch Evaluation</em>. The current prototype solves the planning and standardisation layer. Provider matching, verified onboarding, and live quote comparison are the next pilot phase. Seeded quotes and trade profiles demonstrate how that workflow will work.</p>
+    <p>© 2026 <strong>GharSetu</strong>. All rights reserved. <em>Prototype Demonstration for Startup Pitch Evaluation</em>. The current prototype solves the planning and standardisation layer. Provider matching, pilot onboarding, and live quote comparison are the next pilot phase. Seeded quotes and trade profiles demonstrate how that workflow will work.</p>
   </div>
 </footer>
 

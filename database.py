@@ -387,7 +387,7 @@ def seed_data(cursor):
         ("pro-009", "Vakharia Woodcraft & Modular", "Carpentry", "Mumbai", 4.9, 53, 13, 480.0, "linear-gradient(135deg,#854D0E,#713F12)", json.dumps(["Hydraulic soft-close hinges", "Plywood wardrobes", "Mortise locks"]), "Master Cabinetmaker", "+91 98209 99001", now),
         ("pro-010", "Urban Carpenter Collective", "Carpentry", "Mumbai", 4.8, 27, 6, 420.0, "linear-gradient(135deg,#A16207,#854D0E)", json.dumps(["Sagging cabinet doors", "Lock replacement"]), "Rapid Hardware Fix", "+91 98210 00112", now),
         # Bengaluru Providers
-        ("pro-011", "Silicon City PlumbWorks", "Plumbing", "Bengaluru", 4.9, 45, 9, 460.0, "linear-gradient(135deg,#0284C7,#0369A1)", json.dumps(["Sanitary fixtures", "CPVC lines"]), "Verified Local Pro", "+91 98450 11223", now),
+        ("pro-011", "Silicon City PlumbWorks", "Plumbing", "Bengaluru", 4.9, 45, 9, 460.0, "linear-gradient(135deg,#0284C7,#0369A1)", json.dumps(["Sanitary fixtures", "CPVC lines"]), "Local Pro Partner (Demo)", "+91 98450 11223", now),
         ("pro-012", "Precision Electricals Bangalore", "Electrical", "Bengaluru", 4.9, 51, 11, 490.0, "linear-gradient(135deg,#F59E0B,#D97706)", json.dumps(["Distribution boards", "Wiring"]), "Certified Contractor", "+91 98450 22334", now),
         ("pro-013", "Bengaluru Home Paint Studio", "Painting", "Bengaluru", 4.8, 39, 8, 390.0, "linear-gradient(135deg,#E25822,#C24513)", json.dumps(["Wall putty", "Emulsion"]), "Top Rated", "+91 98450 33445", now),
         ("pro-014", "Southern DampProofers", "Waterproofing", "Bengaluru", 4.9, 47, 12, 540.0, "linear-gradient(135deg,#0D9488,#0F766E)", json.dumps(["Balconies", "Wet areas"]), "Moisture Specialist", "+91 98450 44556", now),
@@ -723,7 +723,7 @@ def create_order(order_data: Dict[str, Any]) -> Dict[str, Any]:
     cursor = conn.cursor()
     now = datetime.now().isoformat()
     city = order_data.get("city", "Mumbai")
-    order_id = order_data.get("id") or f"REQ-{city[:3].upper()}-{secrets.randbelow(9000) + 1000}"
+    order_id = order_data.get("id") or f"REQ-{city[:3].upper()}-{secrets.token_hex(3).upper()}"
 
     items = order_data.get("items", [])
     subtotal = float(order_data.get("subtotal", 0))
@@ -763,7 +763,7 @@ def create_order(order_data: Dict[str, Any]) -> Dict[str, Any]:
     status_label = f"{len(matched_quotes)} Quotes Received (Demo)" if matched_quotes else "Quotes Requested (Demo)"
 
     cursor.execute("""
-        INSERT INTO orders (id, customer_name, customer_email, city, items, subtotal, gst, total, status, timeline, created_at, matched_quotes)
+        INSERT OR REPLACE INTO orders (id, customer_name, customer_email, city, items, subtotal, gst, total, status, timeline, created_at, matched_quotes)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         order_id,
@@ -846,21 +846,42 @@ def save_estimate(estimate_data: Dict[str, Any]) -> Dict[str, Any]:
     conn = get_db_connection()
     cursor = conn.cursor()
     now = datetime.now().isoformat()
-    est_id = estimate_data.get("id") or f"SCOPE-{int(datetime.now().timestamp()) % 10000:04d}"
+    est_id = estimate_data.get("id") or f"SCOPE-{secrets.token_hex(4).upper()}"
+
+    trades_val = estimate_data.get("trades", ["General"])
+    if isinstance(trades_val, list):
+        trades_str = ", ".join(str(t) for t in trades_val if t)
+    else:
+        trades_str = str(trades_val or "General")
+
+    try:
+        mat_subtotal = float(estimate_data.get("material_subtotal", 0) or 0)
+    except (ValueError, TypeError):
+        mat_subtotal = 0.0
+
+    try:
+        labor_subtotal = float(estimate_data.get("labor_subtotal", 0) or 0)
+    except (ValueError, TypeError):
+        labor_subtotal = 0.0
+
+    try:
+        grand_total = float(estimate_data.get("grand_total", 0) or 0)
+    except (ValueError, TypeError):
+        grand_total = mat_subtotal + labor_subtotal
 
     cursor.execute("""
-        INSERT INTO estimates (id, project_desc, city, trades, duration, items, material_subtotal, labor_subtotal, grand_total, created_at)
+        INSERT OR REPLACE INTO estimates (id, project_desc, city, trades, duration, items, material_subtotal, labor_subtotal, grand_total, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         est_id,
-        estimate_data.get("project_desc", "Renovation Project"),
+        estimate_data.get("project_desc", "Repair Scope"),
         estimate_data.get("city", "Mumbai"),
-        ", ".join(estimate_data.get("trades", ["General"])),
-        estimate_data.get("duration", "3-5 Days"),
+        trades_str,
+        estimate_data.get("duration", "2-3 Days"),
         json.dumps(estimate_data.get("items", [])),
-        float(estimate_data.get("material_subtotal", 0)),
-        float(estimate_data.get("labor_subtotal", 0)),
-        float(estimate_data.get("grand_total", 0)),
+        mat_subtotal,
+        labor_subtotal,
+        grand_total,
         now
     ))
     conn.commit()

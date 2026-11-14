@@ -31,7 +31,7 @@ Homeowners usually struggle with vague scopes, repeated contractor site visits, 
 ## ⚠️ Prototype Status & Pitch Scope
 
 > **Important Notice:** This application is an interactive prototype prepared for a startup pitch demonstration.
-> - **Planning & Standardisation Layer:** The current prototype solves the planning and standardisation layer. Provider matching, verified onboarding, and live quote comparison are the next pilot phase.
+> - **Planning & Standardisation Layer:** The current prototype solves the planning and standardisation layer. Provider matching, pilot onboarding, and live quote comparison are the next pilot phase.
 > - **Workflow Demonstration:** The platform demonstrates how that workflow will work; it does not connect homeowners to live contractors in this prototype phase.
 > - **Demo Data:** All seeded professionals, prices, quotes, and project statuses are clearly marked as illustrative prototype demo data.
 > - **Customizable Preliminary Scopes:** Cost estimates are indicative reference benchmarks based on standard CPWD schedules and market rates, not guaranteed contractor prices.

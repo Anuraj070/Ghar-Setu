@@ -44,7 +44,7 @@ function authRequired(req, res, next) {
   catch(e) { return res.status(401).json({ success:false, message:'Invalid or expired token' }); }
 }
 
-// Verified Benchmark Catalog (Demo Data across 5 services)
+// Standard Benchmark Catalog (Demo Data across 5 services)
 const PRODUCTS = [
   { id:'prod-001', name:'Astral CPVC Pipes (Heavy Duty)', meta:'3m Length • 1-inch • Plumbing Grade (Demo)', price:420, originalPrice:510, discount:18, category:'plumbing', stock:180, unit:'piece', tags:['cpvc','pipe','plumbing','astral'] },
   { id:'prod-002', name:'Jaquar Brass Bib Cock Tap', meta:'Chrome Plated • Quarter Turn (Demo)', price:1150, originalPrice:1400, discount:18, category:'plumbing', stock:150, unit:'piece', tags:['tap','bibcock','jaquar','plumbing'] },
