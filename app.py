@@ -556,7 +556,7 @@ def call_gemini_scoper(prompt: str, city: str, trades: List[str]) -> Optional[Di
 # API ROUTES
 # ═════════════════════════════════════════════════════════════════════
 
-@app.get("/api/health")
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 async def health_check():
     """Health check endpoint providing status of API, database, and engine."""
     products = database.get_products()
@@ -766,7 +766,7 @@ async def login(payload: ContractorLogin, request: Request):
 if os.path.exists("public"):
     app.mount("/public", StaticFiles(directory="public"), name="public")
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def serve_index():
     """Serve the primary Single Page Application HTML."""
     if os.path.exists("public/index.html"):
