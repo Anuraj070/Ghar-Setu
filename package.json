@@ -1,7 +1,7 @@
 {
   "name": "ghar-setu",
   "version": "4.0.0",
-  "description": "GharSetu - AI Renovation Scoping & B2B Construction Platform India",
+  "description": "GharSetu - Homeowner Repair & Renovation Coordination Platform (Prototype)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
