@@ -1,0 +1,21 @@
+name: Keep GharSetu Warm
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent Render free-tier container from sleeping (spins down after 15m)
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping GharSetu Health Endpoint
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://gharsetu-5vze.onrender.com/api/health)
+          echo "Render Health Check Response: $response"
+          if [ "$response" -eq 200 ]; then
+            echo "GharSetu is warm and healthy (200 OK)."
+          else
+            echo "Pinged GharSetu with response code: $response"
+          fi
