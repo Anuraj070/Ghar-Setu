@@ -96,6 +96,15 @@ function dismissPageLoader() {
 document.addEventListener('DOMContentLoaded', () => setTimeout(dismissPageLoader, 200));
 window.addEventListener('load', dismissPageLoader);
 
+// Jitter-free Smooth Scrolling with Navbar Offset
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const navHeight = document.getElementById('mainNav')?.offsetHeight || 65;
+  const targetY = Math.max(0, Math.round(el.getBoundingClientRect().top + window.pageYOffset - navHeight - 14));
+  window.scrollTo({ top: targetY, behavior: 'smooth' });
+}
+
 // Scroll Progress Tracker
 window.addEventListener('scroll', () => {
   const progressBar = document.getElementById('scroll-progress');
